@@ -5,7 +5,9 @@ using UnityEngine;
 public class CameraController : MonoBehaviour{
     public const float camScale = 5f;
     public const float defFloorY = 2.5f;
-    private const float DIM_TIME = 1.5f;
+    private const float DIM_TIME = 1f;
+    private const float DEATH_SPOT_INT = 2.5f;
+    private const float DEATH_SPOT_H = 2f;
 
     public float zoom = 1f;
 
@@ -16,16 +18,56 @@ public class CameraController : MonoBehaviour{
     public float curFloorY = 2.5f; //current Y position of mochi if its on the Floor Block
     public float boundsUpY = 3.5f, boundsDownY = 1.5f; //if mochi is under this amount away from the curFloorY it is "acceptable" and the camera snaps to the floor
 
+    public struct LightSetting {
+        public bool directional;
+        public Quaternion angle; //directional only
+        public Color color;
+        public float intensity;
+        public float radius; //!directional only
+        public Vector3 offset; //!directional only, offset from camera. z is the offset from the player, so the zoom will not affect it.
+
+        public static LightSetting sun = new LightSetting(Color.white, 1f, Quaternion.Euler(135f, 110f, 0f));
+        public LightSetting(Color c) {
+            directional = false;
+            angle = Quaternion.Euler(135f, 110f, 0f);
+            color = c;
+            intensity = 2f;
+            radius = 50f;
+            offset = new Vector3(5f, 5f, -5f);
+        }
+
+        public LightSetting(Color c, float intensity, float radius, Vector3 offset) {
+            directional = false;
+            angle = Quaternion.identity;
+            color = c;
+            this.intensity = intensity;
+            this.radius = radius;
+            this.offset = offset;
+        }
+
+        public LightSetting(Color c, float intensity, Quaternion angle) {
+            directional = true;
+            this.angle = angle;
+            color = c;
+            this.intensity = intensity;
+            radius = 30f;
+            offset = new Vector3(0, 0, -5);
+        }
+    }
+
     GameObject player;
-    GameObject clight;
+    public GameObject clight, dlight, deathSpotlight;
     PlayerControl pcon;
+    LightSetting lightCurrent;
     // Start is called before the first frame update
     void Start() {
         player = GameObject.FindGameObjectWithTag("Player");
-        clight = GameObject.Find("Camera Light");
         pcon = player.GetComponent<PlayerControl>();
         curFloorY = targetFloorY = defFloorY;
-        clight.GetComponent<Light>().intensity = 0.5f;
+
+        //todo levelloader will call this
+        deathSpotlight.SetActive(false);
+        setLight(new LightSetting(Color.white));
     }
 
     // Update is called once per frame
@@ -37,9 +79,19 @@ public class CameraController : MonoBehaviour{
             SetCamera();
         }
         else {
-            //slowly dim the lights
             float f = Mathf.Clamp01(pcon.stateTime / DIM_TIME);
-            clight.GetComponent<Light>().intensity = Mathf.Lerp(clight.GetComponent<Light>().intensity, 0f, f);;
+            if(lightCurrent.directional) {
+                //slowly dim *THE SUN*
+                dlight.GetComponent<Light>().intensity = Mathf.Lerp(lightCurrent.intensity, 0f, f);
+            }
+            else {
+                //slowly dim the camera light
+                clight.GetComponent<Light>().intensity = Mathf.Lerp(lightCurrent.intensity, 0f, f);
+            }
+            Vector3 ppos = player.transform.position;
+            if(!deathSpotlight.activeInHierarchy) deathSpotlight.SetActive(true);
+            deathSpotlight.GetComponent<Light>().intensity = Mathf.Lerp(0f, DEATH_SPOT_INT, f);
+            deathSpotlight.transform.position = new Vector3(ppos.x, Mathf.Max(ppos.y, curFloorY) + DEATH_SPOT_H, ppos.z);
         }
     }
 
@@ -53,11 +105,26 @@ public class CameraController : MonoBehaviour{
         //further clean the targetY to make it not show below the floor
         if(inBounds) targetY = Mathf.Max(targetY, curFloorY + playerOffset.y / zoom);
 
+        if(targetZoom <= 0.1f) targetZoom = 0.1f;
         if(Mathf.Abs(zoom - targetZoom) < 0.01f) zoom = targetZoom;
         else zoom = lerpDelta(zoom, targetZoom, 0.05f);
 
         transform.position = new Vector3(ppos.x + playerOffset.x / zoom, targetY, ppos.z + zoomZ());
-        clight.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+        if(!lightCurrent.directional){
+            clight.transform.position = new Vector3(transform.position.x + lightCurrent.offset.x / zoom, transform.position.y + lightCurrent.offset.y / zoom, ppos.z + lightCurrent.offset.z);
+            if(zoom != targetZoom) clight.GetComponent<Light>().intensity = lightCurrent.intensity / zoom;
+        }
+    }
+
+    void setLight(LightSetting lset) {
+        lightCurrent = lset;
+        dlight.SetActive(lset.directional);
+        clight.SetActive(!lset.directional);
+        Light l = lset.directional ? dlight.GetComponent<Light>() : clight.GetComponent<Light>();
+        l.color = lset.color;
+        l.intensity = lset.intensity;
+        if(lset.directional) l.transform.rotation = lset.angle;
+        else l.range = lset.radius;
     }
 
     float zoomZ() {

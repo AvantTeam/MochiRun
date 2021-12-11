@@ -46,12 +46,7 @@ public class PlayerControl : MonoBehaviour
     void Start() {
         rigid = GetComponent<Rigidbody2D>();
         cameraControl = GameObject.Find("Main Camera").GetComponent<CameraController>();
-        nextState = STATE.RUN;
-        setJumpHeight(2.5f);
-
-        health = MAX_HP;
-        usedCourage = false;
-        courage = COURAGES * COURAGE_SLOT;
+        Reset();
     }
 
     // Update is called once per frame
@@ -140,6 +135,17 @@ public class PlayerControl : MonoBehaviour
         rigid.velocity = vel;
     }
 
+    public void Reset() {
+        state = STATE.NONE;
+        nextState = STATE.RUN;
+        setJumpHeight(2.5f);
+        showPlayer(true);
+
+        health = MAX_HP;
+        usedCourage = false;
+        courage = COURAGES * COURAGE_SLOT;
+    }
+
     public void setJumpHeight(float h) {
         JUMP_MAX = heightToVel(h);
     }
@@ -217,8 +223,15 @@ public class PlayerControl : MonoBehaviour
         health = 0f;
         stateTime = 0f;
 
-        Instantiate(deathFx, transform.position, transform.rotation);
+        if(deathEffect){
+            Instantiate(deathFx, transform.position, transform.rotation);
+            showPlayer(false);
+        }
         //TODO
+    }
+
+    public void showPlayer(bool show) {
+        GetComponent<Renderer>().enabled = show;
     }
 
     //input region (TODO replace with a dedicated input controller)

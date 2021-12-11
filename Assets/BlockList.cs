@@ -25,6 +25,9 @@ public class Block {
         hasObject = true;
         prefab = o;
         hasUpdate = o.GetComponent<BlockUpdater>() != null;
+        width = o.transform.localScale.x;
+        height = o.transform.localScale.y;
+
         id = blocks.Count;
         blocks.Add(this);
     }
@@ -44,6 +47,7 @@ public class Block {
 
 public class Floor : Block {
     public float zRand = 0.7f;
+    protected bool yBoop = false; //prevent z-fighting
 
     public Floor(GameObject o) : base(o) {
         width = ChunkLoader.FLOOR_WIDTH;
@@ -51,7 +55,12 @@ public class Floor : Block {
     }
     public override void init(float x, float y, byte ctype) {
         if(hasObject) {
-            GameObject newo = Object.Instantiate(prefab, new Vector3(x, y, zLayer + Random.Range(-zRand, zRand)), Quaternion.identity);
+            GameObject newo = Object.Instantiate(prefab, new Vector3(x, y + (yBoop ? 0.01f : 0f), zLayer + Random.Range(-zRand, zRand)), Quaternion.identity);
+            if(yBoop){
+                BoxCollider2D colli = newo.GetComponent<BoxCollider2D>();
+                colli.offset = new Vector2(colli.offset.x, colli.offset.y - 0.01f / height);
+            }
+            yBoop = !yBoop;
             if(hasUpdate) {
                 BlockUpdater bu = newo.GetComponent<BlockUpdater>();
                 bu.type = this;
