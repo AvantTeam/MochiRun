@@ -111,8 +111,8 @@ Material:
     - _MinLight: 0
     - _Mode: 0
     - _OcclusionStrength: 1
-    - _Offset: 0.077
-    - _OtlWidth: 8
+    - _Offset: -0.385
+    - _OtlWidth: 3
     - _Parallax: 0.02
     - _Segmented: 1
     - _Shininess: 0.03
@@ -124,8 +124,8 @@ Material:
     - _SpecularHighlights: 1
     - _SquashAmount: 1
     - _SrcBlend: 1
-    - _Steps: 1
-    - _StpSmooth: 0
+    - _Steps: 2.67
+    - _StpSmooth: 0.05
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:

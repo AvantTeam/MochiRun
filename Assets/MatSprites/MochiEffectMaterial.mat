@@ -111,7 +111,7 @@ Material:
     - _MinLight: 0
     - _Mode: 0
     - _OcclusionStrength: 1
-    - _Offset: 0.077
+    - _Offset: -0.267
     - _OtlWidth: 3
     - _Parallax: 0.02
     - _Segmented: 1

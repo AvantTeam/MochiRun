@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour{
-    public const float camScale = 5f;
+    public const float CAMSCALE = 5f;
     public const float defFloorY = 2.5f;
     private const float DIM_TIME = 1f;
-    private const float DEATH_SPOT_INT = 2.5f;
-    private const float DEATH_SPOT_H = 2f;
+    //private const float DEATH_SPOT_INT = 2.5f;
+    //private const float DEATH_SPOT_H = 2f;
 
     public float zoom = 1f;
 
@@ -32,8 +32,8 @@ public class CameraController : MonoBehaviour{
             angle = Quaternion.Euler(135f, 110f, 0f);
             color = c;
             intensity = 2f;
-            radius = 50f;
-            offset = new Vector3(5f, 5f, -5f);
+            radius = 150f;
+            offset = new Vector3(15f, 15f, -5f);
         }
 
         public LightSetting(Color c, float intensity, float radius, Vector3 offset) {
@@ -56,7 +56,7 @@ public class CameraController : MonoBehaviour{
     }
 
     GameObject player;
-    public GameObject clight, dlight, deathSpotlight;
+    public GameObject clight, dlight;
     PlayerControl pcon;
     LightSetting lightCurrent;
     // Start is called before the first frame update
@@ -66,8 +66,8 @@ public class CameraController : MonoBehaviour{
         curFloorY = targetFloorY = defFloorY;
 
         //todo levelloader will call this
-        deathSpotlight.SetActive(false);
-        setLight(new LightSetting(Color.white));
+        //deathSpotlight.SetActive(false);
+        setLight(LightSetting.sun);
     }
 
     // Update is called once per frame
@@ -82,16 +82,18 @@ public class CameraController : MonoBehaviour{
             float f = Mathf.Clamp01(pcon.stateTime / DIM_TIME);
             if(lightCurrent.directional) {
                 //slowly dim *THE SUN*
-                dlight.GetComponent<Light>().intensity = Mathf.Lerp(lightCurrent.intensity, 0f, f);
+                dlight.GetComponent<Light>().intensity = Mathf.Lerp(lightCurrent.intensity, 0.1f, f);
             }
             else {
                 //slowly dim the camera light
-                clight.GetComponent<Light>().intensity = Mathf.Lerp(lightCurrent.intensity, 0f, f);
+                clight.GetComponent<Light>().intensity = Mathf.Lerp(lightCurrent.intensity, 0.1f, f);
             }
+            /*
             Vector3 ppos = player.transform.position;
             if(!deathSpotlight.activeInHierarchy) deathSpotlight.SetActive(true);
             deathSpotlight.GetComponent<Light>().intensity = Mathf.Lerp(0f, DEATH_SPOT_INT, f);
             deathSpotlight.transform.position = new Vector3(ppos.x, Mathf.Max(ppos.y, curFloorY) + DEATH_SPOT_H, ppos.z);
+            */
         }
     }
 
@@ -128,7 +130,7 @@ public class CameraController : MonoBehaviour{
     }
 
     float zoomZ() {
-        return -camScale / zoom;
+        return -CAMSCALE / zoom;
     }
 
     float lerpDelta(float fromValue, float toValue, float progress) {

@@ -14,7 +14,8 @@ public class PlayerControl : MonoBehaviour
     public static int COURAGES = 1;
     public static float COURAGE_SLOT = 1.5f; //max courage = SLOT * COURAGES
     public static float FLOAT_YVEL = -0.7f;
-    public static float JUMP_RELEASE_REDUCE = 0.5f;
+    private const float JUMP_RELEASE_REDUCE = 0.75f;
+    private const float JUMP_GRACE = 0.4f; //the motive to "press jump" lasts for this long; i.e. press jump up to X seconds before touching the ground to immediately jump after
 
     public enum STATE {
         NONE = -1,
@@ -38,10 +39,11 @@ public class PlayerControl : MonoBehaviour
     public bool usedCourage = false;
     private bool collided = false;
     private bool jumpReleased = false;
+    private float jumpPressTimer = JUMP_GRACE + 0.1f;
 
     Rigidbody2D rigid;
     CameraController cameraControl;
-    public GameObject burstFx, courageStartFx, deathFx;
+    public GameObject costume, burstFx, courageStartFx, deathFx;
     // Start is called before the first frame update
     void Start() {
         rigid = GetComponent<Rigidbody2D>();
@@ -52,25 +54,36 @@ public class PlayerControl : MonoBehaviour
     // Update is called once per frame
     void Update() {
         Vector2 vel = rigid.velocity;
+        bool inputJump = input_Space();
         stateTime += Time.deltaTime;
         checkLanded();
         checkDeath();
+
+        if(input_SpaceDown()) {
+            jumpPressTimer = 0f;
+        }
+        else if(jumpPressTimer < JUMP_GRACE) {
+            jumpPressTimer += Time.deltaTime;
+        }
 
         //AUTO STATE CHANGE
         if(nextState == STATE.NONE) {
             switch(state) {
                 case STATE.RUN:
-                if(!landed) {
-                    stateAir();
-                }
-                else {
-                    if(input_SpaceDown()) nextState = STATE.JUMP;
-                }
-                break;
+                    if(!landed) {
+                        stateAir();
+                    }
+                    else {
+                        if(jumpPressTimer < JUMP_GRACE) {
+                            jumpPressTimer = JUMP_GRACE + 0.1f;
+                            nextState = STATE.JUMP;
+                        }
+                    }
+                    break;
                 case STATE.FLOAT:
                 case STATE.JUMP:
                     stateAir();
-                break;
+                    break;
             }
         }
 
@@ -82,7 +95,7 @@ public class PlayerControl : MonoBehaviour
                 case STATE.JUMP:
                     vel.y = JUMP_MAX;
                     jumpReleased = false;
-                break;
+                    break;
                 case STATE.FLOAT:
                     if(!usedCourage) Instantiate(courageStartFx, transform.position, transform.rotation);
                     usedCourage = true;
@@ -91,37 +104,41 @@ public class PlayerControl : MonoBehaviour
                 case STATE.RUN:
                     usedCourage = false;
                     courage = COURAGES * COURAGE_SLOT;
-                break;
+                    break;
             }
             stateTime = 0f;
         }
 
-        if(state != STATE.STOP) {
+        if(state != STATE.STOP && (state == STATE.RUN || vel.x > SPEED_MAX * 0.5f)) { //keep speed constantly big except when you try slamming onto a wall
             vel.x += ACCEL * Time.deltaTime;
             if(Mathf.Abs(vel.x) > SPEED_MAX) vel.x = SPEED_MAX * Mathf.Sign(vel.x);
         }
         else {
             vel.x *= 0.7f; //abrupt stop when dead
         }
+
         //UPDATE (per state)
         switch(state) {
             case STATE.RUN:
                 
             break;
             case STATE.JUMP:
-                if(input_Space() || jumpReleased || vel.y <= 0f) break; //nothing to do here
+                if(inputJump || jumpReleased || vel.y <= 0f) break; //nothing to do here
                 vel.y *= JUMP_RELEASE_REDUCE; //early jump key up; reduce jump height
                 jumpReleased = true;
-            break;
+                break;
             case STATE.FLOAT:
                 if(courage > 0f) {
-                    if(input_Space()) {
-                        if(vel.y < FLOAT_YVEL) vel.y = FLOAT_YVEL;
-                        courage -= Time.deltaTime;
-                        courageTime += Time.deltaTime;
+                    if(inputJump) {
+                        if(vel.y <= -1f) {
+                            //glide if you are falling down
+                            if(vel.y < FLOAT_YVEL) vel.y = FLOAT_YVEL;
+                            courage -= Time.deltaTime;
+                        }
+                        courageTime += Time.deltaTime; //even if you are jumping up, you can still use the burst
                     }
                     else{
-                        if(courageTime > 0f && courageTime < 0.15f) {
+                        if(jumpPressTimer < 0.15f && courageTime > 0f) {
                             //fast tap
                             courage = (Mathf.Ceil(courage / COURAGE_SLOT) - 1f) * COURAGE_SLOT; //use one full slot
                             courageBurst();
@@ -129,16 +146,18 @@ public class PlayerControl : MonoBehaviour
                         courageTime = 0f;
                     }
                 }
-            break;
+                break;
         }
         
         rigid.velocity = vel;
+        costume.transform.position = transform.position;
     }
 
     public void Reset() {
         state = STATE.NONE;
         nextState = STATE.RUN;
-        setJumpHeight(2.5f);
+        jumpPressTimer = JUMP_GRACE + 0.1f;
+        setJumpHeight(2f); //todo levelmeta
         showPlayer(true);
 
         health = MAX_HP;
@@ -207,7 +226,7 @@ public class PlayerControl : MonoBehaviour
 
     private void stateAir() {
         if(landed) nextState = STATE.RUN;
-        else if(courage > 0f && input_Space() && rigid.velocity.y <= -1.0f && state != STATE.FLOAT) nextState = STATE.FLOAT;
+        else if(courage > 0f && input_Space() && (jumpReleased || rigid.velocity.y <= -1f) && state != STATE.FLOAT) nextState = STATE.FLOAT;
     }
 
     private void courageBurst() {
@@ -231,7 +250,7 @@ public class PlayerControl : MonoBehaviour
     }
 
     public void showPlayer(bool show) {
-        GetComponent<Renderer>().enabled = show;
+        costume.SetActive(show);
     }
 
     //input region (TODO replace with a dedicated input controller)

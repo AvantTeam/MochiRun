@@ -13,10 +13,31 @@ public class ChunkLoader : MonoBehaviour
     private byte lastFloorType = 0;
 
     public GameObject floorPrefab;
-    GameObject cam;
+    public static GameObject cam;
     Block floorBlock, pitStart, pitEnd;
     List<BlockSave> loadList = new List<BlockSave>(); //must be sorted by x!
     private int listIndex, listSize;
+
+    public struct IslandBackground {
+        public bool islands;
+        public float islandChance;
+        public float islandZ, islandZRand;
+
+        public static IslandBackground none = new IslandBackground(false, 0, 0, 0), islandMany = new IslandBackground(true, 0.02f, 18f, 5f);
+
+        public IslandBackground(bool islands, float islandChance, float islandZ, float islandZRand) {
+            this.islands = islands;
+            this.islandChance = islandChance;
+            this.islandZ = islandZ;
+            this.islandZRand = islandZRand;
+        }
+    }
+
+    //todo should be set by LevelLoader
+    public IslandBackground islandData;
+    public GameObject islandPrefab;
+    private float lastIslandX;
+    private bool prePlaced = false;
 
     private struct BlockSave {
         public Block type;
@@ -36,18 +57,20 @@ public class ChunkLoader : MonoBehaviour
     void Start() {
         loadBlocks();
         cam = GameObject.Find("Main Camera");
-        isPit = false;
+        isPit = prePlaced = false;
         resetLoadList();
 
         //TODO remove
         loadList.Add(new BlockSave(pitStart, 60f, 0f, 0));
         loadList.Add(new BlockSave(pitEnd, 61f, 0f, 0));
+        islandData = IslandBackground.islandMany;
     }
 
     // Update is called once per frame
     void Update() {
         placeFloors();
         placeBlocks();
+        placeBackground();
     }
 
     private void placeFloors() {
@@ -70,8 +93,33 @@ public class ChunkLoader : MonoBehaviour
     }
 
     private void placeBlock(BlockSave bs) {
-        Debug.Log(bs.x);
         bs.type.init(bs.x, bs.type.onFloor ? floorY + FLOOR_HEIGHT / 2 + bs.type.height / 2 : bs.y, bs.ctype);
+    }
+
+    private void placeBackground() {
+        if(islandData.islands) {
+            if(!prePlaced) prePlaceIslands();
+            if(cam.transform.position.x > 0.5f + lastIslandX && Random.Range(0f, 1f) <= islandData.islandChance * Time.deltaTime * 60f) {
+                float z = islandData.islandZ + Random.Range(-islandData.islandZRand, islandData.islandZRand);
+                float xBound = cam.transform.position.x + DistancedCamClip(z) + 2f;
+                lastIslandX = cam.transform.position.x;
+                Instantiate(islandPrefab, new Vector3(xBound, Random.Range(-2f, -1f), z), Quaternion.identity);
+            }
+        }
+    }
+
+    //only call after IslandBackground is properly set
+    private void prePlaceIslands() {
+        float xLeft = cam.transform.position.x - DistancedCamClip(islandData.islandZ) - 2f;
+        float xRight = cam.transform.position.x + DistancedCamClip(islandData.islandZ) + 2f;
+        lastIslandX = cam.transform.position.x;
+        int n = (int)(islandData.islandChance * 320);
+
+        for(int i = 0; i < n; i++) {
+            float z = islandData.islandZ + Random.Range(-islandData.islandZRand, islandData.islandZRand);
+            Instantiate(islandPrefab, new Vector3(Random.Range(xLeft, xRight), Random.Range(-2f, -1f), z), Quaternion.identity);
+        }
+        prePlaced = true;
     }
 
     private void loadBlocks() {
@@ -84,5 +132,9 @@ public class ChunkLoader : MonoBehaviour
         loadList.Clear();
         listIndex = 0;
         listSize = -1;
+    }
+
+    public static float DistancedCamClip(float z) {
+        return CAM_CLIP / (cam.GetComponent<CameraController>().zoom * (CameraController.CAMSCALE / (CameraController.CAMSCALE + z)));
     }
 }

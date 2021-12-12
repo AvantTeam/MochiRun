@@ -40,7 +40,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2315629835069471037}
   serializedVersion: 7
-  lengthInSec: 0.1
+  lengthInSec: 3
   simulationSpeed: 1
   stopAction: 2
   cullingMode: 0
@@ -1029,7 +1029,7 @@ ParticleSystem:
       repeatInterval: 0.01
       probability: 1
   SizeModule:
-    enabled: 0
+    enabled: 1
     curve:
       serializedVersion: 2
       minMaxState: 1
@@ -1048,10 +1048,10 @@ ParticleSystem:
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
-          time: 0.8408313
-          value: 0.5270271
-          inSlope: -1.0162418
-          outSlope: -1.0162418
+          time: 0.7555365
+          value: 0.62498236
+          inSlope: -1.4854164
+          outSlope: -1.4854164
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
@@ -1059,11 +1059,11 @@ ParticleSystem:
         - serializedVersion: 3
           time: 1
           value: 0
-          inSlope: -2
-          outSlope: -2
+          inSlope: -2.4871414
+          outSlope: -2.4871414
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0
+          inWeight: 0.07606691
           outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -3877,7 +3877,7 @@ ParticleSystem:
       properties: 0
       emitProbability: 1
   LightsModule:
-    enabled: 1
+    enabled: 0
     ratio: 1
     light: {fileID: 9050572088890266779, guid: b6372ef3c97edb043a104fdd8f66ad82, type: 3}
     randomDistribution: 1
@@ -4825,7 +4825,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10301, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 3c771f13fe0b61441ba4dedec0a969ca, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4865,7 +4865,7 @@ ParticleSystemRenderer:
   m_AllowRoll: 1
   m_FreeformStretching: 0
   m_RotateWithStretchDirection: 1
-  m_VertexStreams: 00010304
+  m_VertexStreams: 000304
   m_Mesh: {fileID: 0}
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}

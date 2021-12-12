@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 6879530640559862610}
   - component: {fileID: 2684214066083671740}
   - component: {fileID: 2444641576752487683}
-  - component: {fileID: -7115298801318168407}
-  m_Layer: 0
+  - component: {fileID: 5863213241963398698}
+  m_Layer: 1
   m_Name: BurstCourageFx
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4817,7 +4817,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10301, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 3c771f13fe0b61441ba4dedec0a969ca, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4863,7 +4863,7 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
---- !u!114 &-7115298801318168407
+--- !u!114 &5863213241963398698
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4872,7 +4872,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2315629835069471037}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 887609cc442f71d4eaeca6d23b8a02df, type: 3}
+  m_Script: {fileID: 11500000, guid: 323d2db75d728af429884fab12c691a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   offset: {x: 0, y: 0, z: 0}
