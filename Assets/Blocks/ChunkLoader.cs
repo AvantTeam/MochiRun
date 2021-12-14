@@ -13,8 +13,9 @@ public class ChunkLoader : MonoBehaviour
     private byte lastFloorType = 0;
 
     public GameObject floorPrefab;
+    public GameObject[] blockPrefabs;
     public static GameObject cam;
-    Block floorBlock, pitStart, pitEnd;
+    Block floorBlock, pitStart, pitEnd, spike;
     List<BlockSave> loadList = new List<BlockSave>(); //must be sorted by x!
     private int listIndex, listSize;
 
@@ -126,6 +127,7 @@ public class ChunkLoader : MonoBehaviour
         floorBlock = new Floor(floorPrefab);
         pitStart = new PitStarter();
         pitEnd = new PitEnder();
+        spike = new Block("Spike");
     }
 
     private void resetLoadList() {

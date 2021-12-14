@@ -8,12 +8,10 @@ public class BlockUpdater : MonoBehaviour
     public byte ctype = 0;
 
     GameObject cam;
-    // Start is called before the first frame update
     void Start() {
         cam = ChunkLoader.cam;
     }
 
-    // Update is called once per frame
     void Update() {
         float xBound = cam.transform.position.x - ChunkLoader.CAM_CLIP / cam.GetComponent<CameraController>().zoom - type.clipsize;
         if(transform.position.x < xBound){

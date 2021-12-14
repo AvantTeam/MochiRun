@@ -4828,3 +4828,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   offset: {x: 0, y: -0.5, z: 0}
+  player: {fileID: 4444414581615536473, guid: de72024a6795c9742b160883036f3ccf, type: 3}

@@ -9,8 +9,8 @@ public class PlayerControl : MonoBehaviour
     public static float JUMP_MAX = 0f; //y velocity of the jump. To set it using blocks instead, use setJumpHeight().
     public static float SPEED_MAX = 6f;
     public static float ACCEL = 10f;
-    public static float MAX_HP = 200f;
-    public static float HP_LOSS = 4f; //per second
+    public static float MAX_HP = 100f;
+    public static float HP_LOSS = 2f; //per second
     public static int COURAGES = 1;
     public static float COURAGE_SLOT = 1.5f; //max courage = SLOT * COURAGES
     public static float FLOAT_YVEL = -0.7f;
@@ -43,12 +43,13 @@ public class PlayerControl : MonoBehaviour
 
     Rigidbody2D rigid;
     CameraController cameraControl;
+    public PlayerAnimator animator;
     public GameObject costume, burstFx, courageStartFx, deathFx;
     // Start is called before the first frame update
     void Start() {
         rigid = GetComponent<Rigidbody2D>();
         cameraControl = GameObject.Find("Main Camera").GetComponent<CameraController>();
-        Reset();
+        reset();
     }
 
     // Update is called once per frame
@@ -153,7 +154,8 @@ public class PlayerControl : MonoBehaviour
         costume.transform.position = transform.position;
     }
 
-    public void Reset() {
+    //note: Reset is reserved
+    public void reset() {
         state = STATE.NONE;
         nextState = STATE.RUN;
         jumpPressTimer = JUMP_GRACE + 0.1f;
@@ -163,6 +165,7 @@ public class PlayerControl : MonoBehaviour
         health = MAX_HP;
         usedCourage = false;
         courage = COURAGES * COURAGE_SLOT;
+        if(animator != null) animator.reset();
     }
 
     public void setJumpHeight(float h) {
@@ -233,6 +236,15 @@ public class PlayerControl : MonoBehaviour
         Instantiate(burstFx, transform.position, transform.rotation);
     }
 
+    public void Damage(float damage) {
+        Damage(damage, null);
+    }
+
+    public void Damage(float damage, GameObject? source) {
+        //todo effects & sfx, invincibility
+        health -= damage;
+    }
+
     public void Kill() {
         Kill(true);
     }
@@ -246,6 +258,7 @@ public class PlayerControl : MonoBehaviour
             Instantiate(deathFx, transform.position, transform.rotation);
             showPlayer(false);
         }
+        if(animator != null) animator.Kill(deathEffect);
         //TODO
     }
 

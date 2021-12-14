@@ -32,6 +32,12 @@ public class Block {
         blocks.Add(this);
     }
 
+    public Block(string o) : this() { }
+
+    private static GameObject findPrefab(string prefabName) {
+        return null;
+    }
+
     //called when a block is being spawned (typically out of screen). ctype is only saved for blocks with hasUpdate set to true.
     public virtual void init(float x, float y, byte ctype) {
         if(hasObject){

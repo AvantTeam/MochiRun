@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MochiMaterial
+  m_Name: MochiFlowerMaterial
   m_Shader: {fileID: 4800000, guid: ba4ac45649f9a974fa77e5fce712a640, type: 3}
   m_ShaderKeywords: _SEGMENTED_ON
   m_LightmapFlags: 4
@@ -105,14 +105,14 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 1
-    - _Lumin: 0
+    - _Lumin: 0.743
     - _MaxLight: 1
     - _Metallic: 0
     - _MinLight: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Offset: -0.385
-    - _OtlWidth: 2
+    - _OtlWidth: 0.5
     - _Parallax: 0.02
     - _Segmented: 1
     - _Shininess: 0.03
@@ -125,17 +125,17 @@ Material:
     - _SquashAmount: 1
     - _SrcBlend: 1
     - _Steps: 2.67
-    - _StpSmooth: 0.05
+    - _StpSmooth: 0.539
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 1, g: 0.759434, b: 0.9316574, a: 1}
-    - _DarkColor: {r: 1, g: 0.5707547, b: 0.9291154, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _DarkColor: {r: 1, g: 0.8537736, b: 0.9758525, a: 1}
     - _EmissionColor: {r: 0.4716981, g: 0, b: 0.33542976, a: 0.40392157}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
-    - _OtlColor: {r: 1, g: 0.5707547, b: 0.9291154, a: 1}
+    - _OtlColor: {r: 1, g: 0.8537736, b: 0.9758525, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
-    - _ShnColor: {r: 1, g: 1, b: 0, a: 1}
+    - _ShnColor: {r: 1, g: 0.8537736, b: 0.9758525, a: 1}
     - _SpecColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _TreeInstanceColor: {r: 1, g: 1, b: 1, a: 1}
     - _TreeInstanceScale: {r: 1, g: 1, b: 1, a: 1}
