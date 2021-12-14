@@ -95,7 +95,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -147,6 +147,7 @@ MonoBehaviour:
   burstFx: {fileID: 2315629835069471037, guid: d7004b26539b56d4681a6f43ed2c8c54, type: 3}
   courageStartFx: {fileID: 2315629835069471037, guid: 04d65b732f1711941be18d9430635a96, type: 3}
   deathFx: {fileID: 2315629835069471037, guid: bbd7554615e3e0e42a9a5c8d1333482e, type: 3}
+  damageFx: {fileID: 2315629835069471037, guid: 8a4054466ab63a042a5229f813d1e175, type: 3}
 --- !u!108 &3910615291512618672
 Light:
   m_ObjectHideFlags: 0

@@ -22,20 +22,16 @@ public class Block {
     }
 
     public Block(GameObject o) {
-        hasObject = true;
-        prefab = o;
-        hasUpdate = o.GetComponent<BlockUpdater>() != null;
-        width = o.transform.localScale.x;
-        height = o.transform.localScale.y;
+        if(o != null) {
+            hasObject = true;
+            prefab = o;
+            hasUpdate = o.GetComponent<BlockUpdater>() != null;
+            width = o.transform.localScale.x;
+            height = o.transform.localScale.y;
+        }
 
         id = blocks.Count;
         blocks.Add(this);
-    }
-
-    public Block(string o) : this() { }
-
-    private static GameObject findPrefab(string prefabName) {
-        return null;
     }
 
     //called when a block is being spawned (typically out of screen). ctype is only saved for blocks with hasUpdate set to true.

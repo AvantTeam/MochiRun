@@ -44,7 +44,7 @@ public class PlayerControl : MonoBehaviour
     Rigidbody2D rigid;
     CameraController cameraControl;
     public PlayerAnimator animator;
-    public GameObject costume, burstFx, courageStartFx, deathFx;
+    public GameObject costume, burstFx, courageStartFx, deathFx, damageFx;
     // Start is called before the first frame update
     void Start() {
         rigid = GetComponent<Rigidbody2D>();
@@ -243,6 +243,14 @@ public class PlayerControl : MonoBehaviour
     public void Damage(float damage, GameObject? source) {
         //todo effects & sfx, invincibility
         health -= damage;
+        if(damage > 5f) {
+            Instantiate(damageFx, transform.position, transform.rotation);
+            if(damage >= 30f) {
+                int n = (int)((damage - 25f) / 18f) + 1;
+                if(n > 3) n = 3;
+                for(int i = 0; i < n; i++) Instantiate(damageFx, transform.position, transform.rotation);
+            }
+        }
     }
 
     public void Kill() {

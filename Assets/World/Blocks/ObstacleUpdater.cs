@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//this object has a Kinematic RigidBody & Trigger Collider
 public class ObstacleUpdater : MonoBehaviour
 {
     public float damage = 15f;
@@ -19,8 +20,10 @@ public class ObstacleUpdater : MonoBehaviour
         }
     }
 
-    //the only trigger is the player!
+
     private void OnTriggerEnter2D(Collider2D collision) {
-        pcon.Damage(damage, gameObject);
+        if(collision.gameObject.CompareTag("Player")) {
+            pcon.Damage(damage, gameObject);
+        }
     }
 }

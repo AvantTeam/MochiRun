@@ -62,8 +62,13 @@ public class ChunkLoader : MonoBehaviour
         resetLoadList();
 
         //TODO remove
+        loadList.Add(new BlockSave(spike, 30f, 0f, 0));
+        loadList.Add(new BlockSave(spike, 32f, 0f, 0));
         loadList.Add(new BlockSave(pitStart, 60f, 0f, 0));
         loadList.Add(new BlockSave(pitEnd, 61f, 0f, 0));
+        loadList.Add(new BlockSave(spike, 80f, 0f, 0));
+        loadList.Add(new BlockSave(spike, 81f, 0f, 0));
+        loadList.Add(new BlockSave(spike, 82f, 0f, 0));
         islandData = IslandBackground.islandMany;
     }
 
@@ -127,13 +132,22 @@ public class ChunkLoader : MonoBehaviour
         floorBlock = new Floor(floorPrefab);
         pitStart = new PitStarter();
         pitEnd = new PitEnder();
-        spike = new Block("Spike");
+        spike = new Block(find("Spike")) {
+            onFloor = true
+        };
     }
 
     private void resetLoadList() {
         loadList.Clear();
         listIndex = 0;
         listSize = -1;
+    }
+
+    private GameObject find(string prefab) {
+        foreach(GameObject o in blockPrefabs) {
+            if(o.name == prefab) return o;
+        }
+        return null;
     }
 
     public static float DistancedCamClip(float z) {

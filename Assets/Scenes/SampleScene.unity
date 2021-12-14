@@ -705,6 +705,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   floorPrefab: {fileID: 3200795463737564019, guid: 7e0ff9ac475e1f749a6b28b1586dddbb, type: 3}
+  blockPrefabs:
+  - {fileID: 5600063603711397611, guid: e684f5c6c994c0f4793258d6e37fa9f3, type: 3}
   islandPrefab: {fileID: 3200795463737564019, guid: af8652a723b69bd48b601ab44de90fba, type: 3}
 --- !u!1 &2140138407 stripped
 GameObject:
@@ -747,6 +749,10 @@ PrefabInstance:
     - target: {fileID: 3910615291512617289, guid: 52516eb6e82fb8e43a59d2b5e303eab4, type: 3}
       propertyPath: m_TagString
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 3910615291512617290, guid: 52516eb6e82fb8e43a59d2b5e303eab4, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3910615291512617293, guid: 52516eb6e82fb8e43a59d2b5e303eab4, type: 3}
       propertyPath: m_RootOrder
