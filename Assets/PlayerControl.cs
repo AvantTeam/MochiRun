@@ -10,9 +10,9 @@ public class PlayerControl : MonoBehaviour
     public static float SPEED_MAX = 6f;
     public static float INVIN_TIME = 0.75f; //invincibility seconds after taking any damage
     public static float MAX_HP = 100f;
-    public static float HP_LOSS = 2f; //per second
-    public static int COURAGES = 1;
-    public static float COURAGE_SLOT = 1.5f; //max courage = SLOT * COURAGES
+    public static float HP_LOSS = 4f; //per second
+    public static int COURAGES = 2;
+    public static float COURAGE_SLOT = 1f; //max courage = SLOT * COURAGES
     public static float FLOAT_YVEL = -0.7f;
     private const float JUMP_RELEASE_REDUCE = 0.75f;
     private const float JUMP_GRACE = 0.3f; //the motive to "press jump" lasts for this long; i.e. press jump up to X seconds before touching the ground to immediately jump after
@@ -46,7 +46,7 @@ public class PlayerControl : MonoBehaviour
     Rigidbody2D rigid;
     CameraController cameraControl;
     public PlayerAnimator animator;
-    public GameObject costume, burstFx, courageStartFx, deathFx, damageFx;
+    public GameObject costume, burstFx, courageStartFx, deathFx, damageFx, courageFailFx;
     // Start is called before the first frame update
     void Start() {
         rigid = GetComponent<Rigidbody2D>();
@@ -157,6 +157,10 @@ public class PlayerControl : MonoBehaviour
         costume.transform.position = transform.position;
     }
 
+    public int CourageSlots() {
+        return Mathf.FloorToInt(courage / COURAGE_SLOT);
+    }
+
     //note: Reset is reserved
     public void reset() {
         state = STATE.NONE;
@@ -237,8 +241,8 @@ public class PlayerControl : MonoBehaviour
     }
 
     private void courageBurst() {
-        //todo only play this effect if bursting succeeds
-        //Fx(burstFx);
+        //todo only play burstFx if bursting succeeds
+        Fx(courageFailFx);
     }
 
     public void Damage(float damage) {
@@ -246,7 +250,6 @@ public class PlayerControl : MonoBehaviour
     }
 
     public void Damage(float damage, GameObject? source) {
-        //todo effects & sfx, invincibility
         health -= damage;
         if(damage < 0.5f) {
             //heal effect?
@@ -273,6 +276,7 @@ public class PlayerControl : MonoBehaviour
         state = STATE.STOP;
         nextState = STATE.STOP;
         health = 0f;
+        courage = 0f;
         stateTime = 0f;
 
         if(deathEffect){
@@ -304,6 +308,6 @@ public class PlayerControl : MonoBehaviour
         return Input.GetKeyDown(KeyCode.Space);
     }
     public bool input_Space() {
-        return Input.GetKey(KeyCode.Space);
+        return Input.GetKey(KeyCode.Space) || Input.GetKeyDown(KeyCode.Space);
     }
 }

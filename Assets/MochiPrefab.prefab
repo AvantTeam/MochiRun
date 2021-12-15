@@ -148,6 +148,7 @@ MonoBehaviour:
   courageStartFx: {fileID: 2315629835069471037, guid: 04d65b732f1711941be18d9430635a96, type: 3}
   deathFx: {fileID: 2315629835069471037, guid: bbd7554615e3e0e42a9a5c8d1333482e, type: 3}
   damageFx: {fileID: 2315629835069471037, guid: 8a4054466ab63a042a5229f813d1e175, type: 3}
+  courageFailFx: {fileID: 2315629835069471037, guid: 8adcb95cc2940e249895f1aa97b4ab68, type: 3}
 --- !u!108 &3910615291512618672
 Light:
   m_ObjectHideFlags: 0
