@@ -15,7 +15,7 @@ public class ChunkLoader : MonoBehaviour
     public GameObject floorPrefab;
     public GameObject[] blockPrefabs;
     public static GameObject cam;
-    Block floorBlock, pitStart, pitEnd, spike;
+    Block floorBlock, pitStart, pitEnd, spike, potion;
     List<BlockSave> loadList = new List<BlockSave>(); //must be sorted by x!
     private int listIndex, listSize;
 
@@ -68,6 +68,7 @@ public class ChunkLoader : MonoBehaviour
         loadList.Add(new BlockSave(pitEnd, 61f, 0f, 0));
         loadList.Add(new BlockSave(spike, 80f, 0f, 0));
         loadList.Add(new BlockSave(spike, 81f, 0f, 0));
+        loadList.Add(new BlockSave(potion, 81f, 5f, 0));
         loadList.Add(new BlockSave(spike, 82f, 0f, 0));
         islandData = IslandBackground.islandMany;
     }
@@ -135,6 +136,7 @@ public class ChunkLoader : MonoBehaviour
         spike = new Block(find("Spike")) {
             onFloor = true
         };
+        potion = new Block(find("Potion"));
     }
 
     private void resetLoadList() {

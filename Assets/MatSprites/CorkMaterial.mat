@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: StoneMaterial
+  m_Name: CorkMaterial
   m_Shader: {fileID: 4800000, guid: ba4ac45649f9a974fa77e5fce712a640, type: 3}
   m_ShaderKeywords: _SEGMENTED_ON
   m_LightmapFlags: 4
@@ -93,7 +93,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - PixelSnap: 0
-    - _AmbientCol: 0.491
+    - _AmbientCol: 0.1
     - _BumpScale: 1
     - _Clipped: 0
     - _ColBright: 0
@@ -112,7 +112,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Offset: 0.827
-    - _OtlWidth: 5
+    - _OtlWidth: 3
     - _Parallax: 0.02
     - _Segmented: 1
     - _Shininess: 0.03
@@ -124,16 +124,16 @@ Material:
     - _SpecularHighlights: 1
     - _SquashAmount: 1
     - _SrcBlend: 1
-    - _Steps: 10
-    - _StpSmooth: 0.129
+    - _Steps: 3
+    - _StpSmooth: 0
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.4528302, g: 0.4528302, b: 0.4528302, a: 1}
-    - _DarkColor: {r: 0.31132078, g: 0.31132078, b: 0.31132078, a: 1}
+    - _Color: {r: 0.8490566, g: 0.57362473, b: 0, a: 1}
+    - _DarkColor: {r: 0.5566038, g: 0.35863674, b: 0, a: 1}
     - _EmissionColor: {r: 0.4716981, g: 0, b: 0.33542976, a: 0.40392157}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
-    - _OtlColor: {r: 0.31132078, g: 0.31132078, b: 0.31132078, a: 1}
+    - _OtlColor: {r: 0.5566038, g: 0.35863674, b: 0, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _ShnColor: {r: 1, g: 1, b: 0, a: 1}
     - _SpecColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}

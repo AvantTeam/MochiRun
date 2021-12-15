@@ -8,14 +8,15 @@ public class PlayerControl : MonoBehaviour
 
     public static float JUMP_MAX = 0f; //y velocity of the jump. To set it using blocks instead, use setJumpHeight().
     public static float SPEED_MAX = 6f;
-    public static float ACCEL = 10f;
+    public static float INVIN_TIME = 0.75f; //invincibility seconds after taking any damage
     public static float MAX_HP = 100f;
     public static float HP_LOSS = 2f; //per second
     public static int COURAGES = 1;
     public static float COURAGE_SLOT = 1.5f; //max courage = SLOT * COURAGES
     public static float FLOAT_YVEL = -0.7f;
     private const float JUMP_RELEASE_REDUCE = 0.75f;
-    private const float JUMP_GRACE = 0.4f; //the motive to "press jump" lasts for this long; i.e. press jump up to X seconds before touching the ground to immediately jump after
+    private const float JUMP_GRACE = 0.3f; //the motive to "press jump" lasts for this long; i.e. press jump up to X seconds before touching the ground to immediately jump after
+    private const float ACCEL = 10f;
 
     public enum STATE {
         NONE = -1,
@@ -40,6 +41,7 @@ public class PlayerControl : MonoBehaviour
     private bool collided = false;
     private bool jumpReleased = false;
     private float jumpPressTimer = JUMP_GRACE + 0.1f;
+    private float invincibility = 0f;
 
     Rigidbody2D rigid;
     CameraController cameraControl;
@@ -66,6 +68,7 @@ public class PlayerControl : MonoBehaviour
         else if(jumpPressTimer < JUMP_GRACE) {
             jumpPressTimer += Time.deltaTime;
         }
+        if(invincibility > 0f) invincibility -= Time.deltaTime;
 
         //AUTO STATE CHANGE
         if(nextState == STATE.NONE) {
@@ -98,7 +101,7 @@ public class PlayerControl : MonoBehaviour
                     jumpReleased = false;
                     break;
                 case STATE.FLOAT:
-                    if(!usedCourage) Instantiate(courageStartFx, transform.position, transform.rotation);
+                    if(!usedCourage) Fx(courageStartFx);
                     usedCourage = true;
                     courageTime = 0f;
                     break;
@@ -110,11 +113,11 @@ public class PlayerControl : MonoBehaviour
             stateTime = 0f;
         }
 
-        if(state != STATE.STOP && (state == STATE.RUN || vel.x > SPEED_MAX * 0.5f)) { //keep speed constantly big except when you try slamming onto a wall
+        if(state != STATE.STOP && (state == STATE.RUN || vel.x > SPEED_MAX * 0.1f)) { //keep speed constantly big except when you try slamming onto a wall
             vel.x += ACCEL * Time.deltaTime;
             if(Mathf.Abs(vel.x) > SPEED_MAX) vel.x = SPEED_MAX * Mathf.Sign(vel.x);
         }
-        else {
+        else if(state == STATE.STOP){
             vel.x *= 0.7f; //abrupt stop when dead
         }
 
@@ -139,7 +142,7 @@ public class PlayerControl : MonoBehaviour
                         courageTime += Time.deltaTime; //even if you are jumping up, you can still use the burst
                     }
                     else{
-                        if(jumpPressTimer < 0.15f && courageTime > 0f) {
+                        if(courageTime < 0.15f && courageTime > 0f) {
                             //fast tap
                             courage = (Mathf.Ceil(courage / COURAGE_SLOT) - 1f) * COURAGE_SLOT; //use one full slot
                             courageBurst();
@@ -165,6 +168,7 @@ public class PlayerControl : MonoBehaviour
         health = MAX_HP;
         usedCourage = false;
         courage = COURAGES * COURAGE_SLOT;
+        invincibility = 0f;
         if(animator != null) animator.reset();
     }
 
@@ -181,7 +185,7 @@ public class PlayerControl : MonoBehaviour
         Vector2 s = new Vector2(transform.position.x, transform.position.y);
         Vector2 e = s + Vector2.down * 0.6f;
         Collider2D collider = Physics2D.Linecast(s, e).collider;
-        if(collider == null) {
+        if(collider == null || collider.isTrigger) {
             return;
         }
         if(collider.gameObject.CompareTag("Floor")) {
@@ -229,11 +233,12 @@ public class PlayerControl : MonoBehaviour
 
     private void stateAir() {
         if(landed) nextState = STATE.RUN;
-        else if(courage > 0f && input_Space() && (jumpReleased || rigid.velocity.y <= -1f) && state != STATE.FLOAT) nextState = STATE.FLOAT;
+        else if(courage > 0f && input_Space() && (jumpReleased/* || rigid.velocity.y <= -1f*/) && state != STATE.FLOAT) nextState = STATE.FLOAT; //uncomment to make courage use automatically
     }
 
     private void courageBurst() {
-        Instantiate(burstFx, transform.position, transform.rotation);
+        //todo only play this effect if bursting succeeds
+        //Fx(burstFx);
     }
 
     public void Damage(float damage) {
@@ -243,14 +248,22 @@ public class PlayerControl : MonoBehaviour
     public void Damage(float damage, GameObject? source) {
         //todo effects & sfx, invincibility
         health -= damage;
-        if(damage > 5f) {
-            Instantiate(damageFx, transform.position, transform.rotation);
+        if(damage < 0.5f) {
+            //heal effect?
+        }
+        else if(damage > 5f) { //status effects (dot damage, <5) are not prevented by invincibility
+            if(invincibility > 0.1f) return;
+            invincibility = INVIN_TIME;
+
+            Fx(damageFx);
             if(damage >= 30f) {
                 int n = (int)((damage - 25f) / 18f) + 1;
                 if(n > 3) n = 3;
-                for(int i = 0; i < n; i++) Instantiate(damageFx, transform.position, transform.rotation);
+                for(int i = 0; i < n; i++) Fx(damageFx);
             }
         }
+
+        if(health > MAX_HP) health = MAX_HP;
     }
 
     public void Kill() {
@@ -263,11 +276,23 @@ public class PlayerControl : MonoBehaviour
         stateTime = 0f;
 
         if(deathEffect){
-            Instantiate(deathFx, transform.position, transform.rotation);
+            Fx(deathFx);
             showPlayer(false);
         }
+        else {
+            Fx(damageFx);
+        }
         if(animator != null) animator.Kill(deathEffect);
-        //TODO
+        //TODO game over sequence
+    }
+
+    //TODO pool fx
+    public void Fx(GameObject fx) {
+        Fx(fx, transform.position, transform.rotation);
+    }
+
+    public void Fx(GameObject fx, Vector3 position, Quaternion rotation) {
+        Instantiate(fx, position, rotation);
     }
 
     public void showPlayer(bool show) {
