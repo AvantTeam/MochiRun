@@ -6,10 +6,13 @@ public class BlockUpdater : MonoBehaviour
 {
     public Block type;
     public byte ctype = 0;
+    public bool updatesTile = false;
 
-    GameObject cam;
-    void Start() {
+    protected GameObject cam;
+    protected PlayerControl pcon;
+    protected virtual void Start() {
         cam = ChunkLoader.cam;
+        pcon = ChunkLoader.pcon;
     }
 
     void Update() {
@@ -17,5 +20,17 @@ public class BlockUpdater : MonoBehaviour
         if(transform.position.x < xBound){
             Destroy(gameObject);
         }
+        else if(updatesTile){
+            UpdateTile();
+        }
+    }
+
+
+    public virtual void UpdateTile() {
+
+    }
+
+    public virtual void Couraged(PlayerControl pcon) {
+
     }
 }

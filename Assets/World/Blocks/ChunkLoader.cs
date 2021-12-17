@@ -15,7 +15,8 @@ public class ChunkLoader : MonoBehaviour
     public GameObject floorPrefab;
     public GameObject[] blockPrefabs;
     public static GameObject cam;
-    Block floorBlock, pitStart, pitEnd, spike, potion;
+    public static PlayerControl pcon;
+    Block floorBlock, pitStart, pitEnd, spike, potion, jumpOrb, balloon, balloonLow, balloonHigh;
     List<BlockSave> loadList = new List<BlockSave>(); //must be sorted by x!
     private int listIndex, listSize;
 
@@ -58,10 +59,12 @@ public class ChunkLoader : MonoBehaviour
     void Start() {
         loadBlocks();
         cam = GameObject.Find("Main Camera");
+        pcon = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControl>();
         isPit = prePlaced = false;
         resetLoadList();
 
         //TODO remove
+        loadList.Add(new BlockSave(jumpOrb, 22f, 5.2f, 0));
         loadList.Add(new BlockSave(spike, 30f, 0f, 0));
         loadList.Add(new BlockSave(spike, 32f, 0f, 0));
         loadList.Add(new BlockSave(pitStart, 60f, 0f, 0));
@@ -70,6 +73,11 @@ public class ChunkLoader : MonoBehaviour
         loadList.Add(new BlockSave(spike, 81f, 0f, 0));
         loadList.Add(new BlockSave(potion, 81f, 5f, 0));
         loadList.Add(new BlockSave(spike, 82f, 0f, 0));
+        loadList.Add(new BlockSave(pitStart, 90f, 0f, 0));
+        loadList.Add(new BlockSave(balloon, 95f, 2.5f, 0));
+        loadList.Add(new BlockSave(balloon, 100f, 2.5f, 0));
+        loadList.Add(new BlockSave(balloonHigh, 105f, 2.5f, 2));
+        loadList.Add(new BlockSave(pitEnd, 110f, 0f, 0));
         islandData = IslandBackground.islandMany;
     }
 
@@ -137,6 +145,12 @@ public class ChunkLoader : MonoBehaviour
             onFloor = true
         };
         potion = new Block(find("Potion"));
+        jumpOrb = new Balloon(find("JumpOrb")) {
+            zLayer = 0.1f
+        };
+        balloon = new Balloon(find("JumpBalloon"));
+        balloonLow = new Balloon(find("JumpBalloonLow"));
+        balloonHigh = new Balloon(find("JumpBalloonHigh"));
     }
 
     private void resetLoadList() {

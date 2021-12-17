@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //this object has a Trigger Collider
-public class ObstacleUpdater : MonoBehaviour
+public class ObstacleUpdater : BlockUpdater
 {
     public float damage = 15f;
     public bool destroyOnHit = false;
@@ -12,26 +12,19 @@ public class ObstacleUpdater : MonoBehaviour
 
     public GameObject hitFx = null;
 
-    GameObject cam;
-    PlayerControl pcon;
-    void Start() {
-        cam = ChunkLoader.cam;
-        pcon = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControl>();
+    protected override void Start() {
+        base.Start();
         Vector3 rot = transform.rotation.eulerAngles;
         transform.rotation = Quaternion.Euler(angleOffset + rot);
+        updatesTile = true;
     }
 
-    void Update() {
-        float xBound = cam.transform.position.x - ChunkLoader.CAM_CLIP / cam.GetComponent<CameraController>().zoom - 2f;
-        if(transform.position.x < xBound) {
-            Destroy(gameObject);
-        }
+    public override void UpdateTile() {
         if(rotateSpeed > 0.1f || rotateSpeed < -0.1f) {
             Vector3 rot = transform.rotation.eulerAngles;
             transform.rotation = Quaternion.Euler(rot.x, rot.y + rotateSpeed * Time.deltaTime, rot.z);
         }
     }
-
 
     private void OnTriggerEnter2D(Collider2D collision) {
         if(collision.gameObject.CompareTag("Player")) {

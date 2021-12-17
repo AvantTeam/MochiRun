@@ -28,6 +28,9 @@ public class Block {
             hasUpdate = o.GetComponent<BlockUpdater>() != null;
             width = o.transform.localScale.x;
             height = o.transform.localScale.y;
+
+            //todo remove
+            //Debug.Log(o.ToString() + "'s BlockUpdater:" + (o.GetComponent<BlockUpdater>() == null ? "NULL" : o.GetComponent<BlockUpdater>().ToString()));
         }
 
         id = blocks.Count;
@@ -74,7 +77,6 @@ public class Floor : Block {
 
 public class PitStarter : Block {
     public PitStarter() : base() {
-        Debug.Log(id);
         clipsize = 4f;
         onFloor = true;
     }
@@ -85,13 +87,11 @@ public class PitStarter : Block {
         Collider2D collider = Physics2D.Linecast(s, e).collider;
         if(collider != null && collider.gameObject.CompareTag("Floor")) Object.Destroy(collider.gameObject); //destroy the floor under this
         ChunkLoader.isPit = true;
-        Debug.Log("Start Pit!");
     }
 }
 
 public class PitEnder : Block {
     public PitEnder() : base() {
-        Debug.Log(id);
         clipsize = 4f;
         onFloor = true;
     }
@@ -99,5 +99,19 @@ public class PitEnder : Block {
     public override void init(float x, float y, byte ctype) {
         ChunkLoader.lastX = x - width / 2f + ChunkLoader.FLOOR_WIDTH / 2f;
         ChunkLoader.isPit = false;
+    }
+}
+
+public class Balloon : Block {
+    public Balloon(GameObject o) : base(o) { }
+    public override void init(float x, float y, byte ctype) {
+        if(hasObject) {
+            GameObject newo = Object.Instantiate(prefab, new Vector3(x, y, zLayer), Quaternion.Euler(0, Random.Range(0f, 360f), 0));
+            if(hasUpdate) {
+                BlockUpdater bu = newo.GetComponent<BlockUpdater>();
+                bu.type = this;
+                bu.ctype = ctype;
+            }
+        }
     }
 }

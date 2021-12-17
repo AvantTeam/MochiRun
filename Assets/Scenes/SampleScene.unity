@@ -1583,6 +1583,10 @@ MonoBehaviour:
   blockPrefabs:
   - {fileID: 5600063603711397611, guid: e684f5c6c994c0f4793258d6e37fa9f3, type: 3}
   - {fileID: 6859687517624608140, guid: a820396c9f9322141bf9e3fac05028cd, type: 3}
+  - {fileID: 2120803639321241534, guid: 102f5418d2071bc45bc4928f7b12e006, type: 3}
+  - {fileID: 6859687517624608140, guid: 719cfd4c56d8a674c825bd78f613868d, type: 3}
+  - {fileID: 6859687517624608140, guid: bcdd6cb616ad9174e8b2ff5cbc531bb4, type: 3}
+  - {fileID: 6859687517624608140, guid: a880bd227557d2f438d6419b42a68401, type: 3}
   islandPrefab: {fileID: 3200795463737564019, guid: af8652a723b69bd48b601ab44de90fba, type: 3}
 --- !u!1 &2140138407 stripped
 GameObject:

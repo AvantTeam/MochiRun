@@ -7,7 +7,7 @@ public class PlayerControl : MonoBehaviour
     public const float PLAYER_RADIUS = 0.5f;
 
     public static float JUMP_MAX = 0f; //y velocity of the jump. To set it using blocks instead, use setJumpHeight().
-    public static float SPEED_MAX = 6f;
+    public static float SPEED_MAX = 4f;
     public static float INVIN_TIME = 0.75f; //invincibility seconds after taking any damage
     public static float MAX_HP = 100f;
     public static float HP_LOSS = 4f; //per second
@@ -38,19 +38,27 @@ public class PlayerControl : MonoBehaviour
 
     public bool landed = false;
     public bool usedCourage = false;
-    private bool collided = false;
     private bool jumpReleased = false;
     private float jumpPressTimer = JUMP_GRACE + 0.1f;
     private float invincibility = 0f;
+    private Collider2D[] colresult = new Collider2D[25]; //attempting to get all overlapping colliders will get 20 max
+    private ContactFilter2D triggerContactFilter;
+    private Vector2 externalForce = Vector2.zero, overrideForce = Vector2.zero;
+    private bool overrideForceX, overrideForceY;
 
     Rigidbody2D rigid;
+    Collider2D collider2d;
     CameraController cameraControl;
     public PlayerAnimator animator;
     public GameObject costume, burstFx, courageStartFx, deathFx, damageFx, courageFailFx;
     // Start is called before the first frame update
     void Start() {
         rigid = GetComponent<Rigidbody2D>();
+        collider2d = GetComponent<Collider2D>();
         cameraControl = GameObject.Find("Main Camera").GetComponent<CameraController>();
+        triggerContactFilter = new ContactFilter2D();
+        triggerContactFilter.useTriggers = true;
+
         reset();
     }
 
@@ -114,8 +122,9 @@ public class PlayerControl : MonoBehaviour
         }
 
         if(state != STATE.STOP && (state == STATE.RUN || vel.x > SPEED_MAX * 0.1f)) { //keep speed constantly big except when you try slamming onto a wall
-            vel.x += ACCEL * Time.deltaTime;
-            if(Mathf.Abs(vel.x) > SPEED_MAX) vel.x = SPEED_MAX * Mathf.Sign(vel.x);
+            if(state == STATE.RUN && landed && Mathf.Abs(externalForce.x) < 0.1f) vel.x = SPEED_MAX;
+            else if(Mathf.Abs(vel.x) > SPEED_MAX) vel.x = SPEED_MAX * Mathf.Sign(vel.x); //todo fix this mess
+            else vel.x += ACCEL * Time.deltaTime;
         }
         else if(state == STATE.STOP){
             vel.x *= 0.7f; //abrupt stop when dead
@@ -127,7 +136,11 @@ public class PlayerControl : MonoBehaviour
                 
             break;
             case STATE.JUMP:
-                if(inputJump || jumpReleased || vel.y <= 0f) break; //nothing to do here
+                if(inputJump || jumpReleased) break;
+                if(vel.y <= 0f){
+                    jumpReleased = true;
+                    break; //nothing to do here
+                }
                 vel.y *= JUMP_RELEASE_REDUCE; //early jump key up; reduce jump height
                 jumpReleased = true;
                 break;
@@ -142,7 +155,7 @@ public class PlayerControl : MonoBehaviour
                         courageTime += Time.deltaTime; //even if you are jumping up, you can still use the burst
                     }
                     else{
-                        if(courageTime < 0.15f && courageTime > 0f) {
+                        if(courageTime < 0.2f && courageTime > 0f) {
                             //fast tap
                             courage = (Mathf.Ceil(courage / COURAGE_SLOT) - 1f) * COURAGE_SLOT; //use one full slot
                             courageBurst();
@@ -153,7 +166,16 @@ public class PlayerControl : MonoBehaviour
                 break;
         }
         
-        rigid.velocity = vel;
+        if(overrideForceX) {
+            vel.x = overrideForce.x;
+            overrideForceX = false;
+        }
+        if(overrideForceY) {
+            vel.y = overrideForce.y;
+            overrideForceY = false;
+        }
+        rigid.velocity = vel + externalForce;
+        externalForce = Vector2.zero;
         costume.transform.position = transform.position;
     }
 
@@ -173,6 +195,9 @@ public class PlayerControl : MonoBehaviour
         usedCourage = false;
         courage = COURAGES * COURAGE_SLOT;
         invincibility = 0f;
+        externalForce = Vector2.zero;
+        overrideForce = Vector2.zero;
+        overrideForceX = overrideForceY = false;
         if(animator != null) animator.reset();
     }
 
@@ -237,12 +262,42 @@ public class PlayerControl : MonoBehaviour
 
     private void stateAir() {
         if(landed) nextState = STATE.RUN;
-        else if(courage > 0f && input_Space() && (jumpReleased/* || rigid.velocity.y <= -1f*/) && state != STATE.FLOAT) nextState = STATE.FLOAT; //uncomment to make courage use automatically
+        else if(courage > 0f && input_SpaceDown() && (jumpReleased || rigid.velocity.y <= 0f) && state != STATE.FLOAT) nextState = STATE.FLOAT;
     }
 
     private void courageBurst() {
         //todo only play burstFx if bursting succeeds
         Fx(courageFailFx);
+        int n = collider2d.OverlapCollider(triggerContactFilter, colresult);
+        for(int i = 0; i < n; i++) {
+            GameObject o = colresult[i].gameObject;
+            if(o.CompareTag("CourageTrigger")) {
+                BlockUpdater build = o.GetComponent<BlockUpdater>();
+                if(build != null) build.Couraged(this);
+            }
+        }
+    }
+
+    public void Impulse(float x, float y) {
+        externalForce.x += x;
+        externalForce.y += y;
+    }
+
+    public void SetVelocity(float x, float y) {
+        SetVelocityX(x);
+        SetVelocityY(y);
+    }
+
+    public void SetVelocityX(float x) {
+        if(overrideForceX && Mathf.Abs(overrideForce.x) > Mathf.Abs(x)) return;
+        overrideForceX = true;
+        overrideForce.x = x;
+    }
+
+    public void SetVelocityY(float y) {
+        if(overrideForceY && Mathf.Abs(overrideForce.y) > Mathf.Abs(y)) return;
+        overrideForceY = true;
+        overrideForce.y = y;
     }
 
     public void Damage(float damage) {
