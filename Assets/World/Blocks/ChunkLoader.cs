@@ -16,7 +16,7 @@ public class ChunkLoader : MonoBehaviour
     public GameObject[] blockPrefabs;
     public static GameObject cam;
     public static PlayerControl pcon;
-    Block floorBlock, pitStart, pitEnd, spike, potion, jumpOrb, balloon, balloonLow, balloonHigh;
+    //Block floorBlock, pitStart, pitEnd, spike, potion, jumpOrb, balloon, balloonLow, balloonHigh;
     List<BlockSave> loadList = new List<BlockSave>(); //must be sorted by x!
     private int listIndex, listSize;
 
@@ -41,7 +41,7 @@ public class ChunkLoader : MonoBehaviour
     private float lastIslandX;
     private bool prePlaced = false;
 
-    private struct BlockSave {
+    public struct BlockSave {
         public Block type;
         public byte ctype;
         public float x;
@@ -57,27 +57,27 @@ public class ChunkLoader : MonoBehaviour
     
     // Start is called before the first frame update
     void Start() {
-        loadBlocks();
+        //loadBlocks();
         cam = GameObject.Find("Main Camera");
         pcon = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControl>();
         isPit = prePlaced = false;
         resetLoadList();
 
         //TODO remove
-        loadList.Add(new BlockSave(jumpOrb, 22f, 5.2f, 0));
-        loadList.Add(new BlockSave(spike, 30f, 0f, 0));
-        loadList.Add(new BlockSave(spike, 32f, 0f, 0));
-        loadList.Add(new BlockSave(pitStart, 60f, 0f, 0));
-        loadList.Add(new BlockSave(pitEnd, 61f, 0f, 0));
-        loadList.Add(new BlockSave(spike, 80f, 0f, 0));
-        loadList.Add(new BlockSave(spike, 81f, 0f, 0));
-        loadList.Add(new BlockSave(potion, 81f, 5f, 0));
-        loadList.Add(new BlockSave(spike, 82f, 0f, 0));
-        loadList.Add(new BlockSave(pitStart, 90f, 0f, 0));
-        loadList.Add(new BlockSave(balloon, 95f, 2.5f, 0));
-        loadList.Add(new BlockSave(balloon, 100f, 2.5f, 0));
-        loadList.Add(new BlockSave(balloonHigh, 105f, 2.5f, 2));
-        loadList.Add(new BlockSave(pitEnd, 110f, 0f, 0));
+        loadList.Add(new BlockSave(Blocks.jumpOrb, 22f, 5.2f, 0));
+        loadList.Add(new BlockSave(Blocks.spike, 30f, 0f, 0));
+        loadList.Add(new BlockSave(Blocks.spike, 32f, 0f, 0));
+        loadList.Add(new BlockSave(Blocks.pitStart, 60f, 0f, 0));
+        loadList.Add(new BlockSave(Blocks.pitEnd, 61f, 0f, 0));
+        loadList.Add(new BlockSave(Blocks.spike, 80f, 0f, 0));
+        loadList.Add(new BlockSave(Blocks.spike, 81f, 0f, 0));
+        loadList.Add(new BlockSave(Blocks.potion, 81f, 5f, 0));
+        loadList.Add(new BlockSave(Blocks.spike, 82f, 0f, 0));
+        loadList.Add(new BlockSave(Blocks.pitStart, 90f, 0f, 0));
+        loadList.Add(new BlockSave(Blocks.balloon, 95f, 2.5f, 0));
+        loadList.Add(new BlockSave(Blocks.balloon, 100f, 2.5f, 0));
+        loadList.Add(new BlockSave(Blocks.balloonHigh, 105f, 2.5f, 2));
+        loadList.Add(new BlockSave(Blocks.pitEnd, 110f, 0f, 0));
         islandData = IslandBackground.islandMany;
     }
 
@@ -92,7 +92,7 @@ public class ChunkLoader : MonoBehaviour
         if(isPit) return;
         float xBound = cam.transform.position.x + CAM_CLIP / cam.GetComponent<CameraController>().zoom + FLOOR_WIDTH;
         while(lastX < xBound) {
-            floorBlock.init(lastX, floorY, (byte)(++lastFloorType % 2));
+            Blocks.floorBlock.init(lastX, floorY, (byte)(++lastFloorType % 2));
             lastX += FLOOR_WIDTH;
         }
     }
@@ -137,7 +137,7 @@ public class ChunkLoader : MonoBehaviour
         prePlaced = true;
     }
 
-    private void loadBlocks() {
+    /*private void loadBlocks() {
         floorBlock = new Floor(floorPrefab);
         pitStart = new PitStarter();
         pitEnd = new PitEnder();
@@ -151,7 +151,7 @@ public class ChunkLoader : MonoBehaviour
         balloon = new Balloon(find("JumpBalloon"));
         balloonLow = new Balloon(find("JumpBalloonLow"));
         balloonHigh = new Balloon(find("JumpBalloonHigh"));
-    }
+    }*/
 
     private void resetLoadList() {
         loadList.Clear();

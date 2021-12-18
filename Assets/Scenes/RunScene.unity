@@ -1695,6 +1695,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Main Camera
       objectReference: {fileID: 0}
+    - target: {fileID: 8581546568948872570, guid: 71aa7db5974ce5a419cab6c2ff0d3f97, type: 3}
+      propertyPath: orthographic
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8581546568948872570, guid: 71aa7db5974ce5a419cab6c2ff0d3f97, type: 3}
+      propertyPath: field of view
+      value: 65
+      objectReference: {fileID: 0}
     - target: {fileID: 9011635991110293062, guid: 71aa7db5974ce5a419cab6c2ff0d3f97, type: 3}
       propertyPath: m_RootOrder
       value: 0
