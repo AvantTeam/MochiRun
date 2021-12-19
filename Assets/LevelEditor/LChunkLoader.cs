@@ -126,7 +126,7 @@ public class LChunkLoader : MonoBehaviour
     private void placeBlock(BlockSave bs) {
         //bs.type.init(bs.x, bs.type.onFloor ? floorY + FLOOR_HEIGHT / 2 + bs.type.height / 2 : bs.y, bs.ctype);
         if(bs.type.hasObject) {
-            GameObject newo = Instantiate(lblock, new Vector3(bs.x, bs.type.onFloor ? (floorY + FLOOR_HEIGHT / 2 + bs.type.height / 2) : bs.y, bs.type.zLayer), Quaternion.identity);
+            GameObject newo = Instantiate(lblock, new Vector3(bs.x, bs.type.onFloor ? (GetFloorY(bs.x) + FLOOR_HEIGHT / 2 + bs.type.height / 2) : bs.y, bs.type.zLayer), bs.type.rotate ? Block.rotation[bs.ctype % 4] : Quaternion.identity);
             
             LBlockUpdater bu = newo.GetComponent<LBlockUpdater>();
             bu.SetBlock(bs.type, bs.ctype);

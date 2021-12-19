@@ -5,9 +5,11 @@ using UnityEngine;
 //something in the world is a Block.
 public class Block {
     public static List<Block> blocks = new List<Block>();
+    public static Quaternion[] rotation = new Quaternion[]{Quaternion.identity, Quaternion.Euler(0, 0, 90), Quaternion.Euler(0, 0, 180), Quaternion.Euler(0, 0, 270)};
 
     public bool hasObject = false; //false is for "special" Blocks like pits.
     public bool hasUpdate = false; //whether the prefab stores its Block instance.
+    public bool rotate = false; //wheter ctype is rotation (ccw, 0~3)
     public GameObject prefab;
     public float zLayer = 0f;
     public float width = 1f;
@@ -40,7 +42,7 @@ public class Block {
     //called when a block is being spawned (typically out of screen). ctype is only saved for blocks with hasUpdate set to true.
     public virtual void init(float x, float y, byte ctype) {
         if(hasObject){
-            GameObject newo = Object.Instantiate(prefab, new Vector3(x, y, zLayer), Quaternion.identity);
+            GameObject newo = Object.Instantiate(prefab, new Vector3(x, y, zLayer), rotate ? rotation[ctype % 4] : Quaternion.identity);
             if(hasUpdate){
                 BlockUpdater bu = newo.GetComponent<BlockUpdater>();
                 bu.type = this;

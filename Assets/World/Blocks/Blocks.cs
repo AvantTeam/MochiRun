@@ -13,7 +13,7 @@ public class Blocks
         pitStart = new PitStarter();
         pitEnd = new PitEnder();
         spike = new Block(find("Spike")) {
-            onFloor = true
+            onFloor = true, rotate = true
         };
         potion = new Block(find("Potion"));
         jumpOrb = new Balloon(find("JumpOrb")) {
