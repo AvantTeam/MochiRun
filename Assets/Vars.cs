@@ -6,6 +6,7 @@ public class Vars : MonoBehaviour
 {
     public static Vars main;
     public Blocks blocks;
+    public bool mobile = false; //todo
     public int test = 0;
 
     void Awake() {

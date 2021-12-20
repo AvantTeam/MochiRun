@@ -13,7 +13,7 @@ public class CursorControl : MonoBehaviour
     public byte ctype;
     public GameObject cursorPrefab, lblock;
     public Material cursorMaterial;
-    public Color placeColor, invalidColor, removeColor;
+    public Color placeColor, invalidColor, removeColor, defaultColor;
 
     public enum STATE {
         NONE = -1,
@@ -25,7 +25,11 @@ public class CursorControl : MonoBehaviour
 
     public STATE state = STATE.PLACE;
 
+    private Block lastBlock; //last placed block
+    private byte lastCtype;
     private float rotateScrollDelta;
+    public bool dragging = false;
+    private bool dragSnapOffsetX, dragSnapOffsetY; //whether drag snap center is set to 0.5, 1.5, 2.5...
     private Collider2D[] colresult = new Collider2D[4];
     private ContactFilter2D triggerContactFilter;
     GameObject cam;
@@ -81,8 +85,8 @@ public class CursorControl : MonoBehaviour
     private void moveToMouse() {
         Vector3 mpos = camc.ScreenToWorldPoint(Input.mousePosition);
         mpos.z = (block == null ? 0f : block.zLayer);
-        mpos.x = Snap(mpos.x);
-        mpos.y = Snap(mpos.y); //todo onFloor, and make spike's onFloor false
+        mpos.x = DragSnap(mpos.x, dragSnapOffsetX);
+        mpos.y = DragSnap(mpos.y, dragSnapOffsetY); //todo onFloor, and make spike's onFloor false
 
         transform.position = mpos;
         if(block != null) {
@@ -106,27 +110,54 @@ public class CursorControl : MonoBehaviour
     }
 
     private void playerInputs() {
-        if(block == null) {
-
+        if(!Vars.main.mobile) {
+            if(state == STATE.PLACE && Input.GetMouseButton(1)) SetState(STATE.REMOVE);
+            else if(state == STATE.REMOVE && !Input.GetMouseButton(1)) SetState(STATE.PLACE);
         }
-        else {
-            switch(state) {
-                case STATE.PLACE:
+
+        switch(state) {
+            case STATE.PLACE:
+                if(block == null) {
+                    dragging = false;
+                    SetState(STATE.NONE); //what went wrong?
+                }
+                else {
                     if(block.rotate) {
-                        float scroll = Input.mouseScrollDelta.y * SCROLL_SCALE;
-                        rotateScrollDelta += scroll;
+                        float scroll = Input.mouseScrollDelta.y;
+                        if(Mathf.Abs(scroll) > SCROLL_SCALE) {
+                            rotateScrollDelta += Mathf.Sign(scroll);
+                        }
+
                         ctype = (byte)((Mathf.RoundToInt(rotateScrollDelta) % 4 + 8) % 4);
                     }
 
-                    bool obstructed = collider2d.OverlapCollider(triggerContactFilter, colresult) > 0 || transform.position.y <= LChunkLoader.main.GetFloorY(transform.position.x) + FLOOR_HEIGHT / 2 + SNAP * 0.5f;
+                    bool obstructed = collider2d.OverlapCollider(triggerContactFilter, colresult) > 0 || transform.position.y <= LChunkLoader.main.GetFloorY(transform.position.x) + FLOOR_HEIGHT / 2 + SNAP * 0.5f || transform.position.x < -SNAP * 0.5f;
                     SetColor(obstructed ? invalidColor : placeColor);
 
-                    if(!obstructed && Input.GetMouseButton(0)) PlaceBlock();
-                    break;
-            }
-            
-
-
+                    if(Input.GetMouseButton(0)) {
+                        if(!dragging) {
+                            dragging = true;
+                            dragSnapOffsetX = Mathf.RoundToInt(transform.position.x / SNAP) % 2 == 1;
+                            dragSnapOffsetY = Mathf.RoundToInt(transform.position.y / SNAP) % 2 == 1;
+                        }
+                        if(!obstructed) PlaceBlock();
+                    }
+                    else {
+                        if(dragging) dragging = false;
+                    }
+                }
+                break;
+            case STATE.REMOVE:
+                if(Vars.main.mobile || !Input.GetMouseButton(0)) {
+                    //stop deleting if left mouse is held down; note that mobile users use left mouse for deleting too!
+                    int n = collider2d.OverlapCollider(triggerContactFilter, colresult);
+                    for(int i = 0; i < n; i++) {
+                        Destroy(colresult[i].gameObject);
+                    }
+                }
+                    
+                SetColor(removeColor);
+                break;
         }
     }
 
@@ -136,5 +167,29 @@ public class CursorControl : MonoBehaviour
 
     public float Snap(float a) {
         return Mathf.Round(a / SNAP) * SNAP;
+    }
+
+    public float DragSnap(float a, bool offset) {
+        if(dragging) {
+            if(offset) return Mathf.Round(a + SNAP) - SNAP;
+            return Mathf.Round(a);
+        }
+        return Snap(a);
+    }
+
+    public void SetState(STATE newState) {
+        if(state == newState) return;
+        
+        dragging = false;
+        if(newState == STATE.PLACE) {
+            SetBlock(lastBlock, lastCtype);
+        }
+        else if(state == STATE.PLACE){
+            lastBlock = block == null ? Blocks.spike : block;
+            lastCtype = ctype;
+            SetBlock(null, 0);
+        }
+
+        state = newState;
     }
 }
