@@ -5,7 +5,7 @@ using static ChunkLoader;
 
 public class CursorControl : MonoBehaviour
 {
-    public const float SNAP = 0.5f, SCROLL_SCALE = 0.5f;
+    public const float SNAP = 0.5f, SCROLL_SCALE = 0.5f, CURSOR_RADIUS = 0.4f;
 
     public bool focused = true;
 
@@ -20,6 +20,7 @@ public class CursorControl : MonoBehaviour
         PLACE = 0,
         REMOVE,
         SELECT,
+        PICK_BLOCK,
         NUM
     };
 
@@ -34,6 +35,7 @@ public class CursorControl : MonoBehaviour
     private ContactFilter2D triggerContactFilter;
     GameObject cam;
     Camera camc;
+    EditorCameraControl camController;
     MeshRenderer mrender;
     Collider2D collider2d;
 
@@ -41,21 +43,23 @@ public class CursorControl : MonoBehaviour
     {
         cam = GameObject.Find("Main Camera");
         camc = cam.GetComponent<Camera>();
+        camController = cam.GetComponent<EditorCameraControl>();
         mrender = GetComponent<MeshRenderer>();
         collider2d = GetComponent<Collider2D>();
         triggerContactFilter = new ContactFilter2D();
         triggerContactFilter.useTriggers = true;
 
         focused = true;
-        SetBlock(Blocks.spike, 0);
+        SetBlock(Blocks.potion, 0);
         SetColor(placeColor);
     }
 
-    void Update()
+    void LateUpdate()
     {
         if(focused){
-            moveToMouse();
+            Show(!camController.panning);
             playerInputs();
+            moveToMouse();
         }
     }
 
@@ -165,6 +169,10 @@ public class CursorControl : MonoBehaviour
         rotateScrollDelta = Mathf.Repeat(Mathf.Round(rotateScrollDelta), 4f);
     }
 
+    public bool ScrollFocused() {
+        return focused && (state == STATE.PLACE && block != null && block.rotate);
+    }
+
     public float Snap(float a) {
         return Mathf.Round(a / SNAP) * SNAP;
     }
@@ -191,5 +199,9 @@ public class CursorControl : MonoBehaviour
         }
 
         state = newState;
+    }
+
+    public void Show(bool show) {
+        mrender.enabled = show;
     }
 }
