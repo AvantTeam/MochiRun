@@ -16,6 +16,8 @@ public class LChunkLoader : MonoBehaviour
     private float lastL, lastR;
 
     public GameObject lblock, lfloor;
+    public CursorControl cursor;
+    public LevelEditorFragment frag;
     public static LChunkLoader main;
 
     GameObject cam;
@@ -33,6 +35,7 @@ public class LChunkLoader : MonoBehaviour
 
         AfterLoad();
         PlaceAllBlocks();
+        frag.Load();
     }
 
     // Update is called once per frame

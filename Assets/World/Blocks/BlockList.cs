@@ -10,6 +10,7 @@ public class Block {
     public bool hasObject = false; //false is for "special" Blocks like pits.
     public bool hasUpdate = false; //whether the prefab stores its Block instance.
     public bool rotate = false; //wheter ctype is rotation (ccw, 0~3)
+    public bool hidden = false;
     public GameObject prefab;
     public float zLayer = 0f;
     public float width = 1f;
@@ -59,6 +60,7 @@ public class Floor : Block {
     public Floor(GameObject o) : base(o) {
         width = ChunkLoader.FLOOR_WIDTH;
         height = ChunkLoader.FLOOR_HEIGHT;
+        hidden = true;
     }
     public override void init(float x, float y, byte ctype) {
         if(hasObject) {

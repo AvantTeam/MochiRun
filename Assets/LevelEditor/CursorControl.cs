@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using static ChunkLoader;
 
 public class CursorControl : MonoBehaviour
@@ -56,11 +57,12 @@ public class CursorControl : MonoBehaviour
 
     void LateUpdate()
     {
+        focused = !EventSystem.current.IsPointerOverGameObject();
+        Show(!camController.panning);
         if(focused){
-            Show(!camController.panning);
             playerInputs();
-            moveToMouse();
         }
+        moveToMouse();
     }
 
     public void SetBlock(Block b, byte ctype) {
@@ -83,6 +85,17 @@ public class CursorControl : MonoBehaviour
                 for(int i = 0; i < matn; i++) newmat[i] = cursorMaterial;
                 mrender.materials = newmat;
             }
+        }
+    }
+
+    //called by ui buttons
+    public void SetBlock(Block b) {
+        if(state == STATE.PLACE) {
+            SetBlock(b, ctype);
+        }
+        else {
+            SetState(STATE.PLACE);
+            SetBlock(b, ctype);
         }
     }
 

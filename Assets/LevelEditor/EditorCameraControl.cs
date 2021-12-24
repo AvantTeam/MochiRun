@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class EditorCameraControl : MonoBehaviour
 {
     private const float MIN_ZOOM = 2f, MAX_ZOOM = 10f, Z = -10f;
+    private const float MIN_X = 0f, MIN_Y = -1.5f;
     
     private float targetZoom;
     public float zoom;
@@ -22,7 +24,7 @@ public class EditorCameraControl : MonoBehaviour
 
     void LateUpdate()
     {
-        if(!cursor.ScrollFocused()) {//todo: add various "focuses" of elements such as the canvas here!
+        if(!cursor.ScrollFocused() && !EventSystem.current.IsPointerOverGameObject()) {
             float scroll = Input.mouseScrollDelta.y;
             if(Mathf.Abs(scroll) > 0.1f) {
                 targetZoom = Mathf.Clamp(targetZoom - Mathf.Sign(scroll), MIN_ZOOM, MAX_ZOOM);
@@ -30,7 +32,7 @@ public class EditorCameraControl : MonoBehaviour
         }
 
         if(cursor.state == CursorControl.STATE.NONE) {
-            updateDragPan(Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(2), Input.GetMouseButton(0) || Input.GetMouseButton(2));
+            updateDragPan((Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject()) || Input.GetMouseButtonDown(2), Input.GetMouseButton(0) || Input.GetMouseButton(2));
         }
         else if(!Vars.main.mobile) {
             updateDragPan(Input.GetMouseButtonDown(2), Input.GetMouseButton(2));
@@ -43,8 +45,10 @@ public class EditorCameraControl : MonoBehaviour
         else zoom = lerpDelta(zoom, targetZoom, 0.05f);
         cam.orthographicSize = zoom;
 
-        float currentMinY = transform.position.y - cam.orthographicSize;
-        if(currentMinY < 0f) transform.position = new Vector3(transform.position.x, cam.orthographicSize, Z);
+        float currentMin = transform.position.y - cam.orthographicSize;//min y
+        if(currentMin < MIN_Y) transform.position = new Vector3(transform.position.x, cam.orthographicSize + MIN_Y, Z);
+        currentMin = transform.position.x - cam.orthographicSize * Screen.width / Screen.height;//min x
+        if(currentMin < MIN_X) transform.position = new Vector3(cam.orthographicSize * Screen.width / Screen.height + MIN_X, transform.position.y, Z);
     }
 
     private void updateDragPan(bool down, bool pressing) {

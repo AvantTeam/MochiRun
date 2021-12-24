@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,6 +28,7 @@ public class OverlayRenderer : MonoBehaviour
         pcon = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControl>();
         init = false;
         setCActive(false);
+        AssetPreview.SetPreviewTextureCacheSize(32);
     }
 
     void Update()
