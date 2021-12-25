@@ -1,34 +1,44 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
-//creates Blocks from prefabs.
+//temporary utility class holding widely used Blocks. Kinda useless now.
 public class Blocks
 {
     public static Block floorBlock, pitStart, pitEnd, spike, potion, jumpOrb, balloon, balloonLow, balloonHigh;
 
     public void Load() {
-        floorBlock = new Floor(findPath("Assets/World/FloorPrefab.prefab"));
-        pitStart = new PitStarter();
-        pitEnd = new PitEnder();
-        spike = new Block(find("Spike")) {
-            onFloor = true, rotate = true
-        };
-        potion = new Block(find("Potion"));
-        jumpOrb = new Balloon(find("JumpOrb")) {
-            zLayer = 0.1f
-        };
-        balloon = new Balloon(find("JumpBalloon"));
-        balloonLow = new Balloon(find("JumpBalloonLow"));
-        balloonHigh = new Balloon(find("JumpBalloonHigh"));
+        floorBlock = find("Floor");
+        pitStart = find("PitStarter");
+        pitEnd = find("PitEnder");
+        spike = find("Spike");
+        potion = find("Potion");
+        jumpOrb = find("JumpOrb");
+        balloon = find("JumpBalloon");
+        balloonLow = find("JumpBalloonLow");
+        balloonHigh = find("JumpBalloonHigh");
     }
 
+    private Block find(string name) {
+        return Vars.main.content.block(name);
+    }
+
+    /*
     private GameObject find(string prefab) {
-        return (GameObject)AssetDatabase.LoadAssetAtPath("Assets/World/Blocks/" + prefab + ".prefab", typeof(GameObject));
+        foreach(GameObject o in BlockPrefabCollector.list) {
+            if(o.name.Equals(prefab)) return o;
+        }
+        return null;
     }
 
     private GameObject findPath(string prefab) {
         return (GameObject)AssetDatabase.LoadAssetAtPath(prefab, typeof(GameObject));
     }
+
+    private int findIndex(GameObject prefab) {
+        for(int i = 0; i < BlockPrefabCollector.list.Length; i++) {
+            if(BlockPrefabCollector.list[i] == prefab) return i;
+        }
+        return -1;
+    }*/
 }

@@ -5,9 +5,11 @@ using UnityEngine;
 public class Vars : MonoBehaviour
 {
     public static Vars main;
-    public Blocks blocks;
+    public ContentList content;
+    
     public bool mobile = false; //todo
-    public int test = 0;
+
+    protected Blocks blocks;
 
     void Awake() {
         if(main != null && main != this)

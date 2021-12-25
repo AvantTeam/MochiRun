@@ -51,7 +51,8 @@ public class CursorControl : MonoBehaviour
         triggerContactFilter.useTriggers = true;
 
         focused = true;
-        SetBlock(Blocks.potion, 0);
+        SetBlock(Blocks.spike);
+        SetState(STATE.NONE);
         SetColor(placeColor);
     }
 
@@ -133,6 +134,9 @@ public class CursorControl : MonoBehaviour
         }
 
         switch(state) {
+            case STATE.NONE:
+                SetColor(defaultColor);
+                break;
             case STATE.PLACE:
                 if(block == null) {
                     dragging = false;
@@ -212,6 +216,21 @@ public class CursorControl : MonoBehaviour
         }
 
         state = newState;
+
+        switch(state) {
+            case STATE.NONE:
+                SetColor(defaultColor);
+                break;
+            case STATE.PLACE:
+                SetColor(placeColor);
+                break;
+            case STATE.REMOVE:
+                SetColor(removeColor);
+                break;
+            default:
+                SetColor(placeColor);
+                break;
+        }
     }
 
     public void Show(bool show) {

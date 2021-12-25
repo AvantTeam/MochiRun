@@ -9,6 +9,7 @@ public class LevelEditorFragment : MonoBehaviour
     //elementss
     public GameObject blockSelectPane, categoryButton;
     public LayoutElement blockScrollView;
+    public Image[] categoryThemed;
     //prefabs
     public GameObject blockSelectButton;
 
@@ -39,27 +40,7 @@ public class LevelEditorFragment : MonoBehaviour
         clearChildren(blockSelectPane);
         setBSPaneSize(BPConfig.rows, BPConfig.columns);
 
-        foreach(Block block in Block.blocks) {
-            if(!block.hasObject || block.hidden) continue; //todo blocks with "sprites"
-            GameObject bb = Instantiate(blockSelectButton, Vector3.zero, Quaternion.identity);
-            bb.transform.SetParent(blockSelectPane.transform);
-            bb.GetComponent<BlockSelectButton>().SetBlock(block);
-        }
-
-        //todo remove
-        foreach(Block block in Block.blocks) {
-            if(!block.hasObject || block.hidden) continue; //todo blocks with "sprites"
-            GameObject bb = Instantiate(blockSelectButton, Vector3.zero, Quaternion.identity);
-            bb.transform.SetParent(blockSelectPane.transform);
-            bb.GetComponent<BlockSelectButton>().SetBlock(block);
-        }
-        foreach(Block block in Block.blocks) {
-            if(!block.hasObject || block.hidden) continue; //todo blocks with "sprites"
-            GameObject bb = Instantiate(blockSelectButton, Vector3.zero, Quaternion.identity);
-            bb.transform.SetParent(blockSelectPane.transform);
-            bb.GetComponent<BlockSelectButton>().SetBlock(block);
-        }
-        foreach(Block block in Block.blocks) {
+        foreach(Block block in Vars.main.content.blocks) {
             if(!block.hasObject || block.hidden) continue; //todo blocks with "sprites"
             GameObject bb = Instantiate(blockSelectButton, Vector3.zero, Quaternion.identity);
             bb.transform.SetParent(blockSelectPane.transform);

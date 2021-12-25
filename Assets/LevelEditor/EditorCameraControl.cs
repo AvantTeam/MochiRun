@@ -11,6 +11,7 @@ public class EditorCameraControl : MonoBehaviour
     private float targetZoom;
     public float zoom;
     public bool panning;
+    private bool lastClickStartFocused = false;
 
     private Vector3 dragCursorOrigin, dragCamOrigin;
 
@@ -32,12 +33,16 @@ public class EditorCameraControl : MonoBehaviour
         }
 
         if(cursor.state == CursorControl.STATE.NONE) {
-            updateDragPan((Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject()) || Input.GetMouseButtonDown(2), Input.GetMouseButton(0) || Input.GetMouseButton(2));
+            if(Input.GetMouseButtonDown(0)) lastClickStartFocused = !EventSystem.current.IsPointerOverGameObject();
+
+            updateDragPan((Input.GetMouseButtonDown(0) && lastClickStartFocused) || Input.GetMouseButtonDown(2), (Input.GetMouseButton(0) && lastClickStartFocused) || Input.GetMouseButton(2));
         }
         else if(!Vars.main.mobile) {
+            lastClickStartFocused = false;
             updateDragPan(Input.GetMouseButtonDown(2), Input.GetMouseButton(2));
         }
         else {
+            lastClickStartFocused = false;
             updateDragPan(false, false);
         }
 
