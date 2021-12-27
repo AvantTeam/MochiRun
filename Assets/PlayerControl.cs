@@ -65,12 +65,12 @@ public class PlayerControl : MonoBehaviour
     // Update is called once per frame
     void Update() {
         Vector2 vel = rigid.velocity;
-        bool inputJump = input_Space();
+        bool inputJump = KeyBinds.Jump();
         stateTime += Time.deltaTime;
         checkLanded();
         checkDeath();
 
-        if(input_SpaceDown()) {
+        if(KeyBinds.JumpDown()) {
             jumpPressTimer = 0f;
         }
         else if(jumpPressTimer < JUMP_GRACE) {
@@ -262,7 +262,7 @@ public class PlayerControl : MonoBehaviour
 
     private void stateAir() {
         if(landed) nextState = STATE.RUN;
-        else if(courage > 0f && input_SpaceDown() && (jumpReleased || rigid.velocity.y <= 0f) && state != STATE.FLOAT) nextState = STATE.FLOAT;
+        else if(courage > 0f && KeyBinds.JumpDown() && (jumpReleased || rigid.velocity.y <= 0f) && state != STATE.FLOAT) nextState = STATE.FLOAT;
     }
 
     private void courageBurst() {
@@ -356,13 +356,5 @@ public class PlayerControl : MonoBehaviour
 
     public void showPlayer(bool show) {
         costume.SetActive(show);
-    }
-
-    //input region (TODO replace with a dedicated input controller)
-    public bool input_SpaceDown() {
-        return Input.GetKeyDown(KeyCode.Space);
-    }
-    public bool input_Space() {
-        return Input.GetKey(KeyCode.Space) || Input.GetKeyDown(KeyCode.Space);
     }
 }

@@ -6,9 +6,12 @@ using UnityEngine.UI;
 public class BlockSelectButton : MonoBehaviour
 {
     public Block block;
-    public Color color, selectedColor;
-    public Texture2D defaultSprite;
+    public Color color, selectedColor, favoriteColor;
+    public Texture2D defaultIcon;
+    public Sprite defaultSprite, favoriteSprite;
+    public Category favoriteCategory;
 
+    private bool isDefaultSprite = true;
     Image image;
     void Start()
     {
@@ -16,6 +19,8 @@ public class BlockSelectButton : MonoBehaviour
         image.color = color;
 
         GetComponent<Button>().onClick.AddListener(Clicked);
+        isDefaultSprite = true;
+        image.sprite = defaultSprite;
     }
 
     void Update()
@@ -25,32 +30,70 @@ public class BlockSelectButton : MonoBehaviour
 
         if(LChunkLoader.main.cursor.state == CursorControl.STATE.PLACE && LChunkLoader.main.cursor.block == block) {
             image.color = selectedColor;
+            SetSprite(false);
+        }
+        else if(LChunkLoader.main.frag.category != favoriteCategory && IsFavorite()) {
+            image.color = favoriteColor;
+            SetSprite(true);
         }
         else {
             image.color = color;
+            SetSprite(false);
         }
     }
 
     void Clicked() {
         if(block == null) return;
-        if(LChunkLoader.main.cursor.block == block) {
-            LChunkLoader.main.cursor.SetState(CursorControl.STATE.NONE);
+
+        if(KeyBinds.Get("Favorite")) {
+            //favorite it
+            ToggleFavorite();
+            //todo maybe a sound cue here?
         }
         else {
-            LChunkLoader.main.cursor.SetBlock(block);
+            if(LChunkLoader.main.cursor.block == block) {
+                LChunkLoader.main.cursor.SetState(CursorControl.STATE.NONE);
+            }
+            else {
+                LChunkLoader.main.cursor.SetBlock(block);
+            }
         }
+        
+    }
+
+    public void ToggleFavorite() {
+        if(block == null) return;
+        if(IsFavorite()) {
+            LChunkLoader.main.frag.favorites.Remove(block);
+        }
+        else {
+            LChunkLoader.main.frag.favorites.Add(block);
+        }
+    }
+
+    public bool IsFavorite() {
+        return LChunkLoader.main.frag.favorites.Contains(block);
     }
 
     public void SetBlock(Block block) {
         this.block = block;
-        if(block.hasObject) {
-            //loadedTexture = !AssetPreview.IsLoadingAssetPreviews();
+        if(block.sprite != null) {
             LoadSprite(block.sprite);
         }
-        //todo "sprite-only" blocks e.g. PitStarter
+    }
+
+    private void SetSprite(bool fav) {
+        if(fav && isDefaultSprite) {
+            isDefaultSprite = false;
+            image.sprite = favoriteSprite;
+        }
+        else if(!fav && !isDefaultSprite) {
+            isDefaultSprite = true;
+            image.sprite = defaultSprite;
+        }
     }
 
     public void LoadSprite(Texture2D sprite) {
-        transform.GetChild(0).gameObject.GetComponent<RawImage>().texture = sprite == null ? defaultSprite : sprite;
+        transform.GetChild(0).gameObject.GetComponent<RawImage>().texture = sprite == null ? defaultIcon : sprite;
     }
 }

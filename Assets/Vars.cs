@@ -7,6 +7,7 @@ public class Vars : MonoBehaviour
     public static Vars main;
     public ContentList content;
     
+    public string firstScene;
     public bool mobile = false; //todo
 
     protected Blocks blocks;
@@ -23,5 +24,7 @@ public class Vars : MonoBehaviour
     public void Load() {
         main.blocks = new Blocks();
         main.blocks.Load();
+
+        KeyBinds.Load();
     }
 }

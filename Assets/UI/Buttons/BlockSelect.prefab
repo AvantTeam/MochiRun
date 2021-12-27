@@ -218,5 +218,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84f85fc8a134dcd4dab0fa33fdfdbc90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  block: {fileID: 0}
   color: {r: 0.31132078, g: 0.31132078, b: 0.31132078, a: 0.24705882}
-  selectedColor: {r: 1, g: 0.83137256, b: 0.5019608, a: 1}
+  selectedColor: {r: 0, g: 0.7410011, b: 1, a: 1}
+  favoriteColor: {r: 1, g: 0.85033107, b: 0, a: 1}
+  defaultIcon: {fileID: 10916, guid: 0000000000000000f000000000000000, type: 0}
+  defaultSprite: {fileID: 21300000, guid: 6bc9f9717a70605459dc0e6eae4e1b41, type: 3}
+  favoriteSprite: {fileID: 21300000, guid: 01cfdd1c29ef0fe4688bbaca4fb7658a, type: 3}
+  favoriteCategory: {fileID: 11400000, guid: 250555ebade4fd64e8e1550f9fe49e7d, type: 2}

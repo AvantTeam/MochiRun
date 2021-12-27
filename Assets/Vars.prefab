@@ -44,4 +44,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   content: {fileID: 11400000, guid: 7ead43bb40faad045aa8a91cd7940bf3, type: 2}
+  firstScene: RunScene
   mobile: 0

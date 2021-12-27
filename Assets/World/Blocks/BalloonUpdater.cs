@@ -8,6 +8,7 @@ public class BalloonUpdater : BlockUpdater
     public bool overrideVelocityY = true;
     public bool destroyOnHit = true;
     public GameObject hitFx = null;
+    public GameObject hitFx2 = null;
 
     public float floatRadius = 0.1f;
     public float floatScl = 1f;
@@ -47,6 +48,7 @@ public class BalloonUpdater : BlockUpdater
             else pcon.Impulse(velocity.x, velocity.y);
 
             if(hitFx != null) pcon.Fx(hitFx, transform.position, Quaternion.identity);
+            if(hitFx2 != null) pcon.Fx(hitFx2, transform.position, Quaternion.identity);
             if(destroyOnHit) Destroy(gameObject);
         }
     }

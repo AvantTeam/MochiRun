@@ -6,6 +6,7 @@ using UnityEngine;
 public class ContentList : ScriptableObject
 {
     public Block[] blocks;
+    public Category defaultCategory;
 
     public Block block(string name) {
         foreach(Block b in blocks) {

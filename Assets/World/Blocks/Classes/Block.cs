@@ -19,6 +19,7 @@ public class Block : ScriptableObject {
     [ReadOnly] public float height = 1f;
     public float clipsize = 4f;
     public bool onFloor = false; //whether to provide the floor + height / 2 as the y position on init().
+    public Category category;
 
     public int id;
 

@@ -1,8 +1,50 @@
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 
 public class MenuItems {
-    [MenuItem("Tools/Pre Build")]
+    public const string initScene = "LoadScene";
+    public static string defaltFirstScene = "RunScene";
+    public static string lastEditScene = "RunScene";
+    public static bool loadSceneMode = false;
+
+    [MenuItem("Tools/Play Scene", false, 1)]
+    public static void PlayCurrentScene() {
+        PrePlayScene();
+        EditorApplication.EnterPlaymode();
+    }
+
+    [MenuItem("Tools/Play Scene", true)]
+    public static bool ValidatePS() {
+        return !SceneManager.GetActiveScene().name.Equals(initScene);
+    }
+
+    public static string PrePlayScene() {
+        string current = SceneManager.GetActiveScene().name;
+        if(!current.Equals(initScene)) {
+            loadSceneMode = true;
+            lastEditScene = current;
+            Debug.Log("Playing: " + current);
+            EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
+            //EditorSceneManager.OpenScene("Assets/Scenes/" + initScene + ".unity");
+            Vars varsPrefab = VarsPrefab();
+            defaltFirstScene = varsPrefab.firstScene;
+            varsPrefab.firstScene = current;
+            return defaltFirstScene;
+        }
+        else {
+            loadSceneMode = false;
+            defaltFirstScene = VarsPrefab().firstScene;
+            return defaltFirstScene;
+        }
+    }
+
+    public static Vars VarsPrefab() {
+        return ((GameObject)AssetDatabase.LoadAssetAtPath("Assets/Vars.prefab", typeof(GameObject))).GetComponent<Vars>();
+    }
+
+    [MenuItem("Tools/Pre Build", false, 20)]
     public static void PreBuild() {
         Debug.LogWarning("----Starting Prebuild----");
         SetContentList();
@@ -11,7 +53,7 @@ public class MenuItems {
         Debug.LogWarning("----Prebuild complete!----");
     }
 
-    [MenuItem("Tools/Init ContentList")]
+    [MenuItem("Tools/Init ContentList", false, 21)]
     private static void SetContentList() {
         initBlocks();
     }
@@ -26,10 +68,12 @@ public class MenuItems {
             Debug.Log(blocks[i].name);
         }
 
-        ((ContentList)AssetDatabase.LoadAssetAtPath("Assets/ContentList.asset", typeof(ContentList))).blocks = blocks;
+        ContentList c = (ContentList)AssetDatabase.LoadAssetAtPath("Assets/ContentList.asset", typeof(ContentList));
+        c.blocks = blocks;
+        EditorUtility.SetDirty(c);
     }
 
-    [MenuItem("Tools/List Block Prefabs")]
+    [MenuItem("Tools/List Block Prefabs", false, 22)]
     private static void ListBlocks() {
         Debug.Log("LISTING BLOCK PREFABS");
         string[] guids = AssetDatabase.FindAssets("t:GameObject", new[] {"Assets/World/Blocks"});
@@ -43,7 +87,7 @@ public class MenuItems {
         BlockPrefabCollector.icons = new Texture2D[guids.Length];
     }
 
-    [MenuItem("Tools/Pack Block Previews")]
+    [MenuItem("Tools/Pack Block Previews", false, 23)]
     private static void AssetPreviewPack() {
         Debug.Log("PACKING BLOCK PREVIEWS");
         if(BlockPrefabCollector.list == null) {
@@ -80,11 +124,13 @@ public class MenuItems {
             if(asset != null) {
                 Block block = (Block)asset;
                 block.sprite = assetTex;
+                EditorUtility.SetDirty(block);
             }
         }
     }
 
-    [MenuItem("Tools/Personal Sh1p Chan")]
+    [MenuItem("Tools/Personal Sh1p Chan", false, 100)]
     private static void ShipChan() {
+        Debug.Log(EditorSceneManager.playModeStartScene);
     }
 }
