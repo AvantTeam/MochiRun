@@ -51,7 +51,7 @@ public class BlockSelectButton : MonoBehaviour
             //todo maybe a sound cue here?
         }
         else {
-            if(LChunkLoader.main.cursor.block == block) {
+            if(LChunkLoader.main.cursor.block == block && LChunkLoader.main.cursor.state == CursorControl.STATE.PLACE) {
                 LChunkLoader.main.cursor.SetState(CursorControl.STATE.NONE);
             }
             else {

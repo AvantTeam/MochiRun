@@ -14,31 +14,39 @@ public class CursorControl : MonoBehaviour
     public byte ctype;
     public GameObject cursorPrefab, lblock;
     public Material cursorMaterial;
-    public Color placeColor, invalidColor, removeColor, defaultColor;
+    public Color placeColor, invalidColor, removeColor, defaultColor, selectColor;
 
     public enum STATE {
         NONE = -1,
         PLACE = 0,
         REMOVE,
-        SELECT,
+        SELECT, //drag, change ctype and rotate selected block(s).
+        SELECTING, //dragging across the screen to select multiple blocks. becomes SELECT when the selection(s) is decided.
         PICK_BLOCK,
+        CAMERA, //3d camera view, comes with a screenshot option and stuff
         NUM
     };
 
     public STATE state = STATE.PLACE;
+    public GameObject selection = null;
+    private bool selectedViaRclick = false;
+    private bool rclickErase = false;
 
     private Block lastBlock; //last placed block
     private byte lastCtype;
     private float rotateScrollDelta;
+
     public bool dragging = false;
     private bool dragSnapOffsetX, dragSnapOffsetY; //whether drag snap center is set to 0.5, 1.5, 2.5...
-    private Collider2D[] colresult = new Collider2D[4];
+    private Collider2D[] colresult = new Collider2D[7];
     private ContactFilter2D triggerContactFilter;
+
     GameObject cam;
     Camera camc;
     EditorCameraControl camController;
     MeshRenderer mrender;
     Collider2D collider2d;
+    Projector highlighter;
 
     void Start()
     {
@@ -47,9 +55,12 @@ public class CursorControl : MonoBehaviour
         camController = cam.GetComponent<EditorCameraControl>();
         mrender = GetComponent<MeshRenderer>();
         collider2d = GetComponent<Collider2D>();
+        highlighter = GetComponent<Projector>();
+        highlighter.enabled = false;
         triggerContactFilter = new ContactFilter2D();
         triggerContactFilter.useTriggers = true;
 
+        Deselect();
         focused = true;
         SetBlock(Blocks.spike);
         SetState(STATE.NONE);
@@ -59,44 +70,17 @@ public class CursorControl : MonoBehaviour
     void LateUpdate()
     {
         focused = !EventSystem.current.IsPointerOverGameObject();
-        Show(!camController.panning);
-        if(focused){
+        Show(state == STATE.SELECT ? selection != null : !(camController.panning || state == STATE.CAMERA));
+        if(focused) {
             playerInputs();
         }
-        moveToMouse();
-    }
-
-    public void SetBlock(Block b, byte ctype) {
-        block = b;
-        if(b == null) {
-            this.ctype = 0;
-            transform.localScale = cursorPrefab.transform.localScale;
-            GetComponent<MeshFilter>().mesh = cursorPrefab.GetComponent<MeshFilter>().sharedMesh;
-            mrender.materials = cursorPrefab.GetComponent<MeshRenderer>().sharedMaterials;
+        if(state != STATE.SELECT || selection == null) {
+            if(state != STATE.CAMERA) moveToMouse();
         }
         else {
-            this.ctype = ctype;
-            if(b.hasObject) {
-                GameObject pref = b.prefab;
-                transform.localScale = pref.transform.localScale;
-                GetComponent<MeshFilter>().mesh = pref.GetComponent<MeshFilter>().sharedMesh;
-
-                int matn = pref.GetComponent<MeshRenderer>().sharedMaterials.Length;
-                Material[] newmat = new Material[matn];
-                for(int i = 0; i < matn; i++) newmat[i] = cursorMaterial;
-                mrender.materials = newmat;
-            }
-        }
-    }
-
-    //called by ui buttons
-    public void SetBlock(Block b) {
-        if(state == STATE.PLACE) {
-            SetBlock(b, ctype);
-        }
-        else {
-            SetState(STATE.PLACE);
-            SetBlock(b, ctype);
+            Color c = selectColor;
+            c.a = absin(Time.realtimeSinceStartup, 0.15f, 1f);
+            SetColor(c);
         }
     }
 
@@ -109,6 +93,141 @@ public class CursorControl : MonoBehaviour
         transform.position = mpos;
         if(block != null) {
             transform.rotation = block.rotate ? Block.rotation[ctype % 4] : Quaternion.identity;
+        }
+    }
+
+    private void playerInputs() {
+        /*if(!Vars.main.mobile) {
+            if(state == STATE.PLACE && Input.GetMouseButton(1)) SetState(STATE.REMOVE);
+            else if(state == STATE.REMOVE && !Input.GetMouseButton(1)) SetState(STATE.PLACE);
+        }*/
+
+        switch(state) {
+            case STATE.NONE:
+                SetColor(defaultColor);
+
+                if(Input.GetMouseButtonDown(1)) {
+                    trySelect(true);
+                }
+                break;
+            case STATE.PLACE:
+                if(block == null) {
+                    dragging = false;
+                    SetState(STATE.NONE); //what went wrong?
+                }
+                else {
+                    if(block.rotate) {
+                        float scroll = Input.mouseScrollDelta.y;
+                        if(Mathf.Abs(scroll) > SCROLL_SCALE) {
+                            rotateScrollDelta += Mathf.Sign(scroll);
+                        }
+
+                        ctype = (byte)((Mathf.RoundToInt(rotateScrollDelta) % 4 + 8) % 4);
+                    }
+
+                    if(Input.GetMouseButton(1) && !Input.GetMouseButton(0)) {
+                        if(!rclickErase) {
+                            rclickErase = true;
+                            resetModel();
+                        }
+                        SetColor(removeColor);
+                        tryErase();
+                    }
+                    else {
+                        if(rclickErase) {
+                            rclickErase = false;
+                            setBlockModel();
+                        }
+                        bool obstructed = collider2d.OverlapCollider(triggerContactFilter, colresult) > 0 || transform.position.y <= LChunkLoader.main.GetFloorY(transform.position.x) + FLOOR_HEIGHT / 2 + SNAP * 0.5f || transform.position.x < -SNAP * 0.5f;
+                        SetColor(obstructed ? invalidColor : placeColor);
+
+                        if(Input.GetMouseButton(0)) {
+                            if(!dragging) {
+                                dragging = true;
+                                dragSnapOffsetX = Mathf.RoundToInt(transform.position.x / SNAP) % 2 == 1;
+                                dragSnapOffsetY = Mathf.RoundToInt(transform.position.y / SNAP) % 2 == 1;
+                            }
+                            if(!obstructed) PlaceBlock();
+                        }
+                        else {
+                            if(dragging) dragging = false;
+                        }
+                    }
+                }
+                break;
+            case STATE.REMOVE:
+                //erase mode, available mainly to mobile users.
+                if(Input.GetMouseButton(0)) {
+                    tryErase();
+                }
+                    
+                SetColor(removeColor);
+                break;
+            case STATE.SELECT:
+                if(selectedViaRclick) {
+                    //a right click in NONE state prompted the state change. Return to NONE state asap.
+                    if(Input.GetMouseButtonDown(1)) {
+                        trySelect(true);
+                    }
+                    else if(Input.GetMouseButtonDown(0) || selection == null) {
+                        SetState(STATE.NONE);
+                    }
+                }
+                else {
+                    if(Input.GetMouseButtonDown(0)) {
+                        trySelect(false);
+                    }
+                }
+                break;
+        }
+    }
+
+    private void tryErase() {
+        int n = collider2d.OverlapCollider(triggerContactFilter, colresult);
+        for(int i = 0; i < n; i++) {
+            Destroy(colresult[i].gameObject);
+        }
+    }
+
+    public void SetBlock(Block b, byte ctype) {
+        block = b;
+        if(b == null) {
+            this.ctype = 0;
+            resetModel();
+        }
+        else {
+            this.ctype = ctype;
+            setBlockModel();
+        }
+    }
+
+    private void resetModel() {
+        transform.localScale = cursorPrefab.transform.localScale;
+        GetComponent<MeshFilter>().mesh = cursorPrefab.GetComponent<MeshFilter>().sharedMesh;
+        mrender.materials = cursorPrefab.GetComponent<MeshRenderer>().sharedMaterials;
+    }
+
+    private void setBlockModel() {
+        if(block != null && block.hasObject) {
+            GameObject pref = block.prefab;
+            transform.localScale = pref.transform.localScale;
+            GetComponent<MeshFilter>().mesh = pref.GetComponent<MeshFilter>().sharedMesh;
+
+            int matn = pref.GetComponent<MeshRenderer>().sharedMaterials.Length;
+            Material[] newmat = new Material[matn];
+            for(int i = 0; i < matn; i++) newmat[i] = cursorMaterial;
+            mrender.materials = newmat;
+        }
+    }
+
+    //called by ui buttons
+    public void SetBlock(Block b) {
+        if(state == STATE.PLACE) {
+            SetBlock(b, ctype);
+        }
+        else {
+            SetState(STATE.PLACE);
+            SetBlock(b, ctype);
         }
     }
 
@@ -127,59 +246,55 @@ public class CursorControl : MonoBehaviour
         }
     }
 
-    private void playerInputs() {
-        if(!Vars.main.mobile) {
-            if(state == STATE.PLACE && Input.GetMouseButton(1)) SetState(STATE.REMOVE);
-            else if(state == STATE.REMOVE && !Input.GetMouseButton(1)) SetState(STATE.PLACE);
+    private void trySelect(bool rclick) {
+        GameObject selected = ClosestBlock();
+        //Debug.Log(selected + " at " + selected.transform.position.ToString());
+        if(selected != null) {
+            selectedViaRclick = rclick;
+            SelectBlock(selected);
+            //show popup window
+        }
+        else if(selection != null){
+            Deselect();
+            if(rclick) SetState(STATE.NONE);
+        }
+    }
+
+    public GameObject ClosestBlock() {
+        Vector2 mpos = camc.ScreenToWorldPoint(Input.mousePosition);
+        float mdist = 99f;
+        GameObject selected = null;
+
+        //int n = collider2d.OverlapCollider(triggerContactFilter, colresult);
+        int n = Physics2D.OverlapCircle(mpos, 0.5f, triggerContactFilter, colresult);
+        for(int i = 0; i < n; i++) {
+            if(!colresult[i].isTrigger) continue;
+            Vector2 bpos = colresult[i].gameObject.transform.position;
+            float dist = Vector2.Distance(mpos, bpos);
+            if(dist < mdist) {
+                selected = colresult[i].gameObject;
+                mdist = dist;
+            }
         }
 
-        switch(state) {
-            case STATE.NONE:
-                SetColor(defaultColor);
-                break;
-            case STATE.PLACE:
-                if(block == null) {
-                    dragging = false;
-                    SetState(STATE.NONE); //what went wrong?
-                }
-                else {
-                    if(block.rotate) {
-                        float scroll = Input.mouseScrollDelta.y;
-                        if(Mathf.Abs(scroll) > SCROLL_SCALE) {
-                            rotateScrollDelta += Mathf.Sign(scroll);
-                        }
+        return selected;
+    }
 
-                        ctype = (byte)((Mathf.RoundToInt(rotateScrollDelta) % 4 + 8) % 4);
-                    }
+    public void SelectBlock(GameObject b) {
+        LBlockUpdater lb = b.GetComponent<LBlockUpdater>();
+        if(lb == null) return;
+        SetState(STATE.SELECT);
+        selection = b;
+        SetBlock(lb.type, lb.ctype);
+        transform.position = b.transform.position;
+        transform.rotation = b.transform.rotation;
+        //change mesh(or enable special effects)
+    }
 
-                    bool obstructed = collider2d.OverlapCollider(triggerContactFilter, colresult) > 0 || transform.position.y <= LChunkLoader.main.GetFloorY(transform.position.x) + FLOOR_HEIGHT / 2 + SNAP * 0.5f || transform.position.x < -SNAP * 0.5f;
-                    SetColor(obstructed ? invalidColor : placeColor);
-
-                    if(Input.GetMouseButton(0)) {
-                        if(!dragging) {
-                            dragging = true;
-                            dragSnapOffsetX = Mathf.RoundToInt(transform.position.x / SNAP) % 2 == 1;
-                            dragSnapOffsetY = Mathf.RoundToInt(transform.position.y / SNAP) % 2 == 1;
-                        }
-                        if(!obstructed) PlaceBlock();
-                    }
-                    else {
-                        if(dragging) dragging = false;
-                    }
-                }
-                break;
-            case STATE.REMOVE:
-                if(Vars.main.mobile || !Input.GetMouseButton(0)) {
-                    //stop deleting if left mouse is held down; note that mobile users use left mouse for deleting too!
-                    int n = collider2d.OverlapCollider(triggerContactFilter, colresult);
-                    for(int i = 0; i < n; i++) {
-                        Destroy(colresult[i].gameObject);
-                    }
-                }
-                    
-                SetColor(removeColor);
-                break;
-        }
+    public void Deselect() {
+        if(selection == null) return;
+        selection = null;
+        //hide popup window
     }
 
     private void snapRotate() {
@@ -214,9 +329,14 @@ public class CursorControl : MonoBehaviour
             lastCtype = ctype;
             SetBlock(null, 0);
         }
+        if(state == STATE.SELECT) {
+            Deselect();
+            SetBlock(null, 0);
+        }
 
         state = newState;
 
+        highlighter.enabled = false;
         switch(state) {
             case STATE.NONE:
                 SetColor(defaultColor);
@@ -226,14 +346,23 @@ public class CursorControl : MonoBehaviour
                 break;
             case STATE.REMOVE:
                 SetColor(removeColor);
+                highlighter.enabled = true;
                 break;
             default:
-                SetColor(placeColor);
+                SetColor(selectColor);
                 break;
         }
     }
 
     public void Show(bool show) {
         mrender.enabled = show;
+    }
+
+    float absin(float inn, float scl, float mag) {
+        return (sin(inn, scl * 2f, mag) + mag) / 2f;
+    }
+
+    float sin(float radians, float scl, float mag) {
+        return Mathf.Sin(radians / scl) * mag;
     }
 }

@@ -5,12 +5,13 @@ using UnityEngine.EventSystems;
 
 public class EditorCameraControl : MonoBehaviour
 {
-    private const float MIN_ZOOM = 2f, MAX_ZOOM = 10f, Z = -10f;
+    private const float MIN_ZOOM = 2f, MAX_ZOOM = 15f, Z = -10f;
     private const float MIN_X = 0f, MIN_Y = -1.5f;
     
     private float targetZoom;
     public float zoom;
     public bool panning;
+    public bool view3D = false;
     private bool lastClickStartFocused = false;
 
     private Vector3 dragCursorOrigin, dragCamOrigin;

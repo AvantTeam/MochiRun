@@ -6,7 +6,7 @@ using static ChunkLoader;
 public class LBlockUpdater : MonoBehaviour
 {
     public Block type;
-    public int ctype;
+    public byte ctype;
     public BlockSave save;
 
     /*
@@ -16,7 +16,7 @@ public class LBlockUpdater : MonoBehaviour
     }
     */
 
-    public void SetBlock(Block b, int ctype) {
+    public void SetBlock(Block b, byte ctype) {
         type = b;
         this.ctype = ctype;
         if(b.hasObject) {

@@ -88,11 +88,17 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 1
     - _GlossyReflections: 1
+    - _GridSize: 0.25
     - _LightingEnabled: 0
+    - _LineThickness: 0.03
     - _Metallic: 0
     - _Mode: 2
     - _OcclusionStrength: 1
+    - _OffsetX: 0
+    - _OffsetY: 0
     - _Parallax: 0.02
+    - _SGridScale: 1
+    - _SLineThickness: 0.05
     - _Shininess: 0.185
     - _SmoothnessTextureChannel: 1
     - _SoftParticlesEnabled: 0
@@ -108,12 +114,17 @@ Material:
     - _Strength: 0.2
     - _UVSec: 0
     - _UseUIAlphaClip: 0
+    - _Xonly: 0
+    - _Yonly: 0
     - _ZWrite: 0
     m_Colors:
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
     - _Color: {r: 1, g: 0.93333334, b: 0, a: 0.39607844}
     - _ColorAddSubDiff: {r: 1, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0.047169805, g: 0.047169805, b: 0.047169805, a: 1}
+    - _GridColor: {r: 1, g: 0.83137256, b: 0.5019608, a: 1}
+    - _MeshColor: {r: 0, g: 0, b: 0, a: 0}
+    - _SGridColor: {r: 1, g: 0.83137256, b: 0.5019608, a: 1}
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
     - _Specular: {r: 1, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
