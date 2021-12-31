@@ -17,7 +17,7 @@ MonoBehaviour:
   rotate: 0
   hidden: 0
   prefab: {fileID: 2120803639321241534, guid: 102f5418d2071bc45bc4928f7b12e006, type: 3}
-  sprite: {fileID: 2800000, guid: 78c5ea57b12fd054d8910dafff2866e0, type: 3}
+  sprite: {fileID: 21300000, guid: 78c5ea57b12fd054d8910dafff2866e0, type: 3}
   zLayer: 0.1
   width: 1
   height: 1

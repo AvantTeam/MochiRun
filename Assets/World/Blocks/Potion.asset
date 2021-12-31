@@ -17,11 +17,11 @@ MonoBehaviour:
   rotate: 0
   hidden: 0
   prefab: {fileID: 6859687517624608140, guid: a820396c9f9322141bf9e3fac05028cd, type: 3}
-  sprite: {fileID: 2800000, guid: aa3ce5db2f10026409eb4b744e997943, type: 3}
+  sprite: {fileID: 21300000, guid: aa3ce5db2f10026409eb4b744e997943, type: 3}
   zLayer: 0
   width: 1
   height: 1
   clipsize: 1
   onFloor: 0
   category: {fileID: 11400000, guid: b7b8c6611067961428e838c117657215, type: 2}
-  id: 8
+  id: 9

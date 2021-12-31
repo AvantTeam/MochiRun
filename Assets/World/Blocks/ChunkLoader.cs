@@ -17,7 +17,7 @@ public class ChunkLoader : MonoBehaviour
     public static GameObject cam;
     public static PlayerControl pcon;
     //Block floorBlock, pitStart, pitEnd, spike, potion, jumpOrb, balloon, balloonLow, balloonHigh;
-    List<BlockSave> loadList = new List<BlockSave>(); //must be sorted by x!
+    private List<BlockSave> loadList; //must be sorted by x!
     private int listIndex, listSize;
 
     public struct IslandBackground {
@@ -55,37 +55,37 @@ public class ChunkLoader : MonoBehaviour
         }
     }
     
-    // Start is called before the first frame update
     void Start() {
         //loadBlocks();
+        Debug.Log("Starting ChunkLoader!");
         cam = GameObject.Find("Main Camera");
         pcon = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControl>();
-        isPit = prePlaced = false;
-        resetLoadList();
+        reset();
 
-        //TODO remove
-        loadList.Add(new BlockSave(Blocks.jumpOrb, 22f, 5.2f, 0));
-        loadList.Add(new BlockSave(Blocks.spike, 30f, 0f, 0));
-        loadList.Add(new BlockSave(Blocks.spike, 32f, 0f, 0));
-        loadList.Add(new BlockSave(Blocks.pitStart, 60f, 0f, 0));
-        loadList.Add(new BlockSave(Blocks.pitEnd, 61f, 0f, 0));
-        loadList.Add(new BlockSave(Blocks.spike, 80f, 0f, 0));
-        loadList.Add(new BlockSave(Blocks.spike, 81f, 0f, 0));
-        loadList.Add(new BlockSave(Blocks.potion, 81f, 5f, 0));
-        loadList.Add(new BlockSave(Blocks.spike, 82f, 0f, 0));
-        loadList.Add(new BlockSave(Blocks.pitStart, 90f, 0f, 0));
-        loadList.Add(new BlockSave(Blocks.balloon, 95f, 2.5f, 0));
-        loadList.Add(new BlockSave(Blocks.balloon, 100f, 2.5f, 0));
-        loadList.Add(new BlockSave(Blocks.balloonHigh, 105f, 2.5f, 2));
-        loadList.Add(new BlockSave(Blocks.pitEnd, 110f, 0f, 0));
-        islandData = IslandBackground.islandMany;
+        if(LevelLoader.main == null || LevelLoader.main.loading == null) {
+            if(LevelLoader.main == null) Debug.LogError("ChunkLoader: LevelLoader missing!");
+            else Debug.LogError("ChunkLoader: Loading level data missing!");
+            loadTestLevel();
+        }
+        else {
+            Level level = LevelLoader.main.loading;
+            islandData = level.islands;
+            loadList = level.blocks;
+        }
     }
 
-    // Update is called once per frame
     void Update() {
         placeFloors();
         placeBlocks();
         placeBackground();
+    }
+
+    private void reset() {
+        lastIslandX = 0f;
+        lastX = -20f;
+        floorY = 0f;
+        isPit = prePlaced = false;
+        resetLoadList();
     }
 
     private void placeFloors() {
@@ -154,7 +154,7 @@ public class ChunkLoader : MonoBehaviour
     }*/
 
     private void resetLoadList() {
-        loadList.Clear();
+        if(loadList != null) loadList.Clear();
         listIndex = 0;
         listSize = -1;
     }
@@ -168,5 +168,24 @@ public class ChunkLoader : MonoBehaviour
 
     public static float DistancedCamClip(float z) {
         return CAM_CLIP / (cam.GetComponent<CameraController>().zoom * (CameraController.CAMSCALE / (CameraController.CAMSCALE + z)));
+    }
+
+    private void loadTestLevel() {
+        if(loadList == null) loadList = new List<BlockSave>();
+        loadList.Add(new BlockSave(Blocks.jumpOrb, 22f, 5.2f, 0));
+        loadList.Add(new BlockSave(Blocks.spike, 30f, 0f, 0));
+        loadList.Add(new BlockSave(Blocks.spike, 32f, 0f, 0));
+        loadList.Add(new BlockSave(Blocks.pitStart, 60f, 0f, 0));
+        loadList.Add(new BlockSave(Blocks.pitEnd, 61f, 0f, 0));
+        loadList.Add(new BlockSave(Blocks.spike, 80f, 0f, 0));
+        loadList.Add(new BlockSave(Blocks.spike, 81f, 0f, 0));
+        loadList.Add(new BlockSave(Blocks.potion, 81f, 5f, 0));
+        loadList.Add(new BlockSave(Blocks.spike, 82f, 0f, 0));
+        loadList.Add(new BlockSave(Blocks.pitStart, 90f, 0f, 0));
+        loadList.Add(new BlockSave(Blocks.balloon, 95f, 2.5f, 0));
+        loadList.Add(new BlockSave(Blocks.balloon, 100f, 2.5f, 0));
+        loadList.Add(new BlockSave(Blocks.balloonHigh, 105f, 2.5f, 2));
+        loadList.Add(new BlockSave(Blocks.pitEnd, 110f, 0f, 0));
+        islandData = IslandBackground.islandMany;
     }
 }

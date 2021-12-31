@@ -23,5 +23,6 @@ MonoBehaviour:
   height: 6
   clipsize: 4
   onFloor: 0
-  id: 0
+  category: {fileID: 0}
+  id: 1
   zRand: 0

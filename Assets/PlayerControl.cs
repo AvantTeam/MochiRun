@@ -35,6 +35,7 @@ public class PlayerControl : MonoBehaviour
     public float health = 0f;
     public float courage = 0f;
     public float courageTime = 0f;
+    public bool dead = false;
 
     public bool landed = false;
     public bool usedCourage = false;
@@ -191,6 +192,7 @@ public class PlayerControl : MonoBehaviour
         setJumpHeight(2f); //todo levelmeta
         showPlayer(true);
 
+        dead = false;
         health = MAX_HP;
         usedCourage = false;
         courage = COURAGES * COURAGE_SLOT;
@@ -328,6 +330,8 @@ public class PlayerControl : MonoBehaviour
         Kill(true);
     }
     public void Kill(bool deathEffect) {
+        if(dead) return;
+        dead = true;
         state = STATE.STOP;
         nextState = STATE.STOP;
         health = 0f;
@@ -342,7 +346,17 @@ public class PlayerControl : MonoBehaviour
             Fx(damageFx);
         }
         if(animator != null) animator.Kill(deathEffect);
+
+        if(LevelLoader.IsEditor()) {
+            //if editor, skip the death cutscene sequence entirely
+            Invoke("End", 1f);
+            return;
+        }
         //TODO game over sequence
+    }
+
+    public void End() {
+        LevelLoader.End();
     }
 
     //TODO pool fx

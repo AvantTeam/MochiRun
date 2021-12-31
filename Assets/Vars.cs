@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static ChunkLoader;
 
 public class Vars : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class Vars : MonoBehaviour
     public bool mobile = false; //todo
 
     protected Blocks blocks;
+    public List<BlockSave> tempBlockSaves;
 
     void Awake() {
         if(main != null && main != this)

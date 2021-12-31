@@ -10,13 +10,13 @@ public class LBlockUpdater : MonoBehaviour
     public BlockSave save;
 
     /*
-    void Update()
+    protected virtual void Update()
     {
         if(LChunkLoader.main.ShouldRemove(this)) Destroy(gameObject);
     }
     */
 
-    public void SetBlock(Block b, byte ctype) {
+    public virtual void SetBlock(Block b, byte ctype) {
         type = b;
         this.ctype = ctype;
         if(b.hasObject) {

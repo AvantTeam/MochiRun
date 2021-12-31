@@ -13,7 +13,7 @@ public class Block : ScriptableObject {
     public bool rotate = false; //wheter ctype is rotation (ccw, 0~3)
     public bool hidden = false;
     public GameObject prefab;
-    public Texture2D sprite = null;
+    public Sprite sprite = null;
     public float zLayer = 0f;
     [ReadOnly] public float width = 1f;
     [ReadOnly] public float height = 1f;
@@ -24,12 +24,16 @@ public class Block : ScriptableObject {
     public int id;
 
     protected virtual void OnValidate() {
-        hasObject = prefab != null;
-        if(prefab != null) {
+        hasObject = prefab != null && !prefab.name.StartsWith("Trigger");
+        if(hasObject) {
             hasUpdate = prefab.GetComponent<BlockUpdater>() != null;
             width = prefab.transform.localScale.x;
             height = prefab.transform.localScale.y;
             clipsize = width;
+        }
+        else if(prefab != null) {
+            hasUpdate = prefab.GetComponent<BlockUpdater>() != null;
+            width = height = clipsize = 1f;
         }
         else {
             hasUpdate = false;
@@ -43,7 +47,7 @@ public class Block : ScriptableObject {
 
     
     public Block(GameObject o) {
-        if(o != null) {
+        if(o != null && !o.name.StartsWith("Trigger")) {
             hasObject = true;
             prefab = o;
             hasUpdate = o.GetComponent<BlockUpdater>() != null;
@@ -60,7 +64,7 @@ public class Block : ScriptableObject {
 
     //called when a block is being spawned (typically out of screen). ctype is only saved for blocks with hasUpdate set to true.
     public virtual void init(float x, float y, byte ctype) {
-        if(hasObject){
+        if(prefab != null){
             GameObject newo = Object.Instantiate(prefab, new Vector3(x, y, zLayer), rotate ? rotation[ctype % 4] : Quaternion.identity);
             if(hasUpdate){
                 BlockUpdater bu = newo.GetComponent<BlockUpdater>();

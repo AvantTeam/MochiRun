@@ -115,7 +115,7 @@ MonoBehaviour:
   type: {fileID: 0}
   ctype: 0
   updatesTile: 0
-  velocity: {x: 0, y: -5}
+  velocity: {x: 0, y: -8}
   overrideVelocityY: 1
   destroyOnHit: 1
   hitFx: {fileID: 2315629835069471037, guid: fb91b50497c7a204f8e08def636a9a86, type: 3}

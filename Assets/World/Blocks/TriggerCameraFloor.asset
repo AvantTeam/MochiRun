@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 418930a47537abb46be37670e864cb13, type: 3}
+  m_Name: TriggerCameraFloor
+  m_EditorClassIdentifier: 
+  hasObject: 0
+  hasUpdate: 1
+  rotate: 0
+  hidden: 0
+  prefab: {fileID: 6888790089733916602, guid: ad96ae135b1f4774fbfbe1f61c194937, type: 3}
+  sprite: {fileID: 21300000, guid: 2bb745d9c0de5be4496a3073151506ad, type: 3}
+  zLayer: 0
+  width: 1
+  height: 1
+  clipsize: 1
+  onFloor: 0
+  category: {fileID: 11400000, guid: 9fdb17510ed6d8b419ee70b5f284f49d, type: 2}
+  id: 11
+  maxData: 0
+  defaultData: 0
+  defaultRange: 2
+  defaultYCross: 1
+  uiColor: {r: 0, g: 1, b: 0.9806142, a: 1}

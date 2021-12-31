@@ -78,7 +78,7 @@ public class BlockSelectButton : MonoBehaviour
     public void SetBlock(Block block) {
         this.block = block;
         if(block.sprite != null) {
-            LoadSprite(block.sprite);
+            LoadSprite(block.sprite.texture, block.hasObject);
         }
     }
 
@@ -93,7 +93,11 @@ public class BlockSelectButton : MonoBehaviour
         }
     }
 
-    public void LoadSprite(Texture2D sprite) {
-        transform.GetChild(0).gameObject.GetComponent<RawImage>().texture = sprite == null ? defaultIcon : sprite;
+    public void LoadSprite(Texture2D sprite, bool cut) {
+        RawImage im = transform.GetChild(0).gameObject.GetComponent<RawImage>();
+        im.texture = sprite == null ? defaultIcon : sprite;
+        if(!cut) {
+            im.uvRect = new Rect(0f, 0f, 1f, 1f);
+        }
     }
 }

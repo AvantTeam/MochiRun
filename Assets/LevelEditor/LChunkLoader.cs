@@ -9,13 +9,14 @@ public class LChunkLoader : MonoBehaviour
     private List<BlockSave> loadList = new List<BlockSave>(); //must be sorted by x. Will not update even if blocks are placed in the editor!
     private PriorityQueue<float, BlockSave> lUnload = new PriorityQueue<float, BlockSave>();
     private PriorityQueue<float, BlockSave> rUnload = new PriorityQueue<float, BlockSave>();
+    private Level level;
 
     //public const float FLOOR_WIDTH = 4f, FLOOR_HEIGHT = 6f;
 
     private int listSize;
     private float lastL, lastR;
 
-    public GameObject lblock, lfloor;
+    public GameObject lblock, lfloor, ltag;
     public CursorControl cursor;
     public LevelEditorFragment frag;
     public static LChunkLoader main;
@@ -135,6 +136,13 @@ public class LChunkLoader : MonoBehaviour
             bu.SetBlock(bs.type, bs.ctype);
             bu.save = bs;
         }
+        else if(bs.type.sprite != null) {
+            GameObject newo = Instantiate(ltag, new Vector3(bs.x, bs.type.onFloor ? (GetFloorY(bs.x) + FLOOR_HEIGHT / 2 + bs.type.height / 2) : bs.y, -5), bs.type.rotate ? Block.rotation[bs.ctype % 4] : Quaternion.identity);
+
+            LBlockUpdater bu = newo.GetComponent<LBlockUpdater>();
+            bu.SetBlock(bs.type, bs.ctype);
+            bu.save = bs;
+        }
     }
 
     //todo
@@ -146,8 +154,35 @@ public class LChunkLoader : MonoBehaviour
         return false;
     }
 
+    public void ResetFloorFlags() {
+        
+    }
+
+    public void RecacheBlocks() {
+        GameObject[] all = GameObject.FindGameObjectsWithTag("LevelBlock");
+        GameObject[] tags = GameObject.FindGameObjectsWithTag("LevelTag");
+        loadList.Clear();
+        foreach(GameObject o in all) {
+            loadList.Add(o.GetComponent<LBlockUpdater>().save);
+        }
+        foreach(GameObject o in tags) {
+            loadList.Add(o.GetComponent<LTagUpdater>().save);
+        }
+
+        loadList.Sort((x, y) => x.x.CompareTo(y.x));
+    }
+
+    public void PlayLevel() {
+        RecacheBlocks();
+        Vars.main.tempBlockSaves = loadList;
+
+        if(level == null) level = new Level(loadList);
+        LevelLoader.LoadRun(level);
+    }
+
     private void loadTestLevel() {
         //todo remove
+        if(loadList.Count > 0) return;
         loadList.Add(new BlockSave(Blocks.jumpOrb, 22f, 5.2f, 0));
         loadList.Add(new BlockSave(Blocks.spike, 30f, 0f, 0));
         loadList.Add(new BlockSave(Blocks.spike, 32f, 0f, 0));
@@ -164,7 +199,12 @@ public class LChunkLoader : MonoBehaviour
         loadList.Add(new BlockSave(Blocks.pitEnd, 110f, 0f, 0));
     }
     private void resetLoadList() {
-        loadList.Clear();
+        Debug.Log("loadList Count:" + loadList.Count);
+        if(Vars.main.tempBlockSaves != null) {
+            loadList = Vars.main.tempBlockSaves;
+            Vars.main.tempBlockSaves = null;
+        }
+        else loadList.Clear();
         listSize = -1;
         while(lUnload.Count > 0) lUnload.Dequeue();
         while(rUnload.Count > 0) rUnload.Dequeue();

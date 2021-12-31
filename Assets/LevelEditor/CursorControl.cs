@@ -12,9 +12,10 @@ public class CursorControl : MonoBehaviour
 
     public Block block;
     public byte ctype;
-    public GameObject cursorPrefab, lblock;
+    public GameObject cursorPrefab, lblock, ltag;
     public Material cursorMaterial;
     public Color placeColor, invalidColor, removeColor, defaultColor, selectColor;
+    public Material additiveSprite, defaultSprite;
 
     public enum STATE {
         NONE = -1,
@@ -41,6 +42,7 @@ public class CursorControl : MonoBehaviour
     private Collider2D[] colresult = new Collider2D[7];
     private ContactFilter2D triggerContactFilter;
 
+    SpriteRenderer tagRenderer;
     GameObject cam;
     Camera camc;
     EditorCameraControl camController;
@@ -50,6 +52,7 @@ public class CursorControl : MonoBehaviour
 
     void Start()
     {
+        tagRenderer = transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
         cam = GameObject.Find("Main Camera");
         camc = cam.GetComponent<Camera>();
         camController = cam.GetComponent<EditorCameraControl>();
@@ -70,7 +73,9 @@ public class CursorControl : MonoBehaviour
     void LateUpdate()
     {
         focused = !EventSystem.current.IsPointerOverGameObject();
-        Show(state == STATE.SELECT ? selection != null : !(camController.panning || state == STATE.CAMERA));
+        Show(state == STATE.SELECT ? 
+            selection != null && !tagRenderer.gameObject.activeInHierarchy : 
+            !(camController.panning || state == STATE.CAMERA || (state == STATE.PLACE && tagRenderer.gameObject.activeInHierarchy)));
         if(focused) {
             playerInputs();
         }
@@ -205,10 +210,13 @@ public class CursorControl : MonoBehaviour
         transform.localScale = cursorPrefab.transform.localScale;
         GetComponent<MeshFilter>().mesh = cursorPrefab.GetComponent<MeshFilter>().sharedMesh;
         mrender.materials = cursorPrefab.GetComponent<MeshRenderer>().sharedMaterials;
+        tagRenderer.gameObject.SetActive(false);
     }
 
     private void setBlockModel() {
-        if(block != null && block.hasObject) {
+        if(block == null) return;
+        if(block.hasObject) {
+            tagRenderer.gameObject.SetActive(false);
             GameObject pref = block.prefab;
             transform.localScale = pref.transform.localScale;
             GetComponent<MeshFilter>().mesh = pref.GetComponent<MeshFilter>().sharedMesh;
@@ -217,6 +225,13 @@ public class CursorControl : MonoBehaviour
             Material[] newmat = new Material[matn];
             for(int i = 0; i < matn; i++) newmat[i] = cursorMaterial;
             mrender.materials = newmat;
+        }
+        else if(block.sprite != null) {
+            //the block is a floor tag
+            transform.localScale = cursorPrefab.transform.localScale;
+            tagRenderer.gameObject.SetActive(true);
+            tagRenderer.sprite = block.sprite;
+            tagRenderer.material = defaultSprite;
         }
     }
 
@@ -233,6 +248,7 @@ public class CursorControl : MonoBehaviour
 
     public void SetColor(Color color) {
         cursorMaterial.color = color;
+        if(tagRenderer.gameObject.activeInHierarchy) tagRenderer.color = color;
     }
 
     public void PlaceBlock() {
@@ -244,15 +260,35 @@ public class CursorControl : MonoBehaviour
             bu.SetBlock(block, ctype);
             bu.save = new BlockSave(block, pos.x, pos.y, ctype);
         }
+        else if(block.sprite != null) {
+            //a tag or trigger
+            byte prefctype = ctype;
+            if(block is Trigger trig) {
+                prefctype = trig.defaultCType();
+            }
+
+            Vector3 pos = transform.position;
+            GameObject newo = Instantiate(ltag, new Vector3(pos.x, pos.y, -5), block.rotate ? Block.rotation[ctype % 4] : Quaternion.identity);
+
+            LBlockUpdater bu = newo.GetComponent<LBlockUpdater>();
+            bu.SetBlock(block, prefctype);
+            bu.save = new BlockSave(block, pos.x, pos.y, prefctype);
+        }
     }
 
     private void trySelect(bool rclick) {
-        GameObject selected = ClosestBlock();
+        GameObject selected = ClosestBlockTag();
         //Debug.Log(selected + " at " + selected.transform.position.ToString());
         if(selected != null) {
             selectedViaRclick = rclick;
             SelectBlock(selected);
+            LBlockUpdater lb = selected.GetComponent<LBlockUpdater>();
+            Block type = lb.type;
             //show popup window
+            if(type is Trigger trig) {
+                LChunkLoader.main.frag.rightClick.GetComponent<RightClickPopup>().SetBlock(trig, lb);
+                LChunkLoader.main.frag.rightClick.SetActive(true);
+            }
         }
         else if(selection != null){
             Deselect();
@@ -280,13 +316,36 @@ public class CursorControl : MonoBehaviour
         return selected;
     }
 
+    public GameObject ClosestBlockTag() {
+        Vector2 mpos = camc.ScreenToWorldPoint(Input.mousePosition);
+        float mdist = 99f;
+        GameObject selected = null;
+
+        int n = Physics2D.OverlapCircle(mpos, 0.5f, triggerContactFilter, colresult);
+        for(int i = 0; i < n; i++) {
+            if(!colresult[i].isTrigger || !colresult[i].gameObject.CompareTag("LevelTag")) continue;
+            Vector2 bpos = colresult[i].gameObject.transform.position;
+            float dist = Vector2.Distance(mpos, bpos);
+            if(dist < mdist) {
+                selected = colresult[i].gameObject;
+                mdist = dist;
+            }
+        }
+
+        return selected;
+    }
+
     public void SelectBlock(GameObject b) {
         LBlockUpdater lb = b.GetComponent<LBlockUpdater>();
         if(lb == null) return;
         SetState(STATE.SELECT);
         selection = b;
         SetBlock(lb.type, lb.ctype);
-        transform.position = b.transform.position;
+        if(lb.type.hasObject) transform.position = b.transform.position;
+        else{
+            transform.position = new Vector3(b.transform.position.x, b.transform.position.y, 0f);
+            tagRenderer.material = additiveSprite;
+        }
         transform.rotation = b.transform.rotation;
         //change mesh(or enable special effects)
     }
@@ -295,6 +354,7 @@ public class CursorControl : MonoBehaviour
         if(selection == null) return;
         selection = null;
         //hide popup window
+        LChunkLoader.main.frag.rightClick.SetActive(false);
     }
 
     private void snapRotate() {

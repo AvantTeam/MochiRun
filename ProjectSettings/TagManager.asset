@@ -6,6 +6,8 @@ TagManager:
   tags:
   - CourageTrigger
   - Floor
+  - LevelBlock
+  - LevelTag
   layers:
   - Default
   - TransparentFX

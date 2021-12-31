@@ -7,7 +7,7 @@ public class LevelEditorFragment : MonoBehaviour
 {
     private const float BP_CELL = 90f;
     //elements
-    public GameObject blockSelectPane, categoryButton, categoryPane, categoryPaneMobile, categoryViewMobile, menuButton;
+    public GameObject blockSelectPane, categoryButton, categoryPane, categoryPaneMobile, categoryViewMobile, menuButton, rightClick;
     public LayoutElement blockScrollView;
     public GridRenderer grid;
     public Image[] categoryThemed;
@@ -37,6 +37,7 @@ public class LevelEditorFragment : MonoBehaviour
 
     public void Load() {
         loadBlockSelect();
+        rightClick.SetActive(false);
 
         //Texture2D yes = (Texture2D)categoryButton.GetComponent<Image>().mainTexture;
         //byte[] bytes = duplicateTexture(yes).EncodeToPNG();
