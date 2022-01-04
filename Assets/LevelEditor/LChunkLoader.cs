@@ -172,11 +172,14 @@ public class LChunkLoader : MonoBehaviour
         loadList.Sort((x, y) => x.x.CompareTo(y.x));
     }
 
+    public Level GetLevel() {
+        if(level == null) level = new Level(loadList);
+        return level;
+    }
+
     public void PlayLevel() {
         RecacheBlocks();
-        Vars.main.tempBlockSaves = loadList;
-
-        if(level == null) level = new Level(loadList);
+        Vars.main.tempBlockSaves = GetLevel();
         LevelLoader.LoadRun(level);
     }
 
@@ -201,7 +204,8 @@ public class LChunkLoader : MonoBehaviour
     private void resetLoadList() {
         Debug.Log("loadList Count:" + loadList.Count);
         if(Vars.main.tempBlockSaves != null) {
-            loadList = Vars.main.tempBlockSaves;
+            loadList = Vars.main.tempBlockSaves.blocks;
+            level = Vars.main.tempBlockSaves;
             Vars.main.tempBlockSaves = null;
         }
         else loadList.Clear();

@@ -36,6 +36,7 @@ public class PlayerControl : MonoBehaviour
     public float courage = 0f;
     public float courageTime = 0f;
     public bool dead = false;
+    public int coins = 0;
 
     public bool landed = false;
     public bool usedCourage = false;
@@ -43,8 +44,9 @@ public class PlayerControl : MonoBehaviour
     private float jumpPressTimer = JUMP_GRACE + 0.1f;
     private float invincibility = 0f;
     private Collider2D[] colresult = new Collider2D[25]; //attempting to get all overlapping colliders will get 20 max
-    private ContactFilter2D triggerContactFilter;
-    private Vector2 externalForce = Vector2.zero, overrideForce = Vector2.zero;
+    private RaycastHit2D[] colsingle = new RaycastHit2D[1];
+    private ContactFilter2D triggerContactFilter, floorContactFilter;
+    private Vector2 externalForce = Vector2.zero, overrideForce = Vector2.zero, floorVector = new Vector2(-0.04f, -0.1f);
     private bool overrideForceX, overrideForceY;
 
     Rigidbody2D rigid;
@@ -52,13 +54,15 @@ public class PlayerControl : MonoBehaviour
     CameraController cameraControl;
     public PlayerAnimator animator;
     public GameObject costume, burstFx, courageStartFx, deathFx, damageFx, courageFailFx;
-    // Start is called before the first frame update
+    
     void Start() {
         rigid = GetComponent<Rigidbody2D>();
         collider2d = GetComponent<Collider2D>();
         cameraControl = GameObject.Find("Main Camera").GetComponent<CameraController>();
         triggerContactFilter = new ContactFilter2D();
         triggerContactFilter.useTriggers = true;
+        floorContactFilter = new ContactFilter2D();
+        floorContactFilter.useTriggers = false;
 
         reset();
     }
@@ -90,6 +94,7 @@ public class PlayerControl : MonoBehaviour
                         if(jumpPressTimer < JUMP_GRACE) {
                             jumpPressTimer = JUMP_GRACE + 0.1f;
                             nextState = STATE.JUMP;
+                            vel.x = SPEED_MAX;
                         }
                     }
                     break;
@@ -189,7 +194,7 @@ public class PlayerControl : MonoBehaviour
         state = STATE.NONE;
         nextState = STATE.RUN;
         jumpPressTimer = JUMP_GRACE + 0.1f;
-        setJumpHeight(2f); //todo levelmeta
+        //setJumpHeight(2f);
         showPlayer(true);
 
         dead = false;
@@ -200,7 +205,21 @@ public class PlayerControl : MonoBehaviour
         externalForce = Vector2.zero;
         overrideForce = Vector2.zero;
         overrideForceX = overrideForceY = false;
+        coins = 0;
         if(animator != null) animator.reset();
+    }
+
+    public void Apply(Level level) {
+        Physics2D.gravity = level.gravity;
+        setJumpHeight(level.jumpHeight);
+        MAX_HP = level.maxHealth;
+        if(MAX_HP < 1) MAX_HP = 1;
+        HP_LOSS = level.healthLoss;
+        SPEED_MAX = level.maxSpeed;
+        COURAGES = level.courages;
+        if(cameraControl == null) cameraControl = GameObject.Find("Main Camera").GetComponent<CameraController>();
+        cameraControl.targetZoom = cameraControl.zoom = level.zoom;
+        reset();
     }
 
     public void setJumpHeight(float h) {
@@ -208,17 +227,22 @@ public class PlayerControl : MonoBehaviour
     }
 
     public float heightToVel(float h) {
-        return Mathf.Sqrt(2f * 9.8f * h);//v = sqrt(2gh)
+        Debug.Log(Physics2D.gravity.ToString());
+        return Mathf.Sqrt(Mathf.Abs(2f * Physics2D.gravity.y * h)) * Mathf.Sign(-Physics2D.gravity.y * h);//v = sqrt(2gh)
     }
 
     private void checkLanded() {
         landed = false;
-        Vector2 s = new Vector2(transform.position.x, transform.position.y);
-        Vector2 e = s + Vector2.down * 0.6f;
-        Collider2D collider = Physics2D.Linecast(s, e).collider;
-        if(collider == null || collider.isTrigger) {
+        //Vector2 s = new Vector2(transform.position.x, transform.position.y - 0.2f);
+        //Vector2 e = s + Vector2.down * 0.6f;
+        //int i = Physics2D.OverlapCircle(s, 0.4f, floorContactFilter, colsingle);
+        int i = collider2d.Cast(floorVector, floorContactFilter, colsingle, 0.12f);
+
+        if(i < 1) {
             return;
         }
+        Collider2D collider = colsingle[0].collider;
+        //Debug.Log(collider);
         if(collider.gameObject.CompareTag("Floor")) {
             cameraControl.targetFloorY = collider.gameObject.transform.localScale.y / 2f + collider.gameObject.transform.position.y + PLAYER_RADIUS;
         }

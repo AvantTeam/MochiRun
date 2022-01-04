@@ -66,11 +66,13 @@ public class ChunkLoader : MonoBehaviour
             if(LevelLoader.main == null) Debug.LogError("ChunkLoader: LevelLoader missing!");
             else Debug.LogError("ChunkLoader: Loading level data missing!");
             loadTestLevel();
+            pcon.Apply(new Level());
         }
         else {
             Level level = LevelLoader.main.loading;
             islandData = level.islands;
             loadList = level.blocks;
+            pcon.Apply(level);
         }
     }
 

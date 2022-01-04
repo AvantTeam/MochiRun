@@ -24,9 +24,12 @@ MonoBehaviour:
   clipsize: 1
   onFloor: 0
   category: {fileID: 11400000, guid: 9fdb17510ed6d8b419ee70b5f284f49d, type: 2}
-  id: 11
+  id: 13
   maxData: 0
   defaultData: 0
+  modifierName: Modifier
+  modifierOffset: 0
+  modifierMultiplier: 1
   defaultRange: 2
   defaultYCross: 1
-  uiColor: {r: 0, g: 1, b: 0.9806142, a: 1}
+  uiColor: {r: 0, g: 1, b: 1, a: 1}

@@ -108,8 +108,8 @@ public class CameraController : MonoBehaviour{
         if(inBounds) targetY = Mathf.Max(targetY, curFloorY + playerOffset.y / zoom);
 
         if(targetZoom <= 0.1f) targetZoom = 0.1f;
-        if(Mathf.Abs(zoom - targetZoom) < 0.01f) zoom = targetZoom;
-        else zoom = lerpDelta(zoom, targetZoom, 0.05f);
+        if(Mathf.Abs(zoom - targetZoom) < 0.001f) zoom = targetZoom;
+        else zoom = approachDelta(zoom, targetZoom, 0.25f);
 
         transform.position = new Vector3(ppos.x + playerOffset.x / zoom, targetY, ppos.z + zoomZ());
         if(!lightCurrent.directional){
@@ -135,5 +135,12 @@ public class CameraController : MonoBehaviour{
 
     float lerpDelta(float fromValue, float toValue, float progress) {
         return fromValue + (toValue - fromValue) * Mathf.Clamp01(progress * Time.deltaTime * 60f);
+    }
+    float approach(float from, float to, float speed) {
+        return from + Mathf.Clamp(to - from, -speed, speed);
+    }
+
+    float approachDelta(float from, float to, float speed) {
+        return approach(from, to, speed * Time.deltaTime);
     }
 }

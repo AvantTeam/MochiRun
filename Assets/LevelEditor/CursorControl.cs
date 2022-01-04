@@ -287,7 +287,7 @@ public class CursorControl : MonoBehaviour
             //show popup window
             if(type is Trigger trig) {
                 LChunkLoader.main.frag.rightClick.GetComponent<RightClickPopup>().SetBlock(trig, lb);
-                LChunkLoader.main.frag.rightClick.SetActive(true);
+                //LChunkLoader.main.frag.rightClick.SetActive(true);
             }
         }
         else if(selection != null){

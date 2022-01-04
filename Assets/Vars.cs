@@ -12,7 +12,7 @@ public class Vars : MonoBehaviour
     public bool mobile = false; //todo
 
     protected Blocks blocks;
-    public List<BlockSave> tempBlockSaves;
+    public Level tempBlockSaves;
 
     void Awake() {
         if(main != null && main != this)

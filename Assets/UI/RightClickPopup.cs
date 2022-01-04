@@ -19,14 +19,16 @@ public class RightClickPopup : MonoBehaviour
     void Start() {
         cam = GameObject.Find("Main Camera").GetComponent<Camera>();
         rect = GetComponent<RectTransform>();
-        rangeL.GetComponent<Button>().onClick.AddListener(RangeLClicked);
-        rangeR.GetComponent<Button>().onClick.AddListener(RangeRClicked);
-        dataL.GetComponent<Button>().onClick.AddListener(DataLClicked);
-        dataR.GetComponent<Button>().onClick.AddListener(DataRClicked);
+        rangeL.onClick.AddListener(RangeLClicked);
+        rangeR.onClick.AddListener(RangeRClicked);
+        dataL.onClick.AddListener(DataLClicked);
+        dataR.onClick.AddListener(DataRClicked);
     }
 
     void Update() {
-        if(block != null) rect.position = (Vector2)cam.WorldToScreenPoint(block.gameObject.transform.position);
+        if(block != null){
+            move();
+        }
     }
 
     public void SetBlock(Trigger trigger, LBlockUpdater block) {
@@ -50,7 +52,8 @@ public class RightClickPopup : MonoBehaviour
             dataL.interactable = dataR.interactable = true;
         }
         rebuild();
-
+        gameObject.SetActive(true);
+        //move();
         //rect.position = (Vector2)cam.WorldToScreenPoint(block.gameObject.transform.position);
     }
 
@@ -64,6 +67,22 @@ public class RightClickPopup : MonoBehaviour
                 dataR.interactable = (block.ctype >> 3) < trigger.maxData;
                 dataText.text = data();
             }
+        }
+    }
+
+    public void move() {
+        if(cam == null) cam = GameObject.Find("Main Camera").GetComponent<Camera>();
+        Vector2 vmin = cam.WorldToScreenPoint(cam.transform.position - new Vector3(-cam.orthographicSize * Screen.width / Screen.height, cam.orthographicSize, 0));
+        rect.position = (Vector2)cam.WorldToScreenPoint(block.gameObject.transform.position);
+        if(rect.position.y - rect.sizeDelta.y < vmin.y) {
+            Vector3 v = rect.position;
+            v.y = vmin.y + rect.sizeDelta.y;
+            rect.position = v;
+        }
+        if(rect.position.x + rect.sizeDelta.x > vmin.x) {
+            Vector3 v = rect.position;
+            v.x = vmin.x - rect.sizeDelta.x;
+            rect.position = v;
         }
     }
 

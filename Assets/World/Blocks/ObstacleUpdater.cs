@@ -29,8 +29,13 @@ public class ObstacleUpdater : BlockUpdater
     private void OnTriggerEnter2D(Collider2D collision) {
         if(collision.gameObject.CompareTag("Player")) {
             pcon.Damage(damage, gameObject);
+            OnHit();
             if(hitFx != null) pcon.Fx(hitFx, transform.position, Quaternion.identity);
             if(destroyOnHit) Destroy(gameObject);
         }
+    }
+
+    public virtual void OnHit() {
+
     }
 }

@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static ChunkLoader;
 
 public class LevelLoader : MonoBehaviour
 {
@@ -16,17 +15,6 @@ public class LevelLoader : MonoBehaviour
         if(main != null) Destroy(main.gameObject);
         main = this;
         DontDestroyOnLoad(this);
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public static void LoadRun(Level level) { 
@@ -46,19 +34,5 @@ public class LevelLoader : MonoBehaviour
 
     public static bool IsEditor() {
         return main.prevScene != null && main.prevScene.Equals("LevelEditScene");
-    }
-}
-
-public class Level {
-    public List<BlockSave> blocks;
-    public bool campaign = false; //if campaign is true, the max health, courage etc. are overriden by story mode's progression.
-    public IslandBackground islands = IslandBackground.islandMany;
-
-    public Level() {
-        blocks = new List<BlockSave>();
-    }
-
-    public Level(List<BlockSave> blocks) {
-        this.blocks = blocks;
     }
 }
