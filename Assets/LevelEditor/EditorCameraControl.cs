@@ -35,6 +35,7 @@ public class EditorCameraControl : MonoBehaviour
 
         //todo sense if the keyboard focus is somewhere else
         if(KeyBinds.GetDown("Toggle Grid")) LChunkLoader.main.frag.grid.ToggleMode();
+        if(Input.GetKeyDown(KeyCode.Tab)) PencilEdit.Clicked();
         if(KeyBinds.EscapeDown()) LChunkLoader.main.frag.menuButton.GetComponent<MenuButton>().Clicked();
 
         if(cursor.state == CursorControl.STATE.NONE) {

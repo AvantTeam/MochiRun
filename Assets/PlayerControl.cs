@@ -53,7 +53,7 @@ public class PlayerControl : MonoBehaviour
     Collider2D collider2d;
     CameraController cameraControl;
     public PlayerAnimator animator;
-    public GameObject costume, burstFx, courageStartFx, deathFx, damageFx, courageFailFx;
+    public GameObject costume, burstFx, courageStartFx, deathFx, damageFx, courageFailFx, curtain;
     
     void Start() {
         rigid = GetComponent<Rigidbody2D>();
@@ -65,6 +65,10 @@ public class PlayerControl : MonoBehaviour
         floorContactFilter.useTriggers = false;
 
         reset();
+        CurtainUpdater cu = Instantiate(curtain, Vector3.zero, Quaternion.identity).GetComponent<CurtainUpdater>();
+        cu.blackout = !LevelLoader.main.wasCurtainScene;
+        cu.Set(true);
+        cu.Hide(1f);
     }
 
     // Update is called once per frame
@@ -331,12 +335,13 @@ public class PlayerControl : MonoBehaviour
     }
 
     public void Damage(float damage, GameObject? source) {
-        health -= damage;
         if(damage < 0.5f) {
             //heal effect?
+            health -= damage;
         }
         else if(damage > 5f) { //status effects (dot damage, <5) are not prevented by invincibility
             if(invincibility > 0.1f) return;
+            health -= damage;
             invincibility = INVIN_TIME;
 
             Fx(damageFx);
@@ -371,16 +376,30 @@ public class PlayerControl : MonoBehaviour
         }
         if(animator != null) animator.Kill(deathEffect);
 
-        if(LevelLoader.IsEditor()) {
+        if(false && LevelLoader.IsEditor()) {//todo remove?
             //if editor, skip the death cutscene sequence entirely
             Invoke("End", 1f);
             return;
         }
-        //TODO game over sequence
+
+        Invoke("DropCurtains", 1f);
+        Invoke("End", 2.5f);
+    }
+
+    public void DropCurtains() {
+        CurtainUpdater cu = Instantiate(curtain, Vector3.zero, Quaternion.identity).GetComponent<CurtainUpdater>();
+        cu.blackout = !LevelLoader.main.wasCurtainScene;
+        cu.Show(1.4f);
     }
 
     public void End() {
+        Time.timeScale = 1f;//reset time scale
         LevelLoader.End();
+    }
+
+    public void Quit() {
+        Time.timeScale = 1f;
+        LevelLoader.Quit();
     }
 
     //TODO pool fx

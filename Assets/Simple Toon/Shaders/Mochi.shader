@@ -1,4 +1,4 @@
-Shader "SToon Mochi"
+Shader "Simple Toon/Colored Outline"
 {
 	Properties
     {

@@ -20,6 +20,9 @@ public class OverlayRenderer : MonoBehaviour
     public RectTransform hpBar, hpBarSub, hpBarBack, hpIcon;
     public RectTransform courageBar, courageBarSub, courageBarBack, courageBarSlots, courageIcon;
     public Image courageBarImage, courageBarSImage;
+    public GameObject menuDialog;
+    private float lastTimeScale = 1f;
+    public bool paused = false;
     PlayerControl pcon;
 
     void Start()
@@ -27,6 +30,9 @@ public class OverlayRenderer : MonoBehaviour
         pcon = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControl>();
         init = false;
         setCActive(false);
+        paused = false;
+        lastTimeScale = 1f;
+        Time.timeScale = 1f;
     }
 
     void Update()
@@ -44,6 +50,21 @@ public class OverlayRenderer : MonoBehaviour
             lastMaxCourage = PlayerControl.COURAGES;
             cFlash = 0f;
             init = true;
+        }
+
+        if(menuDialog.activeInHierarchy) {
+            if(!paused) {
+                paused = true;
+                lastTimeScale = Time.timeScale;
+                Time.timeScale = 0f;
+            }
+            return;
+        }
+        else {
+            if(paused) {
+                paused = false;
+                Time.timeScale = lastTimeScale;
+            }
         }
 
         if(lastMaxCourage != PlayerControl.COURAGES) {

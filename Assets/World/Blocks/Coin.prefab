@@ -117,6 +117,6 @@ MonoBehaviour:
   damage: 0
   destroyOnHit: 1
   angleOffset: {x: 0, y: 0, z: 0}
-  rotateSpeed: 150
+  rotateSpeed: 120
   hitFx: {fileID: 2315629835069471037, guid: 9871ae3db0e7c2046874442285cf03b6, type: 3}
   coins: 1

@@ -140,6 +140,8 @@ MonoBehaviour:
   health: 0
   courage: 0
   courageTime: 0
+  dead: 0
+  coins: 0
   landed: 0
   usedCourage: 0
   animator: {fileID: 0}
@@ -149,6 +151,7 @@ MonoBehaviour:
   deathFx: {fileID: 2315629835069471037, guid: bbd7554615e3e0e42a9a5c8d1333482e, type: 3}
   damageFx: {fileID: 2315629835069471037, guid: 8a4054466ab63a042a5229f813d1e175, type: 3}
   courageFailFx: {fileID: 2315629835069471037, guid: 8adcb95cc2940e249895f1aa97b4ab68, type: 3}
+  curtain: {fileID: 1808505048086592643, guid: 311a8a180441ca34b9d0d2e159c3df10, type: 3}
 --- !u!108 &3910615291512618672
 Light:
   m_ObjectHideFlags: 0

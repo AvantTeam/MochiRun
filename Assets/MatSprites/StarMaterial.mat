@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: StarMaterial
   m_Shader: {fileID: 4800000, guid: ba4ac45649f9a974fa77e5fce712a640, type: 3}
-  m_ShaderKeywords: _EMISSION _SEGMENTED_ON
+  m_ShaderKeywords: _EMISSION _SEGMENTED_ON _SHNOVERLAP_ON
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -71,19 +71,19 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _Lumin: 0.78
+    - _Lumin: 0.268
     - _MaxLight: 1
     - _Metallic: 1
     - _MinLight: 0
     - _Mode: 0
     - _OcclusionStrength: 1
-    - _Offset: 0
+    - _Offset: 0.741
     - _OtlWidth: 5
     - _Parallax: 0.02
     - _Segmented: 1
-    - _ShnIntense: 0
-    - _ShnOverlap: 0
-    - _ShnRange: 0.15
+    - _ShnIntense: 1
+    - _ShnOverlap: 1
+    - _ShnRange: 0.073
     - _ShnSmooth: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -93,10 +93,10 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 1, g: 0.8784314, b: 0, a: 1}
+    - _Color: {r: 1, g: 1, b: 0, a: 1}
     - _DarkColor: {r: 0.5377358, g: 0.5377358, b: 0, a: 1}
     - _EmissionColor: {r: 0.18867922, g: 0.15020345, b: 0, a: 1}
-    - _OtlColor: {r: 0.3301887, g: 0.3301887, b: 0, a: 1}
-    - _ShnColor: {r: 1, g: 1, b: 0, a: 1}
+    - _OtlColor: {r: 0.3773585, g: 0.3773585, b: 0, a: 1}
+    - _ShnColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []
