@@ -306,6 +306,7 @@ public class PlayerControl : MonoBehaviour
                 if(build != null) build.Couraged(this);
             }
         }
+        if(animator != null) animator.CourageBurst();
     }
 
     public void Impulse(float x, float y) {
@@ -345,6 +346,7 @@ public class PlayerControl : MonoBehaviour
             invincibility = INVIN_TIME;
 
             Fx(damageFx);
+            if(animator != null) animator.Damage();
             if(damage >= 30f) {
                 int n = (int)((damage - 25f) / 18f) + 1;
                 if(n > 3) n = 3;
