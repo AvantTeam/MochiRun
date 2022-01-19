@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5732612074166360310}
   - component: {fileID: 8381699723434159524}
   - component: {fileID: 1003995690986823624}
+  - component: {fileID: 4085137795732541495}
   m_Layer: 0
   m_Name: JumpOrb
   m_TagString: CourageTrigger
@@ -41,7 +42,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2120803639321241534}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 4300000, guid: e47aafe00ab03274082117e54dd144c7, type: 2}
 --- !u!23 &5732612074166360310
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -61,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ba9da54526531e8468512a2930cdea2a, type: 2}
+  - {fileID: 2100000, guid: 24967846335016a4ca04be7c04a36013, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -111,8 +112,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0d0f71eba2a5304bbf09de81c420c67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: {fileID: 0}
   ctype: 0
   updatesTile: 0
-  velocity: {x: 0, y: 5}
+  velocity: {x: 0, y: 8}
+  overrideVelocityX: 0
+  overrideVelocityY: 1
   destroyOnHit: 0
-  hitFx: {fileID: 2315629835069471037, guid: d7004b26539b56d4681a6f43ed2c8c54, type: 3}
+  rotateSpeed: 100
+  hitFx: {fileID: 2315629835069471037, guid: fd9760a09b5f6ee46993e39396f165d5, type: 3}
+--- !u!122 &4085137795732541495
+Halo:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2120803639321241534}
+  m_Enabled: 1
+  m_Color:
+    serializedVersion: 2
+    rgba: 4292467579
+  m_Size: 0.5

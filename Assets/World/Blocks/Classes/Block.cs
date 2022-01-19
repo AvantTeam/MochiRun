@@ -21,7 +21,7 @@ public class Block : ScriptableObject {
     public bool onFloor = false; //whether to provide the floor + height / 2 as the y position on init().
     public Category category;
 
-    public int id;
+    //public int id;
 
     protected virtual void OnValidate() {
         hasObject = prefab != null && !prefab.name.StartsWith("Trigger");

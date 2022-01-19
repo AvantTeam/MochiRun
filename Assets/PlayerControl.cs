@@ -17,13 +17,14 @@ public class PlayerControl : MonoBehaviour
     private const float JUMP_RELEASE_REDUCE = 0.75f;
     private const float JUMP_GRACE = 0.3f; //the motive to "press jump" lasts for this long; i.e. press jump up to X seconds before touching the ground to immediately jump after
     private const float ACCEL = 10f;
+    public const float STUN_TIME = 0.65f;
 
     public enum STATE {
         NONE = -1,
-        RUN = 0,
+        RUN = 0, //running on the ground, or just fell after no jump
         JUMP,
-        FLOAT,
-        MISS,
+        FLOAT, //using courage glide
+        STUNNED, //ran into a wall
         STOP,
         CUTSCENE,
         NUM
@@ -38,7 +39,7 @@ public class PlayerControl : MonoBehaviour
     public bool dead = false;
     public int coins = 0;
 
-    public bool landed = false;
+    public bool landed = false, collided = false;
     public bool usedCourage = false;
     private bool jumpReleased = false;
     private float jumpPressTimer = JUMP_GRACE + 0.1f;
@@ -46,14 +47,14 @@ public class PlayerControl : MonoBehaviour
     private Collider2D[] colresult = new Collider2D[25]; //attempting to get all overlapping colliders will get 20 max
     private RaycastHit2D[] colsingle = new RaycastHit2D[1];
     private ContactFilter2D triggerContactFilter, floorContactFilter;
-    private Vector2 externalForce = Vector2.zero, overrideForce = Vector2.zero, floorVector = new Vector2(-0.04f, -0.1f);
+    private Vector2 externalForce = Vector2.zero, overrideForce = Vector2.zero, floorVector = new Vector2(-0.04f, -0.1f), wallVector = new Vector2(1f, 0.3f);
     private bool overrideForceX, overrideForceY;
 
     Rigidbody2D rigid;
     Collider2D collider2d;
     CameraController cameraControl;
     public PlayerAnimator animator;
-    public GameObject costume, burstFx, courageStartFx, deathFx, damageFx, courageFailFx, curtain;
+    public GameObject costume, burstFx, courageStartFx, deathFx, damageFx, courageFailFx, bumpWallFx, curtain;
     
     void Start() {
         rigid = GetComponent<Rigidbody2D>();
@@ -77,6 +78,7 @@ public class PlayerControl : MonoBehaviour
         bool inputJump = KeyBinds.Jump();
         stateTime += Time.deltaTime;
         checkLanded();
+        checkWallFront(); //collided is trun when mochi is running fast and there is a wall in front
         checkDeath();
 
         if(KeyBinds.JumpDown()) {
@@ -96,15 +98,25 @@ public class PlayerControl : MonoBehaviour
                     }
                     else {
                         if(jumpPressTimer < JUMP_GRACE) {
+                            //jump
                             jumpPressTimer = JUMP_GRACE + 0.1f;
                             nextState = STATE.JUMP;
                             vel.x = SPEED_MAX;
+                        }
+                        else if(collided && vel.x < 0.1f * SPEED_MAX) {//wall in front, and stuck
+                            //bump back
+                            nextState = STATE.STUNNED;
+                            vel.x = -1.1f * SPEED_MAX;
+                            vel.y = 3f;
                         }
                     }
                     break;
                 case STATE.FLOAT:
                 case STATE.JUMP:
                     stateAir();
+                    break;
+                case STATE.STUNNED:
+                    if(stateTime > STUN_TIME && Mathf.Abs(vel.x) < 1f && landed && animator.stunEnded) nextState = STATE.RUN;
                     break;
             }
         }
@@ -127,11 +139,14 @@ public class PlayerControl : MonoBehaviour
                     usedCourage = false;
                     courage = COURAGES * COURAGE_SLOT;
                     break;
+                case STATE.STUNNED:
+                    Fx(bumpWallFx);
+                    break;
             }
             stateTime = 0f;
         }
 
-        if(state != STATE.STOP && (state == STATE.RUN || vel.x > SPEED_MAX * 0.1f)) { //keep speed constantly big except when you try slamming onto a wall
+        if(state != STATE.STOP && state != STATE.STUNNED && (state == STATE.RUN || vel.x > SPEED_MAX * 0.1f)) { //keep speed constantly big except when you try slamming onto a wall
             if(state == STATE.RUN && landed && Mathf.Abs(externalForce.x) < 0.1f) vel.x = SPEED_MAX;
             else if(Mathf.Abs(vel.x) > SPEED_MAX) vel.x = SPEED_MAX * Mathf.Sign(vel.x); //todo fix this mess
             else vel.x += ACCEL * Time.deltaTime;
@@ -258,6 +273,19 @@ public class PlayerControl : MonoBehaviour
         landed = true;
     }
 
+    private void checkWallFront() {
+        collided = false;
+
+        if(rigid.velocity.x < 0f) return;
+
+        int i = collider2d.Cast(wallVector, floorContactFilter, colsingle, 0.12f);
+
+        if(i < 1) {
+            return;
+        }
+        collided = true;
+    }
+
     private void checkDeath() {
         if(state == STATE.STOP || state == STATE.CUTSCENE) return;
         if(transform.position.y < cameraControl.targetFloorY - cameraControl.boundsDownY) {
@@ -282,7 +310,8 @@ public class PlayerControl : MonoBehaviour
             }
         }
 
-        health -= HP_LOSS * Time.deltaTime;
+        float passiveLoss = HP_LOSS * Time.deltaTime;
+        if((landed && state != STATE.STUNNED) || health > passiveLoss) health -= passiveLoss; //don't kill due to natural loss when mochi is airborne
 
         if(health <= 0) {
             //died because running was no longer an available option
@@ -296,17 +325,21 @@ public class PlayerControl : MonoBehaviour
     }
 
     private void courageBurst() {
-        //todo only play burstFx if bursting succeeds
-        Fx(courageFailFx);
+        bool playfx = true;
+        
         int n = collider2d.OverlapCollider(triggerContactFilter, colresult);
         for(int i = 0; i < n; i++) {
             GameObject o = colresult[i].gameObject;
             if(o.CompareTag("CourageTrigger")) {
                 BlockUpdater build = o.GetComponent<BlockUpdater>();
-                if(build != null) build.Couraged(this);
+                if(build != null){
+                    build.Couraged(this);
+                    playfx = false;
+                }
             }
         }
         if(animator != null) animator.CourageBurst();
+        if(playfx) Fx(courageFailFx);
     }
 
     public void Impulse(float x, float y) {

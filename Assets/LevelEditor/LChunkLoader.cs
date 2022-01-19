@@ -6,6 +6,7 @@ using static ChunkLoader;
 
 public class LChunkLoader : MonoBehaviour
 {
+    public const float MAP_HEIGHT = 60f; //note that this must not exceed 128
     private List<BlockSave> loadList = new List<BlockSave>(); //must be sorted by x. Will not update even if blocks are placed in the editor!
     private PriorityQueue<float, BlockSave> lUnload = new PriorityQueue<float, BlockSave>();
     private PriorityQueue<float, BlockSave> rUnload = new PriorityQueue<float, BlockSave>();
@@ -27,8 +28,8 @@ public class LChunkLoader : MonoBehaviour
     private void Awake() {
         main = this;
     }
-    void Start()
-    {
+
+    void Start() {
         cam = GameObject.Find("Main Camera");
         camc = cam.GetComponent<Camera>();
         resetLoadList();
@@ -39,9 +40,7 @@ public class LChunkLoader : MonoBehaviour
         frag.Load();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
+    void Update() {
         placeFloors();
         //placeBlocks();
     }
@@ -175,6 +174,30 @@ public class LChunkLoader : MonoBehaviour
     public Level GetLevel() {
         if(level == null) level = new Level(loadList);
         return level;
+    }
+
+    public void LoadLevel(Level l) {
+        loadList = l.blocks;
+        level = l;
+
+        //reset queues
+        listSize = -1;
+        while(lUnload.Count > 0) lUnload.Dequeue();
+        while(rUnload.Count > 0) rUnload.Dequeue();
+
+        //wipe all lblocks
+        GameObject[] all = GameObject.FindGameObjectsWithTag("LevelBlock");
+        GameObject[] tags = GameObject.FindGameObjectsWithTag("LevelTag");
+        foreach(GameObject o in all) {
+            Destroy(o);
+        }
+        foreach(GameObject o in tags) {
+            Destroy(o);
+        }
+
+        AfterLoad();
+        PlaceAllBlocks();
+        frag.Load();
     }
 
     public void PlayLevel() {

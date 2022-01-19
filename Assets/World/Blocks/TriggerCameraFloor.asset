@@ -23,7 +23,7 @@ MonoBehaviour:
   height: 1
   clipsize: 1
   onFloor: 0
-  category: {fileID: 11400000, guid: 9fdb17510ed6d8b419ee70b5f284f49d, type: 2}
+  category: {fileID: 11400000, guid: ef2636d86d5f7e44cb5722bc7c733d72, type: 2}
   id: 13
   maxData: 0
   defaultData: 0

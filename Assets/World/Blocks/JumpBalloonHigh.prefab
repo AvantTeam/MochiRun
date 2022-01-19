@@ -112,11 +112,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee09e7098ad686940a5bafef2a345c73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: {fileID: 0}
   ctype: 0
   updatesTile: 0
-  velocity: {x: 0, y: 9}
+  velocity: {x: 0, y: 18}
   overrideVelocityY: 1
   destroyOnHit: 1
   hitFx: {fileID: 2315629835069471037, guid: c7f3516ae4f5c1a4e84b9d1d20ca0924, type: 3}
+  hitFx2: {fileID: 0}
   floatRadius: 0.1
   floatScl: 1

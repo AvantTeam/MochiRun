@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: cf8d4b1e0c8a35d4286d6e433fafa445
+guid: 140e759d18f7fce48bff764845d60445
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
   externalObjects: {}
   materials:
-    materialImportMode: 2
+    materialImportMode: 0
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -65,8 +65,8 @@ ModelImporter:
     secondaryUVPackMargin: 4
     useFileScale: 1
   tangentSpace:
-    normalSmoothAngle: 120
-    normalImportMode: 1
+    normalSmoothAngle: 100
+    normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0

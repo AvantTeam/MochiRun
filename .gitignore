@@ -81,3 +81,5 @@ crashlytics-build.properties
 # Cache files for ECS subscenes
 /[Aa]ssets/SceneDependencyCache
 /[Aa]ssets/SceneDependencyCache.meta
+
+/tests/

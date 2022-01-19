@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerAnimator : MonoBehaviour {
-    private const string landed = "onGround", running = "isRunning", runSpeed = "runSpeed", deadTrigger = "dead";
+    private const string landed = "onGround", running = "isRunning", runSpeed = "runSpeed", deadTrigger = "dead", isStunned = "stunned";
     private const float BLINK_DIST = 3f, GLOW_TIME = 0.7f;
     private WaitForSeconds WaitBlink = new WaitForSeconds(0.15f), WaitDamage = new WaitForSeconds(0.6f);
 
@@ -14,11 +14,12 @@ public class PlayerAnimator : MonoBehaviour {
         public float duration;
     }
     public Material faceMaterial;
-    public Texture2D idleFace, blinkFace;
+    public Texture2D idleFace, blinkFace, stunFace;
     public Texture2D[] jumpFace, damageFace;
     public FaceFrame[] deathFaceAnimation;
 
-    private bool animatingFace = false, jumping = false;
+    public bool stunEnded = true;
+    private bool animatingFace = false, jumping = false, stunned = false;
     private float blinkTimer = BLINK_DIST, eyeGlow = 0f;
     private string[] resetTriggers = {deadTrigger};
 
@@ -39,7 +40,11 @@ public class PlayerAnimator : MonoBehaviour {
     void Update() {
         animator.SetBool(landed, pcon.landed);
         animator.SetBool(running, pcon.state == PlayerControl.STATE.RUN);
+        bool stun = pcon.state == PlayerControl.STATE.STUNNED;
+        bool stunFallen = stun && !(pcon.stateTime > PlayerControl.STUN_TIME && Mathf.Abs(rigid.velocity.x) < 1f && pcon.landed);
+        animator.SetBool(isStunned, stunFallen);
         animator.SetFloat(runSpeed, Mathf.Abs(rigid.velocity.x));
+        stunEnded = !stun || animator.GetCurrentAnimatorStateInfo(0).IsTag("Run");
 
         if(eyeGlow > 0 && animatingFace) {
             setGlow(Mathf.Clamp01(2 * eyeGlow / GLOW_TIME));
@@ -54,6 +59,19 @@ public class PlayerAnimator : MonoBehaviour {
         }
 
         if(!animatingFace && eyeGlow <= 0) {
+            if(stunned) {
+                if(!stunFallen) {
+                    setFaceQuiet(idleFace);
+                    stunned = false;
+                }
+                return;
+            }
+            else if(stunFallen) {
+                setFaceQuiet(stunFace);
+                stunned = true;
+                return;
+            }
+
             if(jumping) {
                 if(pcon.landed || rigid.velocity.y < 0.1f) {
                     setFaceQuiet(idleFace);

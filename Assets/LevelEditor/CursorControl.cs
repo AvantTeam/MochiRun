@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using static ChunkLoader;
@@ -41,6 +42,7 @@ public class CursorControl : MonoBehaviour
     private bool dragSnapOffsetX, dragSnapOffsetY; //whether drag snap center is set to 0.5, 1.5, 2.5...
     private Collider2D[] colresult = new Collider2D[7];
     private ContactFilter2D triggerContactFilter;
+    public TextMeshProUGUI coords;
 
     SpriteRenderer tagRenderer;
     GameObject cam;
@@ -73,9 +75,10 @@ public class CursorControl : MonoBehaviour
     void LateUpdate()
     {
         focused = !EventSystem.current.IsPointerOverGameObject();
-        Show(state == STATE.SELECT ? 
-            selection != null && !tagRenderer.gameObject.activeInHierarchy : 
-            !(camController.panning || state == STATE.CAMERA || (state == STATE.PLACE && tagRenderer.gameObject.activeInHierarchy)));
+        bool shown = state == STATE.SELECT ?
+            selection != null && !tagRenderer.gameObject.activeInHierarchy :
+            !(camController.panning || state == STATE.CAMERA || (state == STATE.PLACE && tagRenderer.gameObject.activeInHierarchy));
+        Show(shown);
         if(focused) {
             playerInputs();
         }
@@ -87,6 +90,8 @@ public class CursorControl : MonoBehaviour
             c.a = absin(Time.realtimeSinceStartup, 0.15f, 1f);
             SetColor(c);
         }
+
+        displayCoords(shown ? transform.position : camc.ScreenToWorldPoint(Input.mousePosition));
     }
 
     private void moveToMouse() {
@@ -416,6 +421,10 @@ public class CursorControl : MonoBehaviour
 
     public void Show(bool show) {
         mrender.enabled = show;
+    }
+
+    private void displayCoords(Vector2 p) {
+        coords.text = "(" + p.x.ToString("0.0") + " ," + p.y.ToString("0.0") + ")";
     }
 
     float absin(float inn, float scl, float mag) {

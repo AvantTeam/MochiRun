@@ -8,7 +8,23 @@ public class CourageOrbUpdater : BlockUpdater
     public bool overrideVelocityX = false;
     public bool overrideVelocityY = true;
     public bool destroyOnHit = false;
+
+    public float rotateSpeed = 0f;
     public GameObject hitFx = null;
+
+    private float rv = 0f;
+
+    protected override void Start() {
+        base.Start();
+        updatesTile = rotateSpeed > 0.1f || rotateSpeed < -0.1f;
+        rv = 0f;
+    }
+
+    public override void UpdateTile() {
+        rv *= 0.9f;
+        Vector3 rot = transform.rotation.eulerAngles;
+        transform.rotation = Quaternion.Euler(rot.x, rot.y + (rotateSpeed + rv) * Time.deltaTime, rot.z);
+    }
 
     override public void Couraged(PlayerControl pcon) {
         if(overrideVelocityX) pcon.SetVelocityX(velocity.x);
@@ -16,8 +32,8 @@ public class CourageOrbUpdater : BlockUpdater
         if(overrideVelocityY) pcon.SetVelocityY(velocity.y);
         else pcon.Impulse(0f, velocity.y);
 
-
         if(hitFx != null) pcon.Fx(hitFx, transform.position, Quaternion.identity);
+        rv = rotateSpeed * 15f;
         if(destroyOnHit) Destroy(gameObject);
     }
 }

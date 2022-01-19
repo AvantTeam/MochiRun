@@ -12,7 +12,7 @@ public class EditorCameraControl : MonoBehaviour
     public float zoom;
     public bool panning;
     public bool view3D = false;
-    private bool lastClickStartFocused = false;
+    private bool lastClickStartFocused = false, middlePan = false;
 
     private Vector3 dragCursorOrigin, dragCamOrigin;
 
@@ -63,15 +63,28 @@ public class EditorCameraControl : MonoBehaviour
     }
 
     private void updateDragPan(bool down, bool pressing) {
+        bool prevpan = panning;
         panning = pressing;
         if(down) {
             dragCursorOrigin = Input.mousePosition;
             dragCamOrigin = transform.position;
+            middlePan = Input.GetMouseButton(2);
         }
         else if(pressing) {
             Vector2 dest = cam.ScreenToViewportPoint(-Input.mousePosition + dragCursorOrigin);
             float speed = cam.orthographicSize * 2f;
             transform.position = new Vector3(dragCamOrigin.x + dest.x * speed * Screen.width / Screen.height, dragCamOrigin.y + dest.y * speed, Z);
+        }
+        else if(prevpan && middlePan) {
+            //stopped panning
+            if(Mathf.Abs(transform.position.x - dragCamOrigin.x) + Mathf.Abs(transform.position.y - dragCamOrigin.y) <= 0.2f) {
+                //pick block
+                GameObject o = cursor.ClosestBlock();
+                if(o != null) {
+                    Block block = o.GetComponent<LBlockUpdater>().type;
+                    if(!block.hidden) cursor.SetBlock(block);
+                }
+            }
         }
     }
 

@@ -64,7 +64,7 @@ public class MenuItems {
         Block[] blocks = new Block[guids.Length];
         for(int i = 0; i < guids.Length; i++) {
             blocks[i] = (Block)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(guids[i]), typeof(Block));
-            blocks[i].id = i;
+            //blocks[i].id = i;
             Debug.Log(blocks[i].name);
         }
 
@@ -104,6 +104,7 @@ public class MenuItems {
             string spriteName = BlockPrefabCollector.list[i].name;
             if(spriteName.StartsWith("Trigger")) continue;
             string path = "Assets/MatSprites/Gen/" + spriteName + ".png";
+            Debug.Log("Packing:"+path);
             Texture2D tex = AssetPreview.GetAssetPreview(BlockPrefabCollector.list[i]);
             //todo remove background and things
             byte[] bytes = tex.EncodeToPNG();
@@ -131,8 +132,31 @@ public class MenuItems {
         }
     }
 
+    [MenuItem("Tools/Test/Write Level File", false, 41)]
+    public static void TestWriteLevel() {
+        LChunkLoader lc = LChunkLoader.main;
+        lc.RecacheBlocks();
+        LevelIO.write(lc.GetLevel(), "C:\\Users\\starw\\MochiRun\\tests\\TestLevel.mlvl");
+    }
+
+    [MenuItem("Tools/Test/Write Level File", true)]
+    public static bool ValidateTWL() {
+        return EditorApplication.isPlaying && SceneManager.GetActiveScene().name.Equals("LevelEditScene");
+    }
+
+    [MenuItem("Tools/Test/Read Level File", false, 42)]
+    public static void TestReadLevel() {
+        LChunkLoader lc = LChunkLoader.main;
+        lc.LoadLevel(LevelIO.read("C:\\Users\\starw\\MochiRun\\tests\\TestLevel.mlvl"));
+    }
+
+    [MenuItem("Tools/Test/Read Level File", true)]
+    public static bool ValidateTRL() {
+        return EditorApplication.isPlaying && SceneManager.GetActiveScene().name.Equals("LevelEditScene");
+    }
+
     [MenuItem("Tools/Personal Sh1p Chan", false, 100)]
     private static void ShipChan() {
-        Debug.Log(EditorSceneManager.playModeStartScene);
+        Debug.Log("Hi!");
     }
 }

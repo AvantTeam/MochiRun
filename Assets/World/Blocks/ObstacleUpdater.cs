@@ -16,14 +16,12 @@ public class ObstacleUpdater : BlockUpdater
         base.Start();
         Vector3 rot = transform.rotation.eulerAngles;
         transform.rotation = Quaternion.Euler(angleOffset + rot);
-        updatesTile = true;
+        updatesTile = rotateSpeed > 0.1f || rotateSpeed < -0.1f;
     }
 
     public override void UpdateTile() {
-        if(rotateSpeed > 0.1f || rotateSpeed < -0.1f) {
-            Vector3 rot = transform.rotation.eulerAngles;
-            transform.rotation = Quaternion.Euler(rot.x, rot.y + rotateSpeed * Time.deltaTime, rot.z);
-        }
+        Vector3 rot = transform.rotation.eulerAngles;
+        transform.rotation = Quaternion.Euler(rot.x, rot.y + rotateSpeed * Time.deltaTime, rot.z);
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {

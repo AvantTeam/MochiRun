@@ -24,4 +24,3 @@ MonoBehaviour:
   clipsize: 1
   onFloor: 0
   category: {fileID: 11400000, guid: 53d2a39eff326fd45a2e2fdf34a29ce0, type: 2}
-  id: 4

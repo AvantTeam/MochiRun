@@ -1231,6 +1231,7 @@ MonoBehaviour:
   faceMaterial: {fileID: 2100000, guid: f1b80b8315cb62a46b8ab0e89affab1d, type: 2}
   idleFace: {fileID: 2800000, guid: 7876612098748af4b836c98b7db293ea, type: 3}
   blinkFace: {fileID: 2800000, guid: 559697d870540e243ae30cce66a9db31, type: 3}
+  stunFace: {fileID: 2800000, guid: ff592b59aefdcd04a90d3ec2ed1f498d, type: 3}
   jumpFace:
   - {fileID: 2800000, guid: 7876612098748af4b836c98b7db293ea, type: 3}
   - {fileID: 2800000, guid: 559697d870540e243ae30cce66a9db31, type: 3}
@@ -1245,6 +1246,7 @@ MonoBehaviour:
     duration: 0.4
   - face: {fileID: 2800000, guid: 559697d870540e243ae30cce66a9db31, type: 3}
     duration: 1
+  stunEnded: 1
 --- !u!1 &616412425
 GameObject:
   m_ObjectHideFlags: 0
