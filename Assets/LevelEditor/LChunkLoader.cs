@@ -177,6 +177,7 @@ public class LChunkLoader : MonoBehaviour
     }
 
     public void LoadLevel(Level l) {
+        if(l == null) return;
         loadList = l.blocks;
         level = l;
 
