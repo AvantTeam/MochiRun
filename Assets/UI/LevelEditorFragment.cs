@@ -46,9 +46,9 @@ public class LevelEditorFragment : MonoBehaviour
 
     private void loadBlockSelect() {
         if(category == null) category = Vars.main.content.defaultCategory;
-        clearChildren(blockSelectPane);
-        clearChildren(categoryPane);
-        clearChildren(categoryPaneMobile);
+        UI.ClearChildren(blockSelectPane);
+        UI.ClearChildren(categoryPane);
+        UI.ClearChildren(categoryPaneMobile);
         categoryPane.SetActive(false);
         categoryViewMobile.SetActive(false);
         catPaneOpen = false;
@@ -61,14 +61,6 @@ public class LevelEditorFragment : MonoBehaviour
         }
 
         SetCategory(category);
-    }
-
-    private void clearChildren(GameObject o) {
-        int n = o.transform.childCount;
-        if(n <= 0) return;
-        for(int i = n - 1; i >= 0; i--) {
-            Destroy(o.transform.GetChild(i).gameObject);
-        }
     }
 
     private void setBSPaneSize(int w, int h) {
@@ -99,7 +91,7 @@ public class LevelEditorFragment : MonoBehaviour
     }
 
     private void rebuildBlocks() {
-        clearChildren(blockSelectPane);
+        UI.ClearChildren(blockSelectPane);
         foreach(Block block in Vars.main.content.blocks) {
             if(block.sprite == null || block.hidden || !isCategory(block)) continue;
             GameObject bb = Instantiate(blockSelectButton, Vector3.zero, Quaternion.identity);

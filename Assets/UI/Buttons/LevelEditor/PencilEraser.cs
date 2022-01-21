@@ -8,7 +8,7 @@ public class PencilEraser : MonoBehaviour
     public bool mobileOnly;
     void Start()
     {
-        if(mobileOnly) gameObject.SetActive(Vars.main.mobile);
+        if(mobileOnly) gameObject.SetActive(Vars.mobile);
         GetComponent<Button>().onClick.AddListener(Clicked);
     }
 

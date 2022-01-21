@@ -54,7 +54,7 @@ public class PlayerControl : MonoBehaviour
     Collider2D collider2d;
     CameraController cameraControl;
     public PlayerAnimator animator;
-    public GameObject costume, burstFx, courageStartFx, deathFx, damageFx, courageFailFx, bumpWallFx, curtain;
+    public GameObject costume, burstFx, courageStartFx, deathFx, damageFx, courageFailFx, bumpWallFx;
     
     void Start() {
         rigid = GetComponent<Rigidbody2D>();
@@ -66,7 +66,7 @@ public class PlayerControl : MonoBehaviour
         floorContactFilter.useTriggers = false;
 
         reset();
-        CurtainUpdater cu = Instantiate(curtain, Vector3.zero, Quaternion.identity).GetComponent<CurtainUpdater>();
+        CurtainUpdater cu = Instantiate(Vars.main.prefabs.curtain, Vector3.zero, Quaternion.identity).GetComponent<CurtainUpdater>();
         cu.blackout = !LevelLoader.main.wasCurtainScene;
         cu.Set(true);
         cu.Hide(1f);
@@ -411,7 +411,7 @@ public class PlayerControl : MonoBehaviour
         }
         if(animator != null) animator.Kill(deathEffect);
 
-        if(false && LevelLoader.IsEditor()) {//todo remove?
+        if(LevelLoader.IsEditor()) {
             //if editor, skip the death cutscene sequence entirely
             Invoke("End", 1f);
             return;
@@ -422,7 +422,7 @@ public class PlayerControl : MonoBehaviour
     }
 
     public void DropCurtains() {
-        CurtainUpdater cu = Instantiate(curtain, Vector3.zero, Quaternion.identity).GetComponent<CurtainUpdater>();
+        CurtainUpdater cu = Instantiate(Vars.main.prefabs.curtain, Vector3.zero, Quaternion.identity).GetComponent<CurtainUpdater>();
         cu.blackout = !LevelLoader.main.wasCurtainScene;
         cu.Show(1.4f);
     }

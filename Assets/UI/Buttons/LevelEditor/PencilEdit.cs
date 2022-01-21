@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class PencilEdit : MonoBehaviour {
     public bool desktopOnly = true;
     void Start() {
-        if(desktopOnly) gameObject.SetActive(!Vars.main.mobile);
+        if(desktopOnly) gameObject.SetActive(!Vars.mobile);
         GetComponent<Button>().onClick.AddListener(Clicked);
     }
 

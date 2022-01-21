@@ -8,6 +8,8 @@ TagManager:
   - Floor
   - LevelBlock
   - LevelTag
+  - LevelFloor
+  - Dialog
   layers:
   - Default
   - TransparentFX

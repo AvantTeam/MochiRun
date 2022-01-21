@@ -33,17 +33,19 @@ public class EditorCameraControl : MonoBehaviour
             }
         }
 
-        //todo sense if the keyboard focus is somewhere else
-        if(KeyBinds.GetDown("Toggle Grid")) LChunkLoader.main.frag.grid.ToggleMode();
-        if(Input.GetKeyDown(KeyCode.Tab)) PencilEdit.Clicked();
-        if(KeyBinds.EscapeDown()) LChunkLoader.main.frag.menuButton.GetComponent<MenuButton>().Clicked();
+        //keyboard shortcuts
+        if(Input.anyKey && !KeyBinds.hasDialog()) {
+            if(KeyBinds.GetDown("Toggle Grid")) LChunkLoader.main.frag.grid.ToggleMode();
+            if(Input.GetKeyDown(KeyCode.Tab)) PencilEdit.Clicked();
+            if(KeyBinds.EscapeDown()) LChunkLoader.main.frag.menuButton.GetComponent<MenuButton>().Clicked();
+        }
 
         if(cursor.state == CursorControl.STATE.NONE) {
             if(Input.GetMouseButtonDown(0)) lastClickStartFocused = !EventSystem.current.IsPointerOverGameObject();
 
             updateDragPan((Input.GetMouseButtonDown(0) && lastClickStartFocused) || Input.GetMouseButtonDown(2), (Input.GetMouseButton(0) && lastClickStartFocused) || Input.GetMouseButton(2));
         }
-        else if(!Vars.main.mobile) {
+        else if(!Vars.mobile) {
             lastClickStartFocused = false;
             updateDragPan(Input.GetMouseButtonDown(2), Input.GetMouseButton(2));
         }

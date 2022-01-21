@@ -6,14 +6,19 @@ using static ChunkLoader;
 public class Vars : MonoBehaviour
 {
     public static Vars main;
+    public VarsPrefab prefabs;
     public ContentList content;
-    
-    public string firstScene;
-    public bool mobile = false; //todo
 
-    protected Blocks blocks;
+#if UNITY_ANDROID
+    public const bool mobile = true;
+#else
+    public const bool mobile = false;
+#endif
+
+    public string firstScene;
     public Level tempBlockSaves;
 
+    protected Blocks blocks;
     void Awake() {
         if(main != null && main != this)
             Destroy(gameObject);
@@ -29,4 +34,9 @@ public class Vars : MonoBehaviour
 
         KeyBinds.Load();
     }
+}
+
+[System.Serializable]
+public class VarsPrefab {
+    public GameObject announcement, curtain, ynpopup, stringpopup;
 }

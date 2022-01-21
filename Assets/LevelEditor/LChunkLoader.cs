@@ -189,10 +189,14 @@ public class LChunkLoader : MonoBehaviour
         //wipe all lblocks
         GameObject[] all = GameObject.FindGameObjectsWithTag("LevelBlock");
         GameObject[] tags = GameObject.FindGameObjectsWithTag("LevelTag");
+        GameObject[] f = GameObject.FindGameObjectsWithTag("LevelFloor");
         foreach(GameObject o in all) {
             Destroy(o);
         }
         foreach(GameObject o in tags) {
+            Destroy(o);
+        }
+        foreach(GameObject o in f) {
             Destroy(o);
         }
 

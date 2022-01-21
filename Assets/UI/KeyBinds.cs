@@ -28,7 +28,7 @@ public static class KeyBinds {
         confirm = KeyCode.Return;
         cancel = KeyCode.Backspace;
         escape = KeyCode.Escape;
-        if(Vars.main.mobile) jump2 = KeyCode.Mouse0;
+        if(Vars.mobile) jump2 = KeyCode.Mouse0;
     }
 
     public static bool JumpDown() {
@@ -64,5 +64,9 @@ public static class KeyBinds {
     }
     public static bool GetUp(string key) {
         return Input.GetKeyUp(keys[key]);
+    }
+
+    public static bool hasDialog() {
+        return GameObject.FindWithTag("Dialog") != null;
     }
 }

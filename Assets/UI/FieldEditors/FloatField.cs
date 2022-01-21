@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,7 +27,6 @@ public class FloatField : MonoBehaviour
     }
 
     public void Set(Func<float> get, Action left, Action right, Action<float> setAs) {
-        //Debug.Log("SET FLOAT FIELD");
         init = true;
         this.get = get;
         this.left = left;

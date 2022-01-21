@@ -4,20 +4,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LevelOptionsDialog : MonoBehaviour
-{
+public class LevelOptionsDialog : MonoBehaviour {
     //elements
     public GameObject frame;
     //prefabs
-    public GameObject floatField, intField, listField;
+    public GameObject floatField, intField, listField, stringField, boolField;
 
-    void Start()
-    {
+    void Start() {
+        Rebuild(LChunkLoader.main.GetLevel());
+    }
+
+    public void OnEnable() {
         Rebuild(LChunkLoader.main.GetLevel());
     }
 
     protected void Rebuild(Level level) {
-        clearChildren(frame);
+        UI.ClearChildren(frame);
+        fieldString("Name", () => level.name, v => level.name = v, true, 25);
         fieldf("Health", () => level.maxHealth, v => level.maxHealth = v , 0f, 300f, 25f);
         fieldf("HP Loss/s", () => level.healthLoss, v => level.healthLoss = v, 0f, 12f, 2f);
         fieldf("Speed", () => level.maxSpeed, v => level.maxSpeed = v, 1f, 10f, 1f);
@@ -40,16 +43,28 @@ public class LevelOptionsDialog : MonoBehaviour
         o.transform.SetParent(frame.transform);
     }
 
-
-    private void setChildTitle(GameObject o, string s) {
-        o.transform.GetChild(0).gameObject.GetComponent<Text>().text = s + ": ";
+    private void fieldString(string name, Func<string> get, Action<string> set, bool filter, int maxChars) {
+        GameObject o = Instantiate(stringField, Vector3.zero, Quaternion.identity);
+        setChildTitle(o, name);
+        if(maxChars < 0) maxChars = 500;
+        if(filter) o.GetComponent<StringField>().Set(get, s => set(Limit(Blackchar(s.Trim()), maxChars)));
+        else o.GetComponent<StringField>().Set(get, s => set(Limit(s.Trim().Replace("\n", null).Replace("\r", null), maxChars)));
+        o.transform.SetParent(frame.transform);
     }
 
-    private void clearChildren(GameObject o) {
-        int n = o.transform.childCount;
-        if(n <= 0) return;
-        for(int i = n - 1; i >= 0; i--) {
-            Destroy(o.transform.GetChild(i).gameObject);
+
+    private void setChildTitle(GameObject o, string s) {
+        o.transform.GetChild(0).gameObject.GetComponent<Text>().text = s + " ";
+    }
+
+    private string Limit(string s, int maxn) {
+        return s.Substring(0, Mathf.Min(s.Length, maxn));
+    }
+
+    private string Blackchar(string s) {
+        foreach(char c in UI.blackchars) {
+            s = s.Replace(c, '*');
         }
+        return s.Replace("*", null);
     }
 }

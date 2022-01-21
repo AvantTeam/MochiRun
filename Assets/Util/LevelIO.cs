@@ -15,7 +15,7 @@ public class LevelIO {
             using(FileStream stream = File.Open(path, FileMode.Open)) {
                 using(BinaryReader read = new BinaryReader(stream, Encoding.UTF8)) {
                     level = readMeta(read.ReadString());
-                    Debug.Log("Successfully read meta! BS: " + level.blocks == null ? "NULL" : level.blocks.ToString());
+                    Debug.Log("Successfully read meta!");
                     level.blocks = new List<BlockSave>();
 
                     int size = read.ReadInt32();
@@ -27,7 +27,7 @@ public class LevelIO {
                         ushort id = read.ReadUInt16(); //id starts from 1
                         if(id == 0) {
                             chunk++;
-                            Debug.Log("[New Chunk]");
+                            //Debug.Log("[New Chunk]");
                             continue;
                         }
                         Block b = id > maxID ? palette[0] : palette[id]; //palette starts from 1
@@ -62,7 +62,7 @@ public class LevelIO {
                 write.Write(levelJson);
                 Debug.Log("Encoded L:"+ levelJson);
                 int chunks = pos(level.blocks[level.blocks.Count - 1].x) / 256;
-                Debug.Log("Writing level! Estimated chunks: "+chunks);
+                //Debug.Log("Writing level! Estimated chunks: "+chunks);
 
                 int size = level.blocks.Count + chunks;
                 Debug.Log("Estimated size: "+size);
@@ -74,7 +74,7 @@ public class LevelIO {
                     while(bx / 256 > chunk) {
                         //insert new chunk flag
                         write.Write((ushort)0);
-                        Debug.Log("[New Chunk]");
+                        //Debug.Log("[New Chunk]");
                         chunk++;
                     }
 
@@ -92,7 +92,7 @@ public class LevelIO {
     }
 
     //generates a Level class with appropriate fields and sets the palette
-    public static Level readMeta(string levelJson) {
+    private static Level readMeta(string levelJson) {
         Debug.Log("Decoding L:"+levelJson);
         Level l = JsonUtility.FromJson<Level>(levelJson);
         if(palette == null) palette = new Block[Vars.main.content.blocks.Length + 1]; //block type of 0 is a special flag; leave it empty and count from 1
@@ -111,6 +111,20 @@ public class LevelIO {
         palette[0] = missing;
 
         return l;
+    }
+
+    //returns a temporary level with only the meta fetched
+    public static Level fetchMeta(string path) {
+        Level level = null;
+        if(File.Exists(path)) {
+            using(FileStream stream = File.Open(path, FileMode.Open)) {
+                using(BinaryReader read = new BinaryReader(stream, Encoding.UTF8)) {
+                    level = JsonUtility.FromJson<Level>(read.ReadString());
+                }
+            }
+        }
+
+        return level;
     }
 
     private static int pos(float wpos) {

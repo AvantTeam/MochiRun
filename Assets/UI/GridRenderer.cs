@@ -53,7 +53,6 @@ public class GridRenderer : MonoBehaviour
 
     public void ToggleMode() {
         int current = (int)currentMode;
-        Debug.Log("Current mode: " + current);
         if(modes == 0) modes = Enum.GetNames(typeof(MODE)).Length;
         SetMode((MODE) ((current + 1) % modes));
     }

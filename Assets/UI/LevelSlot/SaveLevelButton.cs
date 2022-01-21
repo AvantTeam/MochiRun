@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +10,10 @@ public class SaveLevelButton : MonoBehaviour {
     }
 
     void Clicked() {
+        SaveLevel();
+    }
+
+    public static bool SaveLevel() {
         LChunkLoader lc = LChunkLoader.main;
         lc.RecacheBlocks();
         Level level = lc.GetLevel();
@@ -33,9 +35,14 @@ public class SaveLevelButton : MonoBehaviour {
             string path = LevelSlotDialog.SavePath(level.name);
             Debug.Log("Saving level to " + path);
             LevelIO.write(level, path);
+
+            UI.Announce("Saved \'" + level.name + ".mlvl\'", 3f);
+            return true;
         }
         catch(System.Exception e) {
             Debug.LogError(e);
+            UI.Announce("<color=#ff7777>Failed to save \'" + level.name + ".mlvl\', please retry!</color>", 3f);
         }
+        return false;
     }
 }
