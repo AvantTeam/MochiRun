@@ -6,19 +6,19 @@ using UnityEngine.UI;
 public class OverlayRenderer : MonoBehaviour
 {
     private const float HPBAR_WIDTH = 600f, HPBAR_HEIGHT = 30f, OUTLINE = 7f;
-    private const float CBAR_WIDTH = 106f, CBAR_HEIGHT = 46f;
+    private const float CBAR_WIDTH = 120f, CBAR_HEIGHT = 30f;
     private const float HP_DELTA = 0.08f, COURAGE_DELTA = 0.16f, FLASH = 0.3f; //dleta: per frame, flash: per second
 
     public float deltaHp, deltaCourage, cFlash;
-    public int deltaCSlots;
+    //public int deltaCSlots;
     public Vector2 cBarOffset; //offset from the right tip of the hp bar.
     private bool init = false;
-    private int lastMaxCourage = 0;
-    private bool courageShown = false, cFlashSlot = false;
-    public Color courageColor, courageSlotColor, courageLightColor;
+    private float lastMaxCourage = 0;
+    private bool courageShown = false;
+    public Color courageColor, courageLightColor;
 
     public RectTransform hpBar, hpBarSub, hpBarBack, hpIcon;
-    public RectTransform courageBar, courageBarSub, courageBarBack, courageBarSlots, courageIcon;
+    public RectTransform courageBar, courageBarSub, courageBarBack, courageIcon;
     public Image courageBarImage, courageBarSImage;
     public GameObject menuDialog;
     private float lastTimeScale = 1f;
@@ -40,14 +40,14 @@ public class OverlayRenderer : MonoBehaviour
         float hp = pcon.health;
         if(hp > PlayerControl.MAX_HP) hp = PlayerControl.MAX_HP;
         float courage = pcon.courage;
-        int cslots = pcon.CourageSlots();
+        //int cslots = pcon.CourageSlots();
         if(!init) {
             setHPBarPos(hpIcon.anchoredPosition.x, hpIcon.anchoredPosition.y);
-            setCBarMax(PlayerControl.COURAGES);
+            setCBarMax(PlayerControl.MAX_COURAGE);
             deltaHp = hp;
             deltaCourage = courage;
-            deltaCSlots = cslots;
-            lastMaxCourage = PlayerControl.COURAGES;
+            //deltaCSlots = cslots;
+            lastMaxCourage = PlayerControl.MAX_COURAGE;
             cFlash = 0f;
             init = true;
         }
@@ -67,9 +67,9 @@ public class OverlayRenderer : MonoBehaviour
             }
         }
 
-        if(lastMaxCourage != PlayerControl.COURAGES) {
-            setCBarMax(PlayerControl.COURAGES);
-            lastMaxCourage = PlayerControl.COURAGES;
+        if(lastMaxCourage != PlayerControl.MAX_COURAGE) {
+            setCBarMax(PlayerControl.MAX_COURAGE);
+            lastMaxCourage = PlayerControl.MAX_COURAGE;
         }
 
         if(Mathf.Abs(deltaHp - hp) < 0.01f) deltaHp = hp;
@@ -85,26 +85,27 @@ public class OverlayRenderer : MonoBehaviour
             setHP(hp);
         }
 
-        if(lastMaxCourage > 0) {
-            if(deltaCSlots != cslots) {
+        if(lastMaxCourage > 0.1f) {
+            /*if(deltaCSlots != cslots) {
                 cFlashSlot = deltaCSlots < cslots;
                 deltaCSlots = cslots;
                 cFlash = 1f;
                 courageBarImage.color = courageColor;
                 courageBarSImage.color = courageSlotColor;
-            }
+            }*/
             if(deltaCourage < courage){
                 deltaCourage = courage;
+                if(courage >= lastMaxCourage) cFlash = 1f;
             }
             else deltaCourage = lerpDelta(deltaCourage, courage, COURAGE_DELTA);
             if(cFlash > 0){
                 cFlash -= Time.deltaTime / FLASH;
-                if(cFlashSlot) courageBarSImage.color = Color.Lerp(courageSlotColor, Color.white, Mathf.Clamp01(cFlash));
-                else courageBarImage.color = Color.Lerp(courageColor, courageLightColor, Mathf.Clamp01(cFlash));
+                //if(cFlashSlot) courageBarSImage.color = Color.Lerp(courageSlotColor, Color.white, Mathf.Clamp01(cFlash));
+                courageBarImage.color = Color.Lerp(courageColor, courageLightColor, Mathf.Clamp01(cFlash));
             }
             setCSub(deltaCourage);
             setC(courage);
-            setCSlots(PlayerControl.COURAGE_SLOT * cslots);
+            //setCSlots(PlayerControl.COURAGE_SLOT * cslots);
         }
     }
 
@@ -117,16 +118,16 @@ public class OverlayRenderer : MonoBehaviour
     }
 
     private void setC(float c) {
-        courageBar.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, CBAR_WIDTH * lastMaxCourage * Mathf.Clamp01(c / (PlayerControl.COURAGE_SLOT * lastMaxCourage)));
+        courageBar.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, CBAR_WIDTH * lastMaxCourage * Mathf.Clamp01(c / PlayerControl.MAX_COURAGE));
     }
 
     private void setCSub(float c) {
-        courageBarSub.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, CBAR_WIDTH * lastMaxCourage * Mathf.Clamp01(c / (PlayerControl.COURAGE_SLOT * lastMaxCourage)));
+        courageBarSub.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, CBAR_WIDTH * lastMaxCourage * Mathf.Clamp01(c / PlayerControl.MAX_COURAGE));
     }
 
-    private void setCSlots(float c) {
-        courageBarSlots.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Mathf.Min(c, 1f) + CBAR_WIDTH * lastMaxCourage * Mathf.Clamp01(c / (PlayerControl.COURAGE_SLOT * lastMaxCourage)));
-    }
+    //private void setCSlots(float c) {
+    //    courageBarSlots.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Mathf.Min(c, 1f) + CBAR_WIDTH * lastMaxCourage * Mathf.Clamp01(c / (PlayerControl.COURAGE_SLOT * lastMaxCourage)));
+    //}
 
     private void setHPBarPos(float x, float y) {
         hpBarBack.anchoredPosition = new Vector3(x - OUTLINE, y, 0f);
@@ -141,14 +142,14 @@ public class OverlayRenderer : MonoBehaviour
         hpIcon.anchoredPosition = new Vector3(x, y, 0f);
     }
 
-    private void setCBarMax(int slots) {
-        if(slots > 0) {
+    private void setCBarMax(float cmax) {
+        if(cmax > 0.1f) {
             if(!courageShown) {
                 setCActive(true);
             }
             Vector2 pos = hpBar.anchoredPosition;
-            float x = pos.x + HPBAR_WIDTH - slots * CBAR_WIDTH + cBarOffset.x;
-            setCBarPos(x, pos.y + cBarOffset.y, slots);
+            float x = pos.x + HPBAR_WIDTH - cmax * CBAR_WIDTH + cBarOffset.x;
+            setCBarPos(x, pos.y + cBarOffset.y, cmax);
         }
         else if(courageShown){
             setCActive(false);
@@ -159,12 +160,12 @@ public class OverlayRenderer : MonoBehaviour
         courageBarBack.gameObject.SetActive(a);
         courageBarSub.gameObject.SetActive(a);
         courageBar.gameObject.SetActive(a);
-        courageBarSlots.gameObject.SetActive(a);
+        //courageBarSlots.gameObject.SetActive(a);
         courageIcon.gameObject.SetActive(a);
         courageShown = a;
     }
 
-    private void setCBarPos(float x, float y, int slots) {
+    private void setCBarPos(float x, float y, float slots) {
         courageBarBack.anchoredPosition = new Vector3(x - OUTLINE, y, 0f);
         resize(courageBarBack, CBAR_WIDTH * slots + OUTLINE * 2f, CBAR_HEIGHT + OUTLINE * 2f);
 
@@ -174,8 +175,8 @@ public class OverlayRenderer : MonoBehaviour
         courageBar.anchoredPosition = new Vector3(x, y, 0f);
         resize(courageBar, CBAR_WIDTH * slots, CBAR_HEIGHT);
 
-        courageBarSlots.anchoredPosition = new Vector3(x, y, 0f);
-        resize(courageBarSlots, CBAR_WIDTH * slots, CBAR_HEIGHT);
+        //courageBarSlots.anchoredPosition = new Vector3(x, y, 0f);
+        //resize(courageBarSlots, CBAR_WIDTH * slots, CBAR_HEIGHT);
 
         courageIcon.anchoredPosition = new Vector3(x, y, 0f);
     }

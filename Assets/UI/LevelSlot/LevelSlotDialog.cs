@@ -120,10 +120,10 @@ public class LevelSlotDialog : MonoBehaviour {
         }
 
         //courage
-        if(l.courages >= 1) {
+        if(l.courage > 0.1f) {
             GameObject icc = pref(ic, ic.transform.parent);
             foreach(RuleTexture rt in courageIcons) {
-                if(l.courages >= rt.threshold) icc.GetComponent<RawImage>().texture = rt.texture;
+                if(l.courage >= rt.threshold) icc.GetComponent<RawImage>().texture = rt.texture;
             }
         }
     }

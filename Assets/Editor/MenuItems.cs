@@ -65,7 +65,7 @@ public class MenuItems {
         for(int i = 0; i < guids.Length; i++) {
             blocks[i] = (Block)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(guids[i]), typeof(Block));
             //blocks[i].id = i;
-            Debug.Log(blocks[i].name);
+            //Debug.Log(blocks[i].name);
         }
 
         ContentList c = (ContentList)AssetDatabase.LoadAssetAtPath("Assets/ContentList.asset", typeof(ContentList));
@@ -79,7 +79,7 @@ public class MenuItems {
         string[] guids = AssetDatabase.FindAssets("t:GameObject", new[] {"Assets/World/Blocks"});
         GameObject[] blocks = new GameObject[guids.Length];
         for(int i = 0; i < guids.Length; i++) {
-            Debug.Log(AssetDatabase.GUIDToAssetPath(guids[i]));
+            //Debug.Log(AssetDatabase.GUIDToAssetPath(guids[i]));
             blocks[i] = (GameObject)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(guids[i]), typeof(GameObject));
         }
 
@@ -90,7 +90,7 @@ public class MenuItems {
     [MenuItem("Tools/Pack Block Previews", false, 23)]
     private static void AssetPreviewPack() {
         Debug.Log("PACKING BLOCK PREVIEWS");
-        AssetPreview.SetPreviewTextureCacheSize(100);
+        
         if(BlockPrefabCollector.list == null) {
             Debug.LogError("Error: List block prefabs first!");
             return;
@@ -103,12 +103,18 @@ public class MenuItems {
         for(int i = 0; i < BlockPrefabCollector.icons.Length; i++) {
             string spriteName = BlockPrefabCollector.list[i].name;
             if(spriteName.StartsWith("Trigger")) continue;
+            EditorGUIUtility.PingObject(BlockPrefabCollector.list[i]);
             string path = "Assets/MatSprites/Gen/" + spriteName + ".png";
-            Debug.Log("Packing:"+path);
+            //Debug.Log("Packing:"+path);
             Texture2D tex = AssetPreview.GetAssetPreview(BlockPrefabCollector.list[i]);
+
+            if(tex == null) {
+                Debug.LogError("Error: Failed to pack "+spriteName);
+                continue;
+            }
             //todo remove background and things
             byte[] bytes = tex.EncodeToPNG();
-            // For testing purposes, also write to a file in the project folder
+
             System.IO.File.WriteAllBytes(path, bytes);
             AssetDatabase.ImportAsset(path);
 

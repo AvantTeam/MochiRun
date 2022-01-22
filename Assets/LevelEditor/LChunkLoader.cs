@@ -215,14 +215,14 @@ public class LChunkLoader : MonoBehaviour
         //todo remove
         if(loadList.Count > 0) return;
         loadList.Add(new BlockSave(Blocks.jumpOrb, 22f, 5.2f, 0));
-        loadList.Add(new BlockSave(Blocks.spike, 30f, 0f, 0));
-        loadList.Add(new BlockSave(Blocks.spike, 32f, 0f, 0));
+        loadList.Add(new BlockSave(Blocks.spike, 30f, 3.5f, 0));
+        loadList.Add(new BlockSave(Blocks.spike, 32f, 3.5f, 0));
         loadList.Add(new BlockSave(Blocks.pitStart, 60f, 0f, 0));
         loadList.Add(new BlockSave(Blocks.pitEnd, 61f, 0f, 0));
-        loadList.Add(new BlockSave(Blocks.spike, 80f, 0f, 0));
-        loadList.Add(new BlockSave(Blocks.spike, 81f, 0f, 0));
+        loadList.Add(new BlockSave(Blocks.spike, 80f, 3.5f, 0));
+        loadList.Add(new BlockSave(Blocks.spike, 81f, 3.5f, 0));
         loadList.Add(new BlockSave(Blocks.potion, 81f, 5f, 0));
-        loadList.Add(new BlockSave(Blocks.spike, 82f, 0f, 0));
+        loadList.Add(new BlockSave(Blocks.spike, 82f, 3.5f, 0));
         loadList.Add(new BlockSave(Blocks.pitStart, 90f, 0f, 0));
         loadList.Add(new BlockSave(Blocks.balloon, 95f, 2.5f, 0));
         loadList.Add(new BlockSave(Blocks.balloon, 100f, 2.5f, 0));

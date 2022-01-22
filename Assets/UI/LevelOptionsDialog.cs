@@ -25,7 +25,7 @@ public class LevelOptionsDialog : MonoBehaviour {
         fieldf("HP Loss/s", () => level.healthLoss, v => level.healthLoss = v, 0f, 12f, 2f);
         fieldf("Speed", () => level.maxSpeed, v => level.maxSpeed = v, 1f, 10f, 1f);
         fieldf("Jump", () => level.jumpHeight, v => level.jumpHeight = v, 0f, 5f, 0.5f);
-        fieldi("Courage", () => level.courages, v => level.courages = v, 0, 5, 1);
+        fieldf("Courage", () => level.courage, v => level.courage = v, 0, 5f, 1f);
         fieldf("Zoom", () => level.zoom, v => level.zoom = v, 0.1f, 1.5f, 0.1f);
     }
 

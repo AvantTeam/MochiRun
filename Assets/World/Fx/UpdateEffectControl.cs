@@ -21,7 +21,7 @@ public class UpdateEffectControl : MonoBehaviour
             //ground particle
             setFx(mochiUpdateFx);
         }
-        else if(pcon.state == PlayerControl.STATE.FLOAT && pcon.courageTime > 0f && pcon.courage > 0f) {
+        else if(pcon.state == PlayerControl.STATE.FLOAT && pcon.gliding && pcon.courage > 0f) {
             setFx(floatFx);
         }
         else {

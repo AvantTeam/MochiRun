@@ -11,9 +11,11 @@ public class PlayerControl : MonoBehaviour
     public static float INVIN_TIME = 0.75f; //invincibility seconds after taking any damage
     public static float MAX_HP = 100f;
     public static float HP_LOSS = 4f; //per second
-    public static int COURAGES = 2;
-    public static float COURAGE_SLOT = 1f; //max courage = SLOT * COURAGES
-    public static float FLOAT_YVEL = -0.7f;
+    //public static int COURAGES = 2;
+    //public static float COURAGE_SLOT = 1f; //max courage = SLOT * COURAGES
+    public static float MAX_COURAGE = 1f;
+    public static float C_REGEN = 0.4f;
+    public const float FLOAT_YVEL = -0.7f;
     private const float JUMP_RELEASE_REDUCE = 0.75f;
     private const float JUMP_GRACE = 0.3f; //the motive to "press jump" lasts for this long; i.e. press jump up to X seconds before touching the ground to immediately jump after
     private const float ACCEL = 10f;
@@ -35,12 +37,12 @@ public class PlayerControl : MonoBehaviour
     public float stateTime = 0f; //time after a state change
     public float health = 0f;
     public float courage = 0f;
-    public float courageTime = 0f;
+    //public float courageTime = 0f;
     public bool dead = false;
     public int coins = 0;
 
     public bool landed = false, collided = false;
-    public bool usedCourage = false;
+    public bool usedCourage = false, gliding = false;
     private bool jumpReleased = false;
     private float jumpPressTimer = JUMP_GRACE + 0.1f;
     private float invincibility = 0f;
@@ -80,6 +82,7 @@ public class PlayerControl : MonoBehaviour
         checkLanded();
         checkWallFront(); //collided is trun when mochi is running fast and there is a wall in front
         checkDeath();
+        bool tglide = false;
 
         if(KeyBinds.JumpDown()) {
             jumpPressTimer = 0f;
@@ -133,11 +136,11 @@ public class PlayerControl : MonoBehaviour
                 case STATE.FLOAT:
                     if(!usedCourage) Fx(courageStartFx);
                     usedCourage = true;
-                    courageTime = 0f;
+                    //courageTime = 0f;
                     break;
                 case STATE.RUN:
                     usedCourage = false;
-                    courage = COURAGES * COURAGE_SLOT;
+                    //courage = COURAGES * COURAGE_SLOT;
                     break;
                 case STATE.STUNNED:
                     Fx(bumpWallFx);
@@ -158,9 +161,10 @@ public class PlayerControl : MonoBehaviour
         //UPDATE (per state)
         switch(state) {
             case STATE.RUN:
-                
+                if(courage < MAX_COURAGE) courage = Mathf.Min(MAX_COURAGE, courage + C_REGEN * Time.deltaTime);
             break;
             case STATE.JUMP:
+                if(courage < MAX_COURAGE) courage = Mathf.Min(MAX_COURAGE, courage + C_REGEN * Time.deltaTime);
                 if(inputJump || jumpReleased) break;
                 if(vel.y <= 0f){
                     jumpReleased = true;
@@ -172,13 +176,15 @@ public class PlayerControl : MonoBehaviour
             case STATE.FLOAT:
                 if(courage > 0f) {
                     if(inputJump) {
-                        if(vel.y <= -1f) {
+                        if(vel.y <= FLOAT_YVEL + 0.1f) {
                             //glide if you are falling down
+                            tglide = true;
                             if(vel.y < FLOAT_YVEL) vel.y = FLOAT_YVEL;
                             courage -= Time.deltaTime;
                         }
-                        courageTime += Time.deltaTime; //even if you are jumping up, you can still use the burst
+                        //courageTime += Time.deltaTime; //even if you are jumping up, you can still use the burst
                     }
+                    /*
                     else{
                         if(courageTime < 0.2f && courageTime > 0f) {
                             //fast tap
@@ -186,10 +192,11 @@ public class PlayerControl : MonoBehaviour
                             courageBurst();
                         }
                         courageTime = 0f;
-                    }
+                    }*/
                 }
                 break;
         }
+        gliding = tglide;
         
         if(overrideForceX) {
             vel.x = overrideForce.x;
@@ -204,9 +211,9 @@ public class PlayerControl : MonoBehaviour
         costume.transform.position = transform.position;
     }
 
-    public int CourageSlots() {
-        return Mathf.FloorToInt(courage / COURAGE_SLOT);
-    }
+    //public int CourageSlots() {
+    //    return Mathf.FloorToInt(courage / COURAGE_SLOT);
+    //}
 
     //note: Reset is reserved
     public void reset() {
@@ -219,7 +226,8 @@ public class PlayerControl : MonoBehaviour
         dead = false;
         health = MAX_HP;
         usedCourage = false;
-        courage = COURAGES * COURAGE_SLOT;
+        courage = MAX_COURAGE;
+        gliding = false;
         invincibility = 0f;
         externalForce = Vector2.zero;
         overrideForce = Vector2.zero;
@@ -235,7 +243,7 @@ public class PlayerControl : MonoBehaviour
         if(MAX_HP < 1) MAX_HP = 1;
         HP_LOSS = level.healthLoss;
         SPEED_MAX = level.maxSpeed;
-        COURAGES = level.courages;
+        MAX_COURAGE = level.courage;
         if(cameraControl == null) cameraControl = GameObject.Find("Main Camera").GetComponent<CameraController>();
         cameraControl.targetZoom = cameraControl.zoom = level.zoom;
         reset();
@@ -324,6 +332,7 @@ public class PlayerControl : MonoBehaviour
         else if(courage > 0f && KeyBinds.JumpDown() && (jumpReleased || rigid.velocity.y <= 0f) && state != STATE.FLOAT) nextState = STATE.FLOAT;
     }
 
+    //changed usage; now used for shield parrying.
     private void courageBurst() {
         bool playfx = true;
         

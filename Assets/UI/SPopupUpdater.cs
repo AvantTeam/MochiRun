@@ -39,6 +39,10 @@ public class SPopupUpdater : MonoBehaviour {
         no.gameObject.SetActive(false);
     }
 
+    void Update() {
+        yes.interactable = init && textbox.text.Length > 0;
+    }
+
     public void Set(string titleText, string defText, Action<string> yesa, Action noa, int maxChars, bool filterFile) {
         title.text = titleText;
         yesClicked = yesa;
@@ -64,7 +68,7 @@ public class SPopupUpdater : MonoBehaviour {
     }
 
     void OnYes() {
-        if(!init) return;
+        if(!init || textbox.text == "") return;
         StartCoroutine(IHide());
         yesClicked(filterFile ? Blackchar(textbox.text.Trim()) : textbox.text.Trim());
     }

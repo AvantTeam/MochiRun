@@ -15,7 +15,8 @@ public class Level {
     public float healthLoss = 4f;
     public float maxSpeed = 4f;
     public float jumpHeight = 2f; //in blocks
-    public int courages = 0;
+    //public int courages = 0;
+    public float courage = 0f;
     public float zoom = 1f;
     //todo remove? enumify?
     public IslandBackground islands = IslandBackground.islandMany;

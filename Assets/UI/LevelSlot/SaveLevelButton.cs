@@ -22,6 +22,7 @@ public class SaveLevelButton : MonoBehaviour {
         try {
             if(!Directory.Exists(rootPath)) Directory.CreateDirectory(rootPath);
 
+            if(level.name == "" || level.name.Trim() == "") level.name = defName;
             if(level.name.Equals(defName)) {
                 //name the level "Untitled0, 1, ..." to prevent overriding
                 int i = 0;

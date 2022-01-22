@@ -14,7 +14,7 @@ public static class SceneControl
     }
 
     private static void PlayModeState(PlayModeStateChange state) {
-        Debug.Log(state);
+        //Debug.Log(state);
 
         switch(state) {
             case PlayModeStateChange.EnteredEditMode:

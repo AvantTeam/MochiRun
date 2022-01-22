@@ -61,7 +61,7 @@ public class LevelIO {
                 string levelJson = JsonUtility.ToJson(level);
                 write.Write(levelJson);
                 Debug.Log("Encoded L:"+ levelJson);
-                int chunks = pos(level.blocks[level.blocks.Count - 1].x) / 256;
+                int chunks = level.blocks.Count <= 0 ? 0 : pos(level.blocks[level.blocks.Count - 1].x) / 256;
                 //Debug.Log("Writing level! Estimated chunks: "+chunks);
 
                 int size = level.blocks.Count + chunks;

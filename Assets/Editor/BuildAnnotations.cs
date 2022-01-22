@@ -13,7 +13,7 @@ class BuildAnnotations : IPreprocessBuildWithReport {
         BuildTarget target = report.summary.platform;
         string path = report.summary.outputPath;
         Debug.Log("----T: " + target.ToString() + " PATH: " + path + "----");
-
+        MenuItems.PreBuild();
     }
 }
 #endif
