@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerControl : MonoBehaviour
 {
-    public const float PLAYER_RADIUS = 0.5f;
+    public const float PLAYER_RADIUS = 0.45f;
 
     public static float JUMP_MAX = 0f; //y velocity of the jump. To set it using blocks instead, use setJumpHeight().
     public static float SPEED_MAX = 4f;

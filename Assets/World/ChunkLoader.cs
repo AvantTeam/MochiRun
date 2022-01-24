@@ -5,7 +5,7 @@ using UnityEngine;
 public class ChunkLoader : MonoBehaviour
 {
     public const float FLOOR_WIDTH = 4f, FLOOR_HEIGHT = 6f;
-    public const float CAM_CLIP = 10.5f;
+    public const float CAM_CLIP = 7.5f;
 
     public static float lastX = -20f;
     public static float floorY = 0f;
@@ -79,7 +79,7 @@ public class ChunkLoader : MonoBehaviour
     void Update() {
         placeFloors();
         placeBlocks();
-        placeBackground();
+        //placeBackground();
     }
 
     private void reset() {

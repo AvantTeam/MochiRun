@@ -19,7 +19,7 @@ GameObject:
   m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967294
   m_IsActive: 1
 --- !u!4 &5020359470327302094
 Transform:
@@ -144,5 +144,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e24ffc4a47e7b2e4c8328c93c7bdfe5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: {fileID: 0}
   ctype: 0
   updatesTile: 0

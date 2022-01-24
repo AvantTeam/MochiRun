@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,6 +21,7 @@ public class OverlayRenderer : MonoBehaviour
     public RectTransform hpBar, hpBarSub, hpBarBack, hpIcon;
     public RectTransform courageBar, courageBarSub, courageBarBack, courageIcon;
     public Image courageBarImage, courageBarSImage;
+    public TextMeshProUGUI coinText;
     public GameObject menuDialog;
     private float lastTimeScale = 1f;
     public bool paused = false;
@@ -49,6 +51,7 @@ public class OverlayRenderer : MonoBehaviour
             //deltaCSlots = cslots;
             lastMaxCourage = PlayerControl.MAX_COURAGE;
             cFlash = 0f;
+            coinText.text = "0";
             init = true;
         }
 
@@ -107,6 +110,8 @@ public class OverlayRenderer : MonoBehaviour
             setC(courage);
             //setCSlots(PlayerControl.COURAGE_SLOT * cslots);
         }
+
+        coinText.text = pcon.coins.ToString();
     }
 
     private void setHP(float hp) {
