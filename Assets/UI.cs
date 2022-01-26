@@ -37,4 +37,11 @@ public static class UI {
             UnityEngine.Object.Destroy(o.transform.GetChild(i).gameObject);
         }
     }
+
+    public static Color ColorOf(string hex) {
+        if(!hex.StartsWith("#")) hex = "#" + hex;
+        Color c = new Color();
+        if(ColorUtility.TryParseHtmlString(hex, out c)) return c;
+        return new Color();
+    }
 }

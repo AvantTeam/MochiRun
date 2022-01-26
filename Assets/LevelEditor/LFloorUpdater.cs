@@ -7,7 +7,7 @@ public class LFloorUpdater : MonoBehaviour
     void Start()
     {
         SetBlock(Blocks.floorBlock);
-        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + Blocks.floorBlock.zLayer + Random.Range(-0.7f, 0.7f));
+        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + Blocks.floorBlock.zLayer);
     }
 
     void Update()

@@ -105,13 +105,16 @@ public class LevelSlotDialog : MonoBehaviour {
         GameObject ic = button.transform.Find("RuleIcons").GetChild(0).gameObject;
         Level l = LevelIO.fetchMeta(path);
 
+        ic.GetComponent<RawImage>().texture = l.theme.icon;
+
         if(l.campaign) {
             pref(ic, ic.transform.parent).GetComponent<RawImage>().texture = campaignIcon;
         }
 
         //health
+        RawImage ih = pref(ic, ic.transform.parent).GetComponent<RawImage>();
         foreach(RuleTexture rt in healthIcons) {
-            if(l.maxHealth >= rt.threshold) ic.GetComponent<RawImage>().texture = rt.texture;
+            if(l.maxHealth >= rt.threshold) ih.texture = rt.texture;
         }
 
         //hp loss
@@ -121,9 +124,9 @@ public class LevelSlotDialog : MonoBehaviour {
 
         //courage
         if(l.courage > 0.1f) {
-            GameObject icc = pref(ic, ic.transform.parent);
+            RawImage icc = pref(ic, ic.transform.parent).GetComponent<RawImage>();
             foreach(RuleTexture rt in courageIcons) {
-                if(l.courage >= rt.threshold) icc.GetComponent<RawImage>().texture = rt.texture;
+                if(l.courage >= rt.threshold) icc.texture = rt.texture;
             }
         }
     }

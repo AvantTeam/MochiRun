@@ -13,13 +13,13 @@ GameObject:
   - component: {fileID: 2855659218845973280}
   - component: {fileID: 2995074078557714348}
   - component: {fileID: 3265830400769039043}
-  - component: {fileID: -7999234592039839373}
+  - component: {fileID: 3514770956474076112}
   m_Layer: 0
-  m_Name: FloorPrefab
+  m_Name: FloorPlains
   m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967294
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &5020359470327302094
 Transform:
@@ -42,7 +42,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3200795463737564019}
-  m_Mesh: {fileID: -3108264503887296518, guid: d4b9050ff2107574ba9bd4f8ab945117, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 3b91cbc0a23992842b52b377657d0c48, type: 2}
 --- !u!23 &2855659218845973280
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -62,7 +62,6 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: abd27f87a8cb9d643abd28fd4c1532b1, type: 2}
   - {fileID: 2100000, guid: e845991a3d0b5c343bbcfed07b9a8849, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -132,7 +131,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
---- !u!114 &-7999234592039839373
+--- !u!114 &3514770956474076112
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -141,9 +140,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 3200795463737564019}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e24ffc4a47e7b2e4c8328c93c7bdfe5d, type: 3}
+  m_Script: {fileID: 11500000, guid: 80f9e71bcd0186f40a290033457da4d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   type: {fileID: 0}
   ctype: 0
   updatesTile: 0
+  variants:
+  - {fileID: 4300000, guid: 3b91cbc0a23992842b52b377657d0c48, type: 2}
+  - {fileID: 4300000, guid: a31af9389de33df4c8da4bcc081357b9, type: 2}
+  zRand: 0.3
+  decorateChance: 0.2
+  decorations:
+  - {fileID: 6168266674060144353, guid: 37997b1d9b221b34bb62ff5a76d95310, type: 3}
+  - {fileID: 6168266674060144353, guid: 1fb36ae736496464c975fa93d150409b, type: 3}
+  - {fileID: 6168266674060144353, guid: 58b1945787329cf44b7f5be93d1851fb, type: 3}
+  - {fileID: 6168266674060144353, guid: 37997b1d9b221b34bb62ff5a76d95310, type: 3}

@@ -56,6 +56,7 @@ public class LevelIO {
                     level.palette[i] = Vars.main.content.blocks[i].name;
                     unpalette[Vars.main.content.blocks[i]] = i;
                 }
+                level.themeName = level.theme == null ? "Plains" : level.theme.name;
 
                 //write level
                 string levelJson = JsonUtility.ToJson(level);
@@ -98,6 +99,8 @@ public class LevelIO {
         if(palette == null) palette = new Block[Vars.main.content.blocks.Length + 1]; //block type of 0 is a special flag; leave it empty and count from 1
         Block missing = Vars.main.content.block("Wall"); //todo replace with "Missing"
 
+        l.theme = Vars.main.content.theme(l.themeName == "" ? "Plains" : l.themeName);
+
         //generate block palette
         for(int i = 0; i < palette.Length - 1; i++) {
             if(i >= l.palette.Length) {
@@ -120,6 +123,7 @@ public class LevelIO {
             using(FileStream stream = File.Open(path, FileMode.Open)) {
                 using(BinaryReader read = new BinaryReader(stream, Encoding.UTF8)) {
                     level = JsonUtility.FromJson<Level>(read.ReadString());
+                    level.theme = Vars.main.content.theme(level.themeName == "" ? "Plains" : level.themeName);
                 }
             }
         }

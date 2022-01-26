@@ -7,6 +7,8 @@ using static ChunkLoader;
 [Serializable]
 public class Level {
     [NonSerialized] public List<BlockSave> blocks;
+    [NonSerialized] public Theme theme;
+
     public string name = "Untitled"; //must equal the file name
     public bool campaign = false; //if campaign is true, the max health, courage etc. are overriden by story mode's progression.
 
@@ -23,14 +25,21 @@ public class Level {
 
     //io fields
     public string[] palette;
-    //public string blockStream;
     public byte version = 0;
+    public string themeName = "Plains";
 
     public Level() {
         blocks = new List<BlockSave>();
+        //theme = Vars.main.content.theme("Plains");
     }
 
     public Level(List<BlockSave> blocks) {
         this.blocks = blocks;
+        //theme = Vars.main.content.theme("Plains");
+    }
+
+    public Theme GetTheme() {
+        if(theme == null) theme = Vars.main.content.theme("Plains");
+        return theme;
     }
 }
