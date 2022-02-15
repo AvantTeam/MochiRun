@@ -48,6 +48,11 @@ MonoBehaviour:
     curtain: {fileID: 1808505048086592643, guid: 311a8a180441ca34b9d0d2e159c3df10, type: 3}
     ynpopup: {fileID: 6110171539199678868, guid: 1d9e5d17ffb94fb4cb6cde1cdc77b76c, type: 3}
     stringpopup: {fileID: 6110171539199678868, guid: 9f77d47b33ca7cc43b1780f79c909f0b, type: 3}
+    floatField: {fileID: 7213442945492125854, guid: 00d07b06b350a9b49a508b39b00b269a, type: 3}
+    intField: {fileID: 8931453289131462141, guid: 899356ff5587e124c93f6e2b6d1e14fc, type: 3}
+    listField: {fileID: 3050681784460419263, guid: 6e72b3ec06b7aaa4eaacd0200aa8ec67, type: 3}
+    stringField: {fileID: 281090050809248106, guid: e21f9c41f62bc6340875e936b929d876, type: 3}
+    boolField: {fileID: 6060614236711967458, guid: 831ed99505821a347875a49aa0efd51b, type: 3}
   content: {fileID: 11400000, guid: 7ead43bb40faad045aa8a91cd7940bf3, type: 2}
   firstScene: TitleScene
   tempBlockSaves:
@@ -58,7 +63,8 @@ MonoBehaviour:
     healthLoss: 4
     maxSpeed: 4
     jumpHeight: 2
-    courages: 0
+    courage: 0
     zoom: 1
     palette: []
     version: 0
+    themeName: Plains

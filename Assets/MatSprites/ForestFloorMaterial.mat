@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: StoneDecoMaterial
-  m_Shader: {fileID: 4800000, guid: 7cd5de0b884b14f88ab763ef465e1799, type: 3}
+  m_Name: ForestFloorMaterial
+  m_Shader: {fileID: 4800000, guid: d7287d32147511447abfc082aa813b93, type: 3}
   m_ShaderKeywords: _SEGMENTED_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -93,7 +93,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - PixelSnap: 0
-    - _AmbientCol: 0.243
+    - _AmbientCol: 0.103
     - _BumpScale: 1
     - _Clipped: 0
     - _ColBright: 0
@@ -105,15 +105,15 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 1
-    - _LBound: 0.212
+    - _LBound: 0.012
     - _Lumin: 0
-    - _MaxLight: 0.944
+    - _MaxLight: 1
     - _Metallic: 0
-    - _MinLight: 0.72
+    - _MinLight: 0.287
     - _Mode: 0
     - _OcclusionStrength: 1
-    - _Offset: -0.102
-    - _OtlWidth: 0
+    - _Offset: 0.565
+    - _OtlWidth: 1.26
     - _Parallax: 0.02
     - _Segmented: 1
     - _Shininess: 0.03
@@ -125,21 +125,21 @@ Material:
     - _SpecularHighlights: 1
     - _SquashAmount: 1
     - _SrcBlend: 1
-    - _Steps: 2
-    - _StpSmooth: 0.039
-    - _UBound: 0.345
+    - _Steps: 7.59
+    - _StpSmooth: 0.004
+    - _UBound: 0.033
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.24528301, g: 0.24528301, b: 0.24528301, a: 1}
-    - _DarkColor: {r: 0.31132078, g: 0.31132078, b: 0.31132078, a: 1}
+    - _Color: {r: 0.7372549, g: 0.59424156, b: 0.30196077, a: 1}
+    - _DarkColor: {r: 0, g: 0.3301887, b: 0.093449615, a: 1}
     - _EmissionColor: {r: 0.4716981, g: 0, b: 0.33542976, a: 0.40392157}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
-    - _OtlColor: {r: 0.31132078, g: 0.31132078, b: 0.31132078, a: 1}
+    - _OtlColor: {r: 0, g: 0.3301887, b: 0.093449615, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _ShnColor: {r: 1, g: 1, b: 0, a: 1}
     - _SpecColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    - _TopColor: {r: 0, g: 0.7254902, b: 0, a: 1}
+    - _TopColor: {r: 0.6395902, g: 0.8392157, b: 0, a: 1}
     - _TreeInstanceColor: {r: 1, g: 1, b: 1, a: 1}
     - _TreeInstanceScale: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

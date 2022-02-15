@@ -88,6 +88,10 @@ public class ChunkLoader : MonoBehaviour
         floorY = 0f;
         isPit = prePlaced = false;
         resetLoadList();
+        if(LevelLoader.main != null){
+            floorPrefab = LevelLoader.main.loading.GetTheme().floor;
+            Blocks.floorBlock.prefab = LevelLoader.main.loading.GetTheme().floor;
+        }
     }
 
     private void placeFloors() {

@@ -150,9 +150,8 @@ MonoBehaviour:
   - {fileID: 4300000, guid: 3b91cbc0a23992842b52b377657d0c48, type: 2}
   - {fileID: 4300000, guid: a31af9389de33df4c8da4bcc081357b9, type: 2}
   zRand: 0.3
-  decorateChance: 0.2
+  decorateChance: 0.1
   decorations:
   - {fileID: 6168266674060144353, guid: 37997b1d9b221b34bb62ff5a76d95310, type: 3}
   - {fileID: 6168266674060144353, guid: 1fb36ae736496464c975fa93d150409b, type: 3}
   - {fileID: 6168266674060144353, guid: 58b1945787329cf44b7f5be93d1851fb, type: 3}
-  - {fileID: 6168266674060144353, guid: 37997b1d9b221b34bb62ff5a76d95310, type: 3}

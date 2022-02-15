@@ -16,11 +16,9 @@ public class LFloorUpdater : MonoBehaviour
     }
 
     public void SetBlock(Block b) {
-        if(b.hasObject) {
-            GameObject pref = b.prefab;
-            transform.localScale = pref.transform.localScale;
-            GetComponent<MeshFilter>().mesh = pref.GetComponent<MeshFilter>().sharedMesh;
-            GetComponent<MeshRenderer>().materials = pref.GetComponent<MeshRenderer>().sharedMaterials;
-        }
+        GameObject pref = LChunkLoader.main.GetLevel().GetTheme().floor;
+        transform.localScale = pref.transform.localScale;
+        GetComponent<MeshFilter>().mesh = pref.GetComponent<MeshFilter>().sharedMesh;
+        GetComponent<MeshRenderer>().materials = pref.GetComponent<MeshRenderer>().sharedMaterials;
     }
 }

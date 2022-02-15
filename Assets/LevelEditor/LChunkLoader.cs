@@ -171,6 +171,15 @@ public class LChunkLoader : MonoBehaviour
         loadList.Sort((x, y) => x.x.CompareTo(y.x));
     }
 
+    public void ClearFloor() {
+        GameObject[] f = GameObject.FindGameObjectsWithTag("LevelFloor");
+        foreach(GameObject o in f) {
+            Destroy(o);
+        }
+        lastR = -20f;
+        lastL = -21f;
+    }
+
     public Level GetLevel() {
         if(level == null) level = new Level(loadList);
         return level;

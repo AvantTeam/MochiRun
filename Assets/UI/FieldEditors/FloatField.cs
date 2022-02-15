@@ -2,8 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class FloatField : MonoBehaviour
-{
+public class FloatField : MonoBehaviour{
     public bool init = false;
     public Action left, right;
     public Action<float> setAs;

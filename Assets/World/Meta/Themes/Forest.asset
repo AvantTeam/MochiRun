@@ -18,4 +18,4 @@ MonoBehaviour:
   sky: {r: 0.44010326, g: 0.58217424, b: 0.8113208, a: 1}
   fog: {r: 0, g: 0.06666667, b: 0.14117648, a: 0.42745098}
   icon: {fileID: 2800000, guid: 89c4cd5b4c5eaac4bbd80c5d97342b68, type: 3}
-  floor: {fileID: 3200795463737564019, guid: 7e0ff9ac475e1f749a6b28b1586dddbb, type: 3}
+  floor: {fileID: 3200795463737564019, guid: d4ae7a502f390b6419155c8da88c7f38, type: 3}

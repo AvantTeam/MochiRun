@@ -39,4 +39,5 @@ public class Vars : MonoBehaviour
 [System.Serializable]
 public class VarsPrefab {
     public GameObject announcement, curtain, ynpopup, stringpopup;
+    public GameObject floatField, intField, listField, stringField, boolField;
 }

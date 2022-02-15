@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8942771047036512422}
   - component: {fileID: 7171364061444565451}
   m_Layer: 0
-  m_Name: DecoRock
+  m_Name: SmallHill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
