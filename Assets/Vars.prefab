@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9204380693439320986}
   - component: {fileID: -5838023761207826037}
+  - component: {fileID: 3779746687513859063}
   m_Layer: 0
   m_Name: Vars
   m_TagString: Untagged
@@ -68,3 +69,16 @@ MonoBehaviour:
     palette: []
     version: 0
     themeName: Plains
+--- !u!114 &3779746687513859063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7714243286426511343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d62362d3172186f4788971809f3bc77c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  editorScene: 

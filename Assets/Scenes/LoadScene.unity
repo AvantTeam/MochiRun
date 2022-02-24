@@ -219,7 +219,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2209febb0449a204580dfeab557d300c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstScene: LevelEditScene
 --- !u!1001 &5198211523752261900
 PrefabInstance:
   m_ObjectHideFlags: 0

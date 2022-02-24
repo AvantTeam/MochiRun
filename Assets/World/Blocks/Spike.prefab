@@ -124,9 +124,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89466a9c08061a34e9c278a473a1a9f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: {fileID: 0}
   ctype: 0
   updatesTile: 0
   damage: 15
+  shieldable: 0
+  shieldDamage: 0.5
   destroyOnHit: 0
   angleOffset: {x: 0, y: 0, z: 0}
   rotateSpeed: 0

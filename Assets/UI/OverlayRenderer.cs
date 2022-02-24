@@ -16,7 +16,7 @@ public class OverlayRenderer : MonoBehaviour
     private bool init = false;
     private float lastMaxCourage = 0;
     private bool courageShown = false;
-    public Color courageColor, courageLightColor;
+    public Color courageColor, courageLightColor, courageLowColor;
 
     public RectTransform hpBar, hpBarSub, hpBarBack, hpIcon;
     public RectTransform courageBar, courageBarSub, courageBarBack, courageIcon;
@@ -106,6 +106,7 @@ public class OverlayRenderer : MonoBehaviour
                 //if(cFlashSlot) courageBarSImage.color = Color.Lerp(courageSlotColor, Color.white, Mathf.Clamp01(cFlash));
                 courageBarImage.color = Color.Lerp(courageColor, courageLightColor, Mathf.Clamp01(cFlash));
             }
+            else courageBarImage.color = courage > 0.5f ? courageColor : courageLowColor;
             setCSub(deltaCourage);
             setC(courage);
             //setCSlots(PlayerControl.COURAGE_SLOT * cslots);
@@ -144,7 +145,7 @@ public class OverlayRenderer : MonoBehaviour
         hpBar.anchoredPosition = new Vector3(x, y, 0f);
         resize(hpBar, HPBAR_WIDTH, HPBAR_HEIGHT);
 
-        hpIcon.anchoredPosition = new Vector3(x, y, 0f);
+        hpIcon.anchoredPosition = new Vector3(x - 12f, y, 0f);
     }
 
     private void setCBarMax(float cmax) {
@@ -183,7 +184,7 @@ public class OverlayRenderer : MonoBehaviour
         //courageBarSlots.anchoredPosition = new Vector3(x, y, 0f);
         //resize(courageBarSlots, CBAR_WIDTH * slots, CBAR_HEIGHT);
 
-        courageIcon.anchoredPosition = new Vector3(x, y, 0f);
+        courageIcon.anchoredPosition = new Vector3(x - 12f, y, 0f);
     }
 
     private void resize(RectTransform r, float w, float h) {

@@ -2,10 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations;
 
 public class PlayerAnimator : MonoBehaviour {
-    private const string landed = "onGround", running = "isRunning", runSpeed = "runSpeed", deadTrigger = "dead", isStunned = "stunned";
+    private const string landed = "onGround", running = "isRunning", runSpeed = "runSpeed", deadTrigger = "dead", isStunned = "stunned", isShielded = "shielded";
     private const float BLINK_DIST = 3f, GLOW_TIME = 0.7f;
+    public const float SHIELD_RAD = 2.5f;
     private WaitForSeconds WaitBlink = new WaitForSeconds(0.15f), WaitDamage = new WaitForSeconds(0.6f);
 
     [Serializable]
@@ -18,9 +20,11 @@ public class PlayerAnimator : MonoBehaviour {
     public Texture2D[] jumpFace, damageFace;
     public FaceFrame[] deathFaceAnimation;
 
+    public GameObject shield;
+    public ShieldEffectUpdater shieldEffect;
     public bool stunEnded = true;
     private bool animatingFace = false, jumping = false, stunned = false;
-    private float blinkTimer = BLINK_DIST, eyeGlow = 0f;
+    private float blinkTimer = BLINK_DIST, eyeGlow = 0f, shieldHeat = 0f;
     private string[] resetTriggers = {deadTrigger};
 
     GameObject player;
@@ -28,18 +32,27 @@ public class PlayerAnimator : MonoBehaviour {
     Animator animator;
     Rigidbody2D rigid;
 
+    LookAtConstraint shieldLooker;
+    Material shieldMat;
+
     void Awake() {
         player = GameObject.FindGameObjectWithTag("Player");
         rigid = player.GetComponent<Rigidbody2D>();
         pcon = player.GetComponent<PlayerControl>();
         animator = GetComponent<Animator>();
         pcon.animator = this;
+
+        shieldLooker = shield.GetComponent<LookAtConstraint>();
+        shieldMat = shield.GetComponent<MeshRenderer>().material;
         reset();
     }
 
     void Update() {
         animator.SetBool(landed, pcon.landed);
         animator.SetBool(running, pcon.state == PlayerControl.STATE.RUN);
+        animator.SetBool(isShielded, pcon.shielded);
+        UpdateShield();
+
         bool stun = pcon.state == PlayerControl.STATE.STUNNED;
         bool stunFallen = stun && !(pcon.stateTime > PlayerControl.STUN_TIME && Mathf.Abs(rigid.velocity.x) < 1f && pcon.landed);
         animator.SetBool(isStunned, stunFallen);
@@ -105,6 +118,20 @@ public class PlayerAnimator : MonoBehaviour {
         //don't add code here btw
     }
 
+    private void UpdateShield() {
+        shieldHeat = approachDelta(shieldHeat, pcon.shielded ? 1 : 0, pcon.shielded ? 4 : 4.6f);
+
+        if(shieldHeat > 0.01f) {
+            if(!shield.activeInHierarchy) shield.SetActive(true);
+            shieldLooker.roll = Time.unscaledTime * 110f;
+
+            float r = SHIELD_RAD * shieldHeat;
+            shield.transform.localScale = new Vector3(r, r, r);
+            shieldMat.SetFloat("_Alpha", shieldHeat);
+        }
+        else if(shield.activeInHierarchy) shield.SetActive(false);
+    }
+
     public void Kill(bool deathEffect) {
         if(!deathEffect) { 
             animator.SetTrigger(deadTrigger);
@@ -117,6 +144,16 @@ public class PlayerAnimator : MonoBehaviour {
         //this animation is important
         StopAllCoroutines();
         StartCoroutine(DamageFacial());
+    }
+
+    public void SnapShield() {
+        shieldHeat = 1;
+        shieldEffect.Play(pcon);
+
+        if(animatingFace) return;
+        eyeGlow = GLOW_TIME;
+        animatingFace = true;
+        setFaceQuiet(idleFace);
     }
 
     public void CourageBurst() {
@@ -134,6 +171,8 @@ public class PlayerAnimator : MonoBehaviour {
         setFace();
         eyeGlow = 0f;
         setGlow(0f);
+        shield.SetActive(false);
+        shieldHeat = 0f;
     }
 
     private void setGlow(float a) {
@@ -180,5 +219,17 @@ public class PlayerAnimator : MonoBehaviour {
             setFace(f.face);
             yield return new WaitForSeconds(f.duration);
         }
+    }
+
+    float lerpDelta(float fromValue, float toValue, float progress) {
+        return fromValue + (toValue - fromValue) * Mathf.Clamp01(progress * Time.deltaTime * 60f);
+    }
+
+    float approachDelta(float from, float to, float speed) {
+        return approach(from, to, speed * Time.deltaTime);
+    }
+
+    float approach(float from, float to, float speed) {
+        return from + Mathf.Clamp(to - from, -speed, speed);
     }
 }

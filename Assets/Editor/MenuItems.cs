@@ -163,6 +163,6 @@ public class MenuItems {
 
     [MenuItem("Tools/Personal Sh1p Chan", false, 100)]
     private static void ShipChan() {
-        Debug.Log("Hi!");
+        Debug.Log("Hi");
     }
 }

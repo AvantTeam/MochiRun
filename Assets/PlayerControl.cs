@@ -15,6 +15,8 @@ public class PlayerControl : MonoBehaviour
     //public static float COURAGE_SLOT = 1f; //max courage = SLOT * COURAGES
     public static float MAX_COURAGE = 1f;
     public static float C_REGEN = 0.4f;
+    public static float SHIELD_COURAGE = 0.25f;
+    public const float SHIELD_COOLDOWN = 0.7f; //cooldown until you can use a shield snap; stops spamming the shift button
     public const float FLOAT_YVEL = -0.7f;
     private const float JUMP_RELEASE_REDUCE = 0.75f;
     private const float JUMP_GRACE = 0.3f; //the motive to "press jump" lasts for this long; i.e. press jump up to X seconds before touching the ground to immediately jump after
@@ -40,12 +42,14 @@ public class PlayerControl : MonoBehaviour
     //public float courageTime = 0f;
     public bool dead = false;
     public int coins = 0;
+    public bool shielded = false;
+    public float shieldSnap = 0f;
 
     public bool landed = false, collided = false;
     public bool usedCourage = false, gliding = false;
     private bool jumpReleased = false;
     private float jumpPressTimer = JUMP_GRACE + 0.1f;
-    private float invincibility = 0f;
+    private float invincibility = 0f, shieldCooldown = 0f;
     private Collider2D[] colresult = new Collider2D[25]; //attempting to get all overlapping colliders will get 20 max
     private RaycastHit2D[] colsingle = new RaycastHit2D[1];
     private ContactFilter2D triggerContactFilter, floorContactFilter;
@@ -91,6 +95,8 @@ public class PlayerControl : MonoBehaviour
             jumpPressTimer += Time.deltaTime;
         }
         if(invincibility > 0f) invincibility -= Time.deltaTime;
+        if(shieldCooldown > 0f) shieldCooldown -= Time.deltaTime;
+        if(shieldSnap > 0f) shieldSnap -= Time.deltaTime;
 
         //AUTO STATE CHANGE
         if(nextState == STATE.NONE) {
@@ -158,10 +164,28 @@ public class PlayerControl : MonoBehaviour
             vel.x *= 0.7f; //abrupt stop when dead
         }
 
+        if(state != STATE.RUN) shielded = false;
+
         //UPDATE (per state)
         switch(state) {
             case STATE.RUN:
                 if(courage < MAX_COURAGE) courage = Mathf.Min(MAX_COURAGE, courage + C_REGEN * Time.deltaTime);
+                if(landed && courage > 0f && KeyBinds.Shield() && (courage > 0.4f || shielded)) {
+                    if(!shielded){
+                        if(shieldCooldown <= 0f){
+                            shieldSnap = 0.3f;
+                            shieldCooldown = SHIELD_COOLDOWN;
+                        }
+                        //shieldTime = 0f;
+                    }
+                    shielded = true;
+                    courage -= Time.deltaTime * (SHIELD_COURAGE + C_REGEN);
+                }
+                else{
+                    //if(shielded) shieldTime = 0f;
+                    shielded = false;
+                }
+                //shieldTime += Time.deltaTime;
             break;
             case STATE.JUMP:
                 if(courage < MAX_COURAGE) courage = Mathf.Min(MAX_COURAGE, courage + C_REGEN * Time.deltaTime);
@@ -332,7 +356,13 @@ public class PlayerControl : MonoBehaviour
         else if(courage > 0f && KeyBinds.JumpDown() && (jumpReleased || rigid.velocity.y <= 0f) && state != STATE.FLOAT) nextState = STATE.FLOAT;
     }
 
-    //changed usage; now used for shield parrying.
+    public void SnapShield() {
+        if(animator != null) animator.SnapShield();
+        courage = MAX_COURAGE;
+        shieldCooldown = 0f;
+    }
+
+    //unused
     private void courageBurst() {
         bool playfx = true;
         

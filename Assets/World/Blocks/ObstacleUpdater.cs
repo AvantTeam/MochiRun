@@ -6,6 +6,9 @@ using UnityEngine;
 public class ObstacleUpdater : BlockUpdater
 {
     public float damage = 15f;
+    public bool shieldable = false;
+    public float shieldDamage = 0.5f;
+
     public bool destroyOnHit = false;
     public Vector3 angleOffset;
     public float rotateSpeed = 0f;
@@ -24,16 +27,34 @@ public class ObstacleUpdater : BlockUpdater
         transform.rotation = Quaternion.Euler(rot.x, rot.y + rotateSpeed * Time.deltaTime, rot.z);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision) {
+    protected virtual void OnTriggerEnter2D(Collider2D collision) {
         if(collision.gameObject.CompareTag("Player")) {
-            pcon.Damage(damage, gameObject);
-            OnHit();
             if(hitFx != null) pcon.Fx(hitFx, transform.position, Quaternion.identity);
-            if(destroyOnHit) Destroy(gameObject);
+
+            if(shieldable && (pcon.shieldSnap > 0f || pcon.shielded)) {
+                if(pcon.shieldSnap > 0f) {
+                    pcon.shieldSnap = 0.0001f; //only allow snaps in the same frame
+                    pcon.SnapShield();
+                    OnSnap();
+                }
+                else {
+                    pcon.courage = Mathf.Max(0f, pcon.courage - shieldDamage);
+                    Destroy(gameObject);
+                }
+            }
+            else {
+                pcon.Damage(damage, gameObject);
+                OnHit();
+                if(destroyOnHit) Destroy(gameObject);
+            }
         }
     }
 
     public virtual void OnHit() {
 
+    }
+
+    public virtual void OnSnap() {
+        Destroy(gameObject);
     }
 }
