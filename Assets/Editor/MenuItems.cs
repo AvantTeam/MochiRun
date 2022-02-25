@@ -69,6 +69,17 @@ public class MenuItems {
         }
 
         ContentList c = (ContentList)AssetDatabase.LoadAssetAtPath("Assets/ContentList.asset", typeof(ContentList));
+        //sort blocks according to c.blocks
+        System.Array.Sort(blocks, (x, y) => {
+            int xe = System.Array.IndexOf(c.blocks, x);
+            int ye = System.Array.IndexOf(c.blocks, y);
+            if(xe == -1) xe = c.blocks.Length;
+            if(ye == -1) ye = c.blocks.Length;
+
+            if(xe == ye) return x.name.CompareTo(y.name);
+            else return xe.CompareTo(ye);
+        });
+
         c.blocks = blocks;
         EditorUtility.SetDirty(c);
     }
@@ -103,7 +114,7 @@ public class MenuItems {
         for(int i = 0; i < BlockPrefabCollector.icons.Length; i++) {
             string spriteName = BlockPrefabCollector.list[i].name;
             if(spriteName.StartsWith("Trigger")) continue;
-            EditorGUIUtility.PingObject(BlockPrefabCollector.list[i]);
+            if(!AssetDatabase.GetAssetPath(BlockPrefabCollector.list[i]).Contains("Blocks/Floor/")) EditorGUIUtility.PingObject(BlockPrefabCollector.list[i]);
             string path = "Assets/MatSprites/Gen/" + spriteName + ".png";
             //Debug.Log("Packing:"+path);
             Texture2D tex = AssetPreview.GetAssetPreview(BlockPrefabCollector.list[i]);

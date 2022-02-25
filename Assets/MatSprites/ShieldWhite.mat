@@ -68,7 +68,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Alpha: 0.031680405
+    - _Alpha: 0.028849185
     - _AmbientCol: 0
     - _BlendOp: 0
     - _BumpScale: 1
@@ -136,6 +136,7 @@ Material:
     - _ZWrite: 0
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _BaseColor1: {r: 1, g: 1, b: 1, a: 1}
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 0.39215687}
     - _ColorAddSubDiff: {r: 1, g: 0, b: 0, a: 0}

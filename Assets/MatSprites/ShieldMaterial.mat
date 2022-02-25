@@ -105,7 +105,7 @@ Material:
     - _Offset: 0
     - _OffsetX: 0
     - _OffsetY: 0
-    - _OtlWidth: 12.08
+    - _OtlWidth: 12
     - _Parallax: 0.02
     - _SGridScale: 1
     - _SLineThickness: 0.05
@@ -136,8 +136,9 @@ Material:
     - _ZWrite: 0
     m_Colors:
     - _BaseColor: {r: 0, g: 0.6043427, b: 1, a: 1}
+    - _BaseColor1: {r: 0.6273585, g: 0.99642223, b: 1, a: 0.65882355}
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
-    - _Color: {r: 0.5518868, g: 1, b: 0.9916513, a: 0.29803923}
+    - _Color: {r: 0.5529412, g: 1, b: 0.8873113, a: 0.29803923}
     - _ColorAddSubDiff: {r: 1, g: 0, b: 0, a: 0}
     - _DarkColor: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 0.047169805, g: 0.047169805, b: 0.047169805, a: 1}

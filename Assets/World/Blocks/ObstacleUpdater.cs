@@ -7,7 +7,7 @@ public class ObstacleUpdater : BlockUpdater
 {
     public float damage = 15f;
     public bool shieldable = false;
-    public float shieldDamage = 0.5f;
+    public float shieldMultiplier = 1f;
 
     public bool destroyOnHit = false;
     public Vector3 angleOffset;
@@ -31,14 +31,14 @@ public class ObstacleUpdater : BlockUpdater
         if(collision.gameObject.CompareTag("Player")) {
             if(hitFx != null) pcon.Fx(hitFx, transform.position, Quaternion.identity);
 
-            if(shieldable && (pcon.shieldSnap > 0f || pcon.shielded)) {
-                if(pcon.shieldSnap > 0f) {
-                    pcon.shieldSnap = 0.0001f; //only allow snaps in the same frame
+            if(shieldable && pcon.shield != null && (pcon.shield.shieldSnap > 0f || pcon.shield.shielded)) {
+                if(pcon.shield.shieldSnap > 0f) {
+                    pcon.shield.shieldSnap = 0.0001f; //only allow snaps in the same frame
                     pcon.SnapShield();
                     OnSnap();
                 }
                 else {
-                    pcon.courage = Mathf.Max(0f, pcon.courage - shieldDamage);
+                    pcon.shield.health = Mathf.Max(0f, pcon.shield.health - damage * shieldMultiplier);
                     Destroy(gameObject);
                 }
             }

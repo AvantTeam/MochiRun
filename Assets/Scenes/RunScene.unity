@@ -970,6 +970,7 @@ RectTransform:
   - {fileID: 38479198}
   - {fileID: 2025591092}
   - {fileID: 570706785}
+  - {fileID: 927652848}
   m_Father: {fileID: 1890404871}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1892,6 +1893,83 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 135, y: 110, z: 0}
+--- !u!1 &927652847
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 927652848}
+  - component: {fileID: 927652850}
+  - component: {fileID: 927652849}
+  m_Layer: 5
+  m_Name: ItemFrame
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &927652848
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 927652847}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 369253257}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -658, y: -120}
+  m_SizeDelta: {x: 0, y: 80}
+  m_Pivot: {x: 1, y: 0.5}
+--- !u!114 &927652849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 927652847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 2
+  m_VerticalFit: 0
+--- !u!114 &927652850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 927652847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 3
+  m_Spacing: 4
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &1051287339
 GameObject:
   m_ObjectHideFlags: 0
@@ -3291,7 +3369,7 @@ MonoBehaviour:
   deltaHp: 0
   deltaCourage: 0
   cFlash: 0
-  cBarOffset: {x: -30, y: -60}
+  cBarOffset: {x: 0, y: -65}
   courageColor: {r: 0.22352941, g: 0.78431374, b: 1, a: 1}
   courageLightColor: {r: 1, g: 1, b: 0.740566, a: 1}
   courageLowColor: {r: 1, g: 0.2723468, b: 0, a: 1}
@@ -3303,6 +3381,7 @@ MonoBehaviour:
   courageBarSub: {fileID: 473099846}
   courageBarBack: {fileID: 144620092}
   courageIcon: {fileID: 570706785}
+  items: {fileID: 927652848}
   courageBarImage: {fileID: 38479199}
   courageBarSImage: {fileID: 2025591093}
   coinText: {fileID: 1801236078}
@@ -4108,6 +4187,10 @@ PrefabInstance:
       propertyPath: costume
       value: 
       objectReference: {fileID: 610996452}
+    - target: {fileID: 3910615291512617295, guid: 52516eb6e82fb8e43a59d2b5e303eab4, type: 3}
+      propertyPath: itemsTable
+      value: 
+      objectReference: {fileID: 927652847}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 52516eb6e82fb8e43a59d2b5e303eab4, type: 3}
 --- !u!1183024399 &4288682725756735414

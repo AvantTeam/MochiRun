@@ -50,7 +50,7 @@ public class PlayerAnimator : MonoBehaviour {
     void Update() {
         animator.SetBool(landed, pcon.landed);
         animator.SetBool(running, pcon.state == PlayerControl.STATE.RUN);
-        animator.SetBool(isShielded, pcon.shielded);
+        animator.SetBool(isShielded, pcon.shield != null && pcon.shield.shielded);
         UpdateShield();
 
         bool stun = pcon.state == PlayerControl.STATE.STUNNED;
@@ -119,7 +119,8 @@ public class PlayerAnimator : MonoBehaviour {
     }
 
     private void UpdateShield() {
-        shieldHeat = approachDelta(shieldHeat, pcon.shielded ? 1 : 0, pcon.shielded ? 4 : 4.6f);
+        if(pcon.shield != null && pcon.shield.shielded) shieldHeat = lerpDelta(shieldHeat, 1, 0.2f);
+        else shieldHeat = approachDelta(shieldHeat, 0, 4f);
 
         if(shieldHeat > 0.01f) {
             if(!shield.activeInHierarchy) shield.SetActive(true);

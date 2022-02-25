@@ -20,10 +20,11 @@ public class OverlayRenderer : MonoBehaviour
 
     public RectTransform hpBar, hpBarSub, hpBarBack, hpIcon;
     public RectTransform courageBar, courageBarSub, courageBarBack, courageIcon;
+    public RectTransform items;
     public Image courageBarImage, courageBarSImage;
     public TextMeshProUGUI coinText;
     public GameObject menuDialog;
-    private float lastTimeScale = 1f;
+    private float lastTimeScale = 1f, cw = 1f;
     public bool paused = false;
     PlayerControl pcon;
 
@@ -124,11 +125,11 @@ public class OverlayRenderer : MonoBehaviour
     }
 
     private void setC(float c) {
-        courageBar.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, CBAR_WIDTH * lastMaxCourage * Mathf.Clamp01(c / PlayerControl.MAX_COURAGE));
+        courageBar.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, cw * Mathf.Clamp01(c / PlayerControl.MAX_COURAGE));
     }
 
     private void setCSub(float c) {
-        courageBarSub.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, CBAR_WIDTH * lastMaxCourage * Mathf.Clamp01(c / PlayerControl.MAX_COURAGE));
+        courageBarSub.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, cw * Mathf.Clamp01(c / PlayerControl.MAX_COURAGE));
     }
 
     //private void setCSlots(float c) {
@@ -148,18 +149,27 @@ public class OverlayRenderer : MonoBehaviour
         hpIcon.anchoredPosition = new Vector3(x - 12f, y, 0f);
     }
 
+    private float cWidth(float cmax) {
+        return (2 - 2 * Mathf.Pow(0.5f, cmax)) * CBAR_WIDTH;
+    }
+
     private void setCBarMax(float cmax) {
+        Vector2 pos = hpBar.anchoredPosition;
+        float x = pos.x + HPBAR_WIDTH - cWidth(cmax) + cBarOffset.x;
+
         if(cmax > 0.1f) {
             if(!courageShown) {
                 setCActive(true);
             }
-            Vector2 pos = hpBar.anchoredPosition;
-            float x = pos.x + HPBAR_WIDTH - cmax * CBAR_WIDTH + cBarOffset.x;
+            
             setCBarPos(x, pos.y + cBarOffset.y, cmax);
         }
         else if(courageShown){
             setCActive(false);
         }
+
+        cw = cWidth(cmax);
+        items.anchoredPosition = new Vector2(x - 48f, pos.y + cBarOffset.y);
     }
 
     private void setCActive(bool a) {
@@ -173,13 +183,13 @@ public class OverlayRenderer : MonoBehaviour
 
     private void setCBarPos(float x, float y, float slots) {
         courageBarBack.anchoredPosition = new Vector3(x - OUTLINE, y, 0f);
-        resize(courageBarBack, CBAR_WIDTH * slots + OUTLINE * 2f, CBAR_HEIGHT + OUTLINE * 2f);
+        resize(courageBarBack, cWidth(slots) + OUTLINE * 2f, CBAR_HEIGHT + OUTLINE * 2f);
 
         courageBarSub.anchoredPosition = new Vector3(x, y, 0f);
-        resize(courageBarSub, CBAR_WIDTH * slots, CBAR_HEIGHT);
+        resize(courageBarSub, cWidth(slots), CBAR_HEIGHT);
 
         courageBar.anchoredPosition = new Vector3(x, y, 0f);
-        resize(courageBar, CBAR_WIDTH * slots, CBAR_HEIGHT);
+        resize(courageBar, cWidth(slots), CBAR_HEIGHT);
 
         //courageBarSlots.anchoredPosition = new Vector3(x, y, 0f);
         //resize(courageBarSlots, CBAR_WIDTH * slots, CBAR_HEIGHT);

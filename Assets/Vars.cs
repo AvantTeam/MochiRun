@@ -40,4 +40,5 @@ public class Vars : MonoBehaviour
 public class VarsPrefab {
     public GameObject announcement, curtain, ynpopup, stringpopup;
     public GameObject floatField, intField, listField, stringField, boolField;
+    public GameObject itemDisplay, shieldDisplay;
 }

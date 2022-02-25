@@ -7,6 +7,7 @@ Shader "Unlit/ShieldShader"
         _OtlWidth ("Width", Range(0,20)) = 1
         _Alpha ("Alpha", Range(0,1)) = 1
         _BaseColor("Base Color", Color) = (1,1,1,1)
+        _BaseColor1("Base Color 1", Color) = (1,1,1,1)
     }
     SubShader
     {
@@ -23,7 +24,7 @@ Shader "Unlit/ShieldShader"
             #pragma fragment frag
             #include "UnityCG.cginc"
 
-            fixed4 _BaseColor;
+            fixed4 _BaseColor, _BaseColor1;
             float _Alpha;
          
             struct v2f {
@@ -35,7 +36,8 @@ Shader "Unlit/ShieldShader"
             {
                 v2f o;
                 o.pos = UnityObjectToClipPos(v.vertex);
-                o.color = _BaseColor;
+                float c = sin(_Time.z) * 0.5 + 0.5;
+                o.color = _BaseColor * c + _BaseColor1 * (1.0 - c);
 
                 o.color.a *= (1.0 - abs(v.normal.z)) * _Alpha;
                 return o;
