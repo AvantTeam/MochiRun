@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4882103732064821190}
   - component: {fileID: 4882103732064821189}
   - component: {fileID: 4882103732064821191}
+  - component: {fileID: -2238054903751740035}
   m_Layer: 5
   m_Name: ItemDisplay
   m_TagString: Untagged
@@ -66,7 +67,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: d9b96311fcae5be4db0c24ee64d96b94, type: 3}
+  m_Texture: {fileID: 2800000, guid: f9e67769ffa501b47ba0116d18008899, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -88,3 +89,18 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.23529412}
   m_EffectDistance: {x: -4, y: -4}
   m_UseGraphicAlpha: 0
+--- !u!114 &-2238054903751740035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4882103732064821195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e3d39fd8ca9d9f4f87e828baab9c49e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gravityBelt: {fileID: 2800000, guid: d9b96311fcae5be4db0c24ee64d96b94, type: 3}
+  bubbleGun: {fileID: 2800000, guid: f9e67769ffa501b47ba0116d18008899, type: 3}
+  image: {fileID: 4882103732064821189}

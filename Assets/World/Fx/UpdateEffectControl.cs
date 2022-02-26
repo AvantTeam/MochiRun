@@ -7,17 +7,22 @@ public class UpdateEffectControl : MonoBehaviour
     public GameObject mochiUpdateFx, floatFx;
     private GameObject current, currentOriginal;
 
+    public GameObject[] flagFx;
+
     GameObject player;
     PlayerControl pcon;
-    // Start is called before the first frame update
+
     void Start() {
         player = GameObject.FindGameObjectWithTag("Player");
         pcon = player.GetComponent<PlayerControl>();
     }
 
-    // Update is called once per frame
     void Update() {
-        if(pcon.state == PlayerControl.STATE.RUN && pcon.landed) {
+        if(pcon.updateFxFlag > 0 && pcon.updateFxFlag <= flagFx.Length) {
+            //flag starts from 1, but array starts from 0!
+            setFx(flagFx[pcon.updateFxFlag - 1]);
+        }
+        else if(pcon.state == PlayerControl.STATE.RUN && pcon.landed) {
             //ground particle
             setFx(mochiUpdateFx);
         }

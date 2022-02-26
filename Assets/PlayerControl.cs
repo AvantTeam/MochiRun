@@ -43,6 +43,7 @@ public class PlayerControl : MonoBehaviour
 
     public List<Item> items = new List<Item>();
     public ShieldItem shield = null; //stored for easy lookup
+    public byte updateFxFlag = 0;
 
     public bool landed = false, collided = false;
     public bool usedCourage = false, gliding = false;
@@ -81,6 +82,7 @@ public class PlayerControl : MonoBehaviour
     // Update is called once per frame
     void Update() {
         Vector2 vel = rigid.velocity;
+        updateFxFlag = 0;
         bool inputJump = KeyBinds.Jump();
         stateTime += Time.deltaTime;
         checkLanded();

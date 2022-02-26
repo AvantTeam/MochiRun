@@ -115,7 +115,7 @@ public class MenuItems {
             string spriteName = BlockPrefabCollector.list[i].name;
             if(spriteName.StartsWith("Trigger")) continue;
             if(!AssetDatabase.GetAssetPath(BlockPrefabCollector.list[i]).Contains("Blocks/Floor/")) EditorGUIUtility.PingObject(BlockPrefabCollector.list[i]);
-            string path = "Assets/MatSprites/Gen/" + spriteName + ".png";
+            string path = "Assets/Sprites/Gen/" + spriteName + ".png";
             //Debug.Log("Packing:"+path);
             Texture2D tex = AssetPreview.GetAssetPreview(BlockPrefabCollector.list[i]);
 
@@ -136,7 +136,7 @@ public class MenuItems {
             importer.filterMode = FilterMode.Point;
             AssetDatabase.WriteImportSettingsIfDirty(path);
 
-            Sprite assetTex = (Sprite)AssetDatabase.LoadAssetAtPath("Assets/MatSprites/Gen/" + spriteName + ".png", typeof(Sprite));
+            Sprite assetTex = (Sprite)AssetDatabase.LoadAssetAtPath("Assets/Sprites/Gen/" + spriteName + ".png", typeof(Sprite));
             BlockPrefabCollector.icons[i] = assetTex.texture;
 
             //now, if a Block exists, set its sprite

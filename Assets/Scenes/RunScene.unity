@@ -838,6 +838,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mochiUpdateFx: {fileID: 2315629835069471037, guid: b9fba9f8d0942754ba559861d48fde8a, type: 3}
   floatFx: {fileID: 2315629835069471037, guid: 48d63f72e2239aa45a385b9ddf8a7d46, type: 3}
+  flagFx:
+  - {fileID: 2315629835069471037, guid: 314154c1d9f05a9408d875919da916fd, type: 3}
 --- !u!4 &347978779
 Transform:
   m_ObjectHideFlags: 0

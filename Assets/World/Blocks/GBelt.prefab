@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5009176903658176764
+--- !u!1 &5600063603711397611
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,47 +8,47 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7437289782094833946}
-  - component: {fileID: 7303017904637923488}
-  - component: {fileID: 709923840419520672}
-  - component: {fileID: 1497586691774924332}
-  - component: {fileID: -6111034913676197273}
+  - component: {fileID: 8700867138925231412}
+  - component: {fileID: 4296758046630944676}
+  - component: {fileID: 1910379339961676250}
+  - component: {fileID: -7452211041974004878}
+  - component: {fileID: 7356077967342073067}
   m_Layer: 0
-  m_Name: Wall
+  m_Name: GBelt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7437289782094833946
+--- !u!4 &8700867138925231412
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5009176903658176764}
+  m_GameObject: {fileID: 5600063603711397611}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 863.378, y: 746.65295, z: 677.5462}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.9, y: 0.9, z: 0.9}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &7303017904637923488
+--- !u!33 &4296758046630944676
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5009176903658176764}
-  m_Mesh: {fileID: 4300000, guid: 3b91cbc0a23992842b52b377657d0c48, type: 2}
---- !u!23 &709923840419520672
+  m_GameObject: {fileID: 5600063603711397611}
+  m_Mesh: {fileID: 4300000, guid: b9b4f8d401afdc24599085cb5204ed6a, type: 2}
+--- !u!23 &1910379339961676250
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5009176903658176764}
+  m_GameObject: {fileID: 5600063603711397611}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31affe2da9ee957499e17d39864ab42b, type: 2}
+  - {fileID: 2100000, guid: ce761760c60f4e04cb24742035f57425, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -83,44 +83,41 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!61 &1497586691774924332
-BoxCollider2D:
+--- !u!58 &-7452211041974004878
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5009176903658176764}
+  m_GameObject: {fileID: 5600063603711397611}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
---- !u!114 &-6111034913676197273
+  m_Radius: 0.5
+--- !u!114 &7356077967342073067
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5009176903658176764}
+  m_GameObject: {fileID: 5600063603711397611}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e24ffc4a47e7b2e4c8328c93c7bdfe5d, type: 3}
+  m_Script: {fileID: 11500000, guid: 84045364b66f3224ca78f5910ef40690, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   type: {fileID: 0}
   ctype: 0
-  updatesTile: 0
+  updatesTile: 1
+  damage: 0
+  shieldable: 0
+  shieldMultiplier: 1
+  destroyOnHit: 1
+  angleOffset: {x: 0, y: 0, z: 0}
+  rotateSpeed: 60
+  hitFx: {fileID: 2315629835069471037, guid: 619f6a7ce84b17740be2dbebb59b9e53, type: 3}
