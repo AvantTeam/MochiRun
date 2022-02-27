@@ -55,6 +55,8 @@ MonoBehaviour:
     boolField: {fileID: 6060614236711967458, guid: 831ed99505821a347875a49aa0efd51b, type: 3}
     itemDisplay: {fileID: 4882103732064821195, guid: 2e3c7f07f9d1e6945858c65d4b5e9284, type: 3}
     shieldDisplay: {fileID: 7818974288269461750, guid: e0688938576a3c94bae20ad38d26e07e, type: 3}
+    reloadDisplay: {fileID: 2423553858356836926, guid: 8f5bfa2d15c75d44288d7a4875580268, type: 3}
+    ragblock: {fileID: 7730209729054057865, guid: 9bede6a52bc99b844aa08af1df8f4101, type: 3}
   content: {fileID: 11400000, guid: 7ead43bb40faad045aa8a91cd7940bf3, type: 2}
   firstScene: TitleScene
   tempBlockSaves:

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class ItemDisplay : MonoBehaviour {
-    public Texture2D gravityBelt, bubbleGun;
+    public Texture2D gravityBelt;
 
     public RawImage image;
 }

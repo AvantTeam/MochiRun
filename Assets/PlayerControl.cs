@@ -49,7 +49,7 @@ public class PlayerControl : MonoBehaviour
     public bool usedCourage = false, gliding = false;
     private bool jumpReleased = false;
     private float jumpPressTimer = JUMP_GRACE + 0.1f;
-    private float invincibility = 0f;
+    public float invincibility = 0f;
     private Collider2D[] colresult = new Collider2D[25]; //attempting to get all overlapping colliders will get 20 max
     private RaycastHit2D[] colsingle = new RaycastHit2D[1];
     private ContactFilter2D triggerContactFilter, floorContactFilter;
@@ -167,8 +167,17 @@ public class PlayerControl : MonoBehaviour
         //update all items
         int itemn = items.Count;
         if(itemn > 0) {
+            bool rem = false;
             for(int i = itemn - 1; i >= 0; i--) {
-                items[i].UpdateAlways(this);
+                if(items[i].UpdateAlways(this)) {
+                    //remove this item
+                    items.RemoveAt(i);
+                    rem = true;
+                }
+            }
+            if(rem) {
+                rebuildItemUI();
+                itemn = items.Count;
             }
 
             //only update the latest active item
@@ -450,8 +459,14 @@ public class PlayerControl : MonoBehaviour
             //heal effect?
             health -= damage;
         }
-        else if(damage > 5f) { //status effects (dot damage, <5) are not prevented by invincibility
+        else if(damage > 1f) { //status effects (dot damage, <1) are not prevented by invincibility
             if(invincibility > 0.1f) return;
+
+            //check items for damage negation
+            for(int i = items.Count - 1; i >= 0; i--) {
+                if(!items[i].HandleDamage(this, damage, source)) return;
+            }
+
             health -= damage;
             invincibility = INVIN_TIME;
 

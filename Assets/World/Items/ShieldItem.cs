@@ -27,7 +27,7 @@ public class ShieldItem : Item {
         shielded = false;
     }
 
-    public override void UpdateAlways(PlayerControl pcon) {
+    public override bool UpdateAlways(PlayerControl pcon) {
         if(shieldCooldown > 0f) shieldCooldown -= Time.deltaTime;
         if(shieldSnap > 0f) shieldSnap -= Time.deltaTime;
 
@@ -36,6 +36,7 @@ public class ShieldItem : Item {
         if(pcon.state != STATE.RUN) {
             shielded = false;
         }
+        return false;
     }
 
     public override bool Update(PlayerControl pcon) {

@@ -10,6 +10,7 @@ public abstract class Item {
         AIR, //activates when pressing shift midair
         GROUND,
         WEAPON, //usually has ammo
+        BOOST, //always active, has a set time before disappearing
         STACKABLE //multiple items (even the same ones) can be acquired simultaneously
     }
 
@@ -22,15 +23,20 @@ public abstract class Item {
     }
 
     /** Always called, whether it is active or not, unlike Update. Runs before Update.
+     * @return whether this item should be removed; NEVER CALL removeItem!
      */
-    public virtual void UpdateAlways(PlayerControl pcon) {
-
+    public virtual bool UpdateAlways(PlayerControl pcon) {
+        return false;
     }
 
     /** @return whether the item was used; further items will not be used
      */
     public virtual bool Update(PlayerControl pcon) {
         return false;
+    }
+
+    public virtual bool HandleDamage(PlayerControl pcon, float damage, GameObject? source) {
+        return true;
     }
 
     public virtual void BuildTable(GameObject table) {

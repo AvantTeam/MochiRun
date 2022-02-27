@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6b7f58d195a9654a882b5aba138bad5, type: 3}
+  m_Name: BoostPotion
+  m_EditorClassIdentifier: 
+  hasObject: 1
+  hasUpdate: 1
+  rotate: 0
+  hidden: 0
+  prefab: {fileID: 6859687517624608140, guid: 4dea9d487ba42a94fae8d0608d934cb2, type: 3}
+  sprite: {fileID: 21300000, guid: 6ff427e39c98a6d47b73b60a95322f76, type: 3}
+  zLayer: 0
+  width: 1
+  height: 1
+  clipsize: 1
+  onFloor: 0
+  category: {fileID: 11400000, guid: b7b8c6611067961428e838c117657215, type: 2}
