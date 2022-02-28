@@ -32,7 +32,7 @@ public class FireBoost : Item {
             ObstacleUpdater obs = source.GetComponent<ObstacleUpdater>();
             if(obs != null && !obs.shieldable) {
                 //todo devastate contacting obstacles
-                RagblockUpdater.Yeet(source, PlayerControl.SPEED_MAX + speed);
+                RagblockUpdater.Yeet(source, 2.6f);
                 Object.Destroy(obs.gameObject);
             }
         }

@@ -45,6 +45,6 @@ public class RagblockUpdater : MonoBehaviour {
     }
 
     public static RagblockUpdater Yeet(GameObject source, float speed) {
-        return At(source).Impulse(PlayerControl.SPEED_MAX * (1 + speed + Random.Range(0.1f, 0.4f)), Random.Range(5f, 7f), Random.Range(-1.5f, -1f)).Spin(Random.Range(-15f, 15f), Random.Range(-15f, 15f));
+        return At(source).Impulse(speed * Random.Range(0.8f, 2.2f) * PlayerControl.SPEED_MAX, Random.Range(3f, 8f) * speed, Random.Range(-1.5f, -1f)).Spin(Random.Range(-7f, 7f) * speed, Random.Range(-15f, 15f));
     }
 }

@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Marker
   m_EditorClassIdentifier: 
   color: {r: 0, g: 0.54663944, b: 1, a: 1}
-  icon: {fileID: 2800000, guid: 2bb745d9c0de5be4496a3073151506ad, type: 3}
+  icon: {fileID: 2800000, guid: b6190c526a38fc6499cf279744e49200, type: 3}
   special: 0
   blackIcon: 0

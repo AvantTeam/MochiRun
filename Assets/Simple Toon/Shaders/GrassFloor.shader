@@ -74,8 +74,9 @@
             {
                 v2f o;
 			    o.pos = v.vertex;
-			    o.pos.xyz += normalize(v.normal.xyz) * _OtlWidth * 0.008;
-			    o.pos = UnityObjectToClipPos(o.pos);
+                o.pos = UnityObjectToClipPos(o.pos);
+                float3 norm = TransformViewToProjection(normalize(mul((float3x3)UNITY_MATRIX_IT_MV, v.normal)));
+                o.pos.xyz += norm * _OtlWidth * 0.008;
 
 			    return o;
             }
