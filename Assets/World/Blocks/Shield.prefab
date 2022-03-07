@@ -121,4 +121,4 @@ MonoBehaviour:
   destroyOnHit: 1
   angleOffset: {x: 0, y: 0, z: 0}
   rotateSpeed: 60
-  hitFx: {fileID: 0}
+  hitFx: {fileID: 2315629835069471037, guid: f8b2fbe2da6eeff4ea239869e0b0e741, type: 3}
