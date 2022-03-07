@@ -7,10 +7,10 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MochiFace
-  m_Shader: {fileID: 4800000, guid: 9b49653b762b1fd489b8fa045b550e7e, type: 3}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
+  m_Name: SilverMaterial
+  m_Shader: {fileID: 4800000, guid: ba4ac45649f9a974fa77e5fce712a640, type: 3}
+  m_ShaderKeywords: _EMISSION _SEGMENTED_ON
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -19,10 +19,6 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _AlphaTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -43,14 +39,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _MainBump:
+    - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 7876612098748af4b836c98b7db293ea, type: 3}
-        m_Scale: {x: 1.2, y: 1.2}
-        m_Offset: {x: -0.1, y: -0.1}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -63,41 +55,48 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SubTex:
-        m_Texture: {fileID: 2800000, guid: 8ab284aad0b04ab4683eb9527526669f, type: 3}
+    - _SpecGlossMap:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - PixelSnap: 0
+    - _AmbientCol: 0
     - _BumpScale: 1
-    - _ColorMask: 15
+    - _Clipped: 0
+    - _ColBright: 0
+    - _ColIntense: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _EnableExternalAlpha: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _Metallic: 0
+    - _Lumin: 0.532
+    - _MaxLight: 1
+    - _Metallic: 1
+    - _MinLight: 0
     - _Mode: 0
     - _OcclusionStrength: 1
+    - _Offset: 0
+    - _OtlWidth: 1
     - _Parallax: 0.02
-    - _Shininess: 0.2
+    - _Segmented: 1
+    - _ShnIntense: 1
+    - _ShnOverlap: 0
+    - _ShnRange: 0.06
+    - _ShnSmooth: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _Stencil: 0
-    - _StencilComp: 8
-    - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
+    - _Steps: 3
+    - _StpSmooth: 0
     - _UVSec: 0
-    - _UseUIAlphaClip: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.5896226, g: 1, b: 1, a: 0}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _Flip: {r: 1, g: 1, b: 1, a: 1}
-    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Specular: {r: 0, g: 0, b: 0, a: 0}
+    - _Color: {r: 0.7268779, g: 0.75164604, b: 0.7830189, a: 1}
+    - _DarkColor: {r: 0.49245283, g: 0.5050798, b: 0.5471698, a: 1}
+    - _EmissionColor: {r: 0.18867922, g: 0.15020345, b: 0, a: 1}
+    - _OtlColor: {r: 0.49411765, g: 0.5058824, b: 0.54901963, a: 1}
+    - _ShnColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []

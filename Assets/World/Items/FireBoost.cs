@@ -15,9 +15,14 @@ public class FireBoost : Item {
         time = maxTime;
     }
 
+    public override void Start(PlayerControl pcon) {
+        pcon.animator.setFace(pcon.animator.excited);
+    }
+
     public override bool UpdateAlways(PlayerControl pcon) {
         if(time <= 0f || pcon.state == PlayerControl.STATE.STUNNED){
             pcon.invincibility = 0.6f;
+            if (pcon.animator.getFace() == pcon.animator.excited) pcon.animator.setFace();
             return true;
         }
         pcon.Impulse(PlayerControl.SPEED_MAX * speed, 0f);

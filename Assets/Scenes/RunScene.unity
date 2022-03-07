@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657725, g: 0.49641198, b: 0.5748184, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657695, g: 0.49641138, b: 0.5748176, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1599,6 +1599,8 @@ MonoBehaviour:
   idleFace: {fileID: 2800000, guid: 7876612098748af4b836c98b7db293ea, type: 3}
   blinkFace: {fileID: 2800000, guid: 559697d870540e243ae30cce66a9db31, type: 3}
   stunFace: {fileID: 2800000, guid: ff592b59aefdcd04a90d3ec2ed1f498d, type: 3}
+  excited: {fileID: 2800000, guid: 60d30907e66e39e4582edf9d9d6dec04, type: 3}
+  angry: {fileID: 2800000, guid: 47db88c92a5ef7e47850466385a82b58, type: 3}
   jumpFace:
   - {fileID: 2800000, guid: 7876612098748af4b836c98b7db293ea, type: 3}
   - {fileID: 2800000, guid: 559697d870540e243ae30cce66a9db31, type: 3}

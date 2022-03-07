@@ -19,8 +19,8 @@ MonoBehaviour:
   prefab: {fileID: 5600063603711397611, guid: ce5a6462b8d6ad64ea6a05b376c22a03, type: 3}
   sprite: {fileID: 21300000, guid: 3e231583a8fb3384aa3e91bcac33df6f, type: 3}
   zLayer: 0
-  width: 0.9
-  height: 0.9
-  clipsize: 0.9
+  width: 1
+  height: 1
+  clipsize: 1
   onFloor: 0
   category: {fileID: 11400000, guid: b7b8c6611067961428e838c117657215, type: 2}

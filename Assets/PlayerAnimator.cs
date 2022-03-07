@@ -16,7 +16,7 @@ public class PlayerAnimator : MonoBehaviour {
         public float duration;
     }
     public Material faceMaterial;
-    public Texture2D idleFace, blinkFace, stunFace;
+    public Texture2D idleFace, blinkFace, stunFace, excited, angry;
     public Texture2D[] jumpFace, damageFace;
     public FaceFrame[] deathFaceAnimation;
 
@@ -182,7 +182,7 @@ public class PlayerAnimator : MonoBehaviour {
         faceMaterial.color = c;
     }
 
-    private void setFace(Texture2D f) {
+    public void setFace(Texture2D f) {
         if(f != idleFace){
             animatingFace = true;
             eyeGlow = 0f;
@@ -195,9 +195,13 @@ public class PlayerAnimator : MonoBehaviour {
         faceMaterial.mainTexture = f;
     }
 
-    private void setFace() {
+    public void setFace() {
         animatingFace = false;
         faceMaterial.mainTexture = idleFace;
+    }
+
+    public Texture getFace() {
+        return faceMaterial.mainTexture;
     }
 
     //this is quiet!
