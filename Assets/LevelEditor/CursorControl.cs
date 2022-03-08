@@ -211,6 +211,11 @@ public class CursorControl : MonoBehaviour
         }
     }
 
+    public void Rotate(int i) {
+        rotateScrollDelta += i;
+        ctype = (byte)((Mathf.RoundToInt(rotateScrollDelta) % 4 + 8) % 4);
+    }
+
     private void resetModel() {
         transform.localScale = cursorPrefab.transform.localScale;
         GetComponent<MeshFilter>().mesh = cursorPrefab.GetComponent<MeshFilter>().sharedMesh;

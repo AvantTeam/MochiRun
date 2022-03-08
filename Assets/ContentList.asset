@@ -37,6 +37,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: be0454d275264c94fae8a179a3d16cfc, type: 2}
   - {fileID: 11400000, guid: c8c0588c436d16142963768273df3457, type: 2}
   - {fileID: 11400000, guid: fa1e18fe5e8b7c54a8a23069e06ae363, type: 2}
+  - {fileID: 11400000, guid: 6bc540ef6f0290c4d9ca81f471803b3f, type: 2}
   defaultCategory: {fileID: 11400000, guid: cbab9c39d96cffc469f4acb2d848cae6, type: 2}
   themes:
   - {fileID: 11400000, guid: 757a8dc9075933046817aab46c1464e8, type: 2}

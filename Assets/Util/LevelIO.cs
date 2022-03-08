@@ -97,7 +97,7 @@ public class LevelIO {
         Debug.Log("Decoding L:"+levelJson);
         Level l = JsonUtility.FromJson<Level>(levelJson);
         if(palette == null) palette = new Block[Vars.main.content.blocks.Length + 1]; //block type of 0 is a special flag; leave it empty and count from 1
-        Block missing = Vars.main.content.block("Wall"); //todo replace with "Missing"
+        Block missing = Vars.main.content.block("Missing");
 
         l.theme = Vars.main.content.theme(l.themeName == "" ? "Plains" : l.themeName);
 
