@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6b7f58d195a9654a882b5aba138bad5, type: 3}
+  m_Name: WingedCloud
+  m_EditorClassIdentifier: 
+  hasObject: 1
+  hasUpdate: 1
+  rotate: 0
+  hidden: 0
+  prefab: {fileID: 5600063603711397611, guid: c1547b7a7811d4a41b14548befa6b3d1, type: 3}
+  sprite: {fileID: 21300000, guid: b9cf5e4ceeda91740b23866b30db0821, type: 3}
+  zLayer: 0
+  width: 1
+  height: 1
+  clipsize: 0.01
+  onFloor: 0
+  category: {fileID: 11400000, guid: 9fdb17510ed6d8b419ee70b5f284f49d, type: 2}

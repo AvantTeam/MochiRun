@@ -468,7 +468,7 @@ public class PlayerControl : MonoBehaviour
             }
 
             health -= damage;
-            invincibility = INVIN_TIME;
+            //invincibility = INVIN_TIME;
 
             Fx(damageFx);
             if(animator != null) animator.Damage();

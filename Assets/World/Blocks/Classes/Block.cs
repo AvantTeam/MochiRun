@@ -17,7 +17,7 @@ public class Block : ScriptableObject {
     public float zLayer = 0f;
     [ReadOnly] public float width = 1f;
     [ReadOnly] public float height = 1f;
-    public float clipsize = 4f;
+    public float clipsize = 0f;
     public bool onFloor = false; //whether to provide the floor + height / 2 as the y position on init().
     public Category category;
 
@@ -29,11 +29,12 @@ public class Block : ScriptableObject {
             hasUpdate = prefab.GetComponent<BlockUpdater>() != null;
             width = prefab.transform.localScale.x;
             height = prefab.transform.localScale.y;
-            clipsize = width;
+            if(clipsize == 0f) clipsize = width;
         }
         else if(prefab != null) {
             hasUpdate = prefab.GetComponent<BlockUpdater>() != null;
-            width = height = clipsize = 1f;
+            width = height = 1f;
+            if(clipsize == 0f) clipsize = width;
         }
         else {
             hasUpdate = false;
