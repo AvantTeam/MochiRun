@@ -25,7 +25,7 @@ public class GravityBelt : Item {
         }
 
         //in air
-        if(KeyBinds.Shield() && !(pcon.state == STATE.FLOAT && pcon.gliding && pcon.courage > 0f)){
+        if(pcon.input.Shield() && !(pcon.state == STATE.FLOAT && pcon.gliding && pcon.courage > 0f)){
             pcon.SetVelocityY(Physics2D.gravity.y * GRAVITY);
             if(!active){
                 time = 0f;

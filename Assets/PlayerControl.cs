@@ -60,9 +60,14 @@ public class PlayerControl : MonoBehaviour
     Collider2D collider2d;
     CameraController cameraControl;
     public PlayerAnimator animator;
+    public InputHandler input;
     public GameObject itemsTable;
     public GameObject costume, burstFx, courageStartFx, deathFx, damageFx, courageFailFx, bumpWallFx;
-    
+
+    private void Awake() {
+        input = Vars.mobile ? new MobileInputHandler(GameObject.Find("Main Camera").GetComponent<Camera>()) : new InputHandler(GameObject.Find("Main Camera").GetComponent<Camera>());
+    }
+
     void Start() {
         rigid = GetComponent<Rigidbody2D>();
         collider2d = GetComponent<Collider2D>();
@@ -79,18 +84,17 @@ public class PlayerControl : MonoBehaviour
         cu.Hide(1f);
     }
 
-    // Update is called once per frame
     void Update() {
         Vector2 vel = rigid.velocity;
         updateFxFlag = 0;
-        bool inputJump = KeyBinds.Jump();
+        bool inputJump = input.Jump();
         stateTime += Time.deltaTime;
         checkLanded();
         checkWallFront(); //collided is trun when mochi is running fast and there is a wall in front
         checkDeath();
         bool tglide = false;
 
-        if(KeyBinds.JumpDown()) {
+        if(input.JumpDown()) {
             jumpPressTimer = 0f;
         }
         else if(jumpPressTimer < JUMP_GRACE) {
@@ -401,7 +405,7 @@ public class PlayerControl : MonoBehaviour
 
     private void stateAir() {
         if(landed) nextState = STATE.RUN;
-        else if(courage > 0f && KeyBinds.JumpDown() && (jumpReleased || rigid.velocity.y <= 0f) && state != STATE.FLOAT) nextState = STATE.FLOAT;
+        else if(courage > 0f && input.JumpDown() && (jumpReleased || rigid.velocity.y <= 0f) && state != STATE.FLOAT) nextState = STATE.FLOAT;
     }
 
     public void SnapShield() {

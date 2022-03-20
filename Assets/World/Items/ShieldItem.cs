@@ -45,7 +45,7 @@ public class ShieldItem : Item {
         }
 
         //update
-        if(pcon.landed && health > 0f && shieldCooldown <= 0f && KeyBinds.Shield()) {
+        if(pcon.landed && health > 0f && shieldCooldown <= 0f && pcon.input.Shield()) {
             if(!shielded) {
                 shieldSnap = 0.2f;
                 shielded = true;
