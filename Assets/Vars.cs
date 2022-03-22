@@ -8,6 +8,7 @@ public class Vars : MonoBehaviour
     public static Vars main;
     public VarsPrefab prefabs;
     public ContentList content;
+    public Categories category;
 
 #if UNITY_ANDROID
     public const bool mobile = true;
@@ -42,4 +43,9 @@ public class VarsPrefab {
     public GameObject floatField, intField, listField, stringField, boolField;
     public GameObject itemDisplay, shieldDisplay, reloadDisplay;
     public GameObject ragblock; //misc
+}
+
+[System.Serializable]
+public class Categories {
+    public Category all, favorite, obstacle, item, movement, terrain, marker;
 }

@@ -58,6 +58,14 @@ MonoBehaviour:
     reloadDisplay: {fileID: 2423553858356836926, guid: 8f5bfa2d15c75d44288d7a4875580268, type: 3}
     ragblock: {fileID: 7730209729054057865, guid: 9bede6a52bc99b844aa08af1df8f4101, type: 3}
   content: {fileID: 11400000, guid: 7ead43bb40faad045aa8a91cd7940bf3, type: 2}
+  category:
+    all: {fileID: 11400000, guid: d16baca427656984e9f09467d5cc8283, type: 2}
+    favorite: {fileID: 11400000, guid: 250555ebade4fd64e8e1550f9fe49e7d, type: 2}
+    obstacle: {fileID: 11400000, guid: cbab9c39d96cffc469f4acb2d848cae6, type: 2}
+    item: {fileID: 11400000, guid: b7b8c6611067961428e838c117657215, type: 2}
+    movement: {fileID: 11400000, guid: 53d2a39eff326fd45a2e2fdf34a29ce0, type: 2}
+    terrain: {fileID: 11400000, guid: 9fdb17510ed6d8b419ee70b5f284f49d, type: 2}
+    marker: {fileID: 11400000, guid: ef2636d86d5f7e44cb5722bc7c733d72, type: 2}
   firstScene: TitleScene
   tempBlockSaves:
     name: Untitled

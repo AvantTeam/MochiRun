@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08a97e31a9eaad94280bc38549c2cb46, type: 3}
+  m_Name: Swamp
+  m_EditorClassIdentifier: 
+  background1: {fileID: 21300000, guid: 0784f5e1c1ce3f743802ba83d57d8578, type: 3}
+  background2: {fileID: 21300000, guid: cb47659d49508024c84966df37300c7a, type: 3}
+  backgroundScrollY: 1
+  sky: {r: 0.1307699, g: 0.11997151, b: 0.18867922, a: 1}
+  fog: {r: 0.36192325, g: 0, b: 0.53333336, a: 0.42745098}
+  icon: {fileID: 2800000, guid: 9d400e0ae0dec7749959fc6449f27c01, type: 3}
+  floor: {fileID: 3200795463737564019, guid: fc8c8e1e42de0094d988db047a54a56f, type: 3}

@@ -305,11 +305,16 @@ MonoBehaviour:
   type: {fileID: 0}
   ctype: 0
   updatesTile: 0
-  wingp1: {x: -30, y: 20, z: 0}
-  wingp2: {x: 0, y: -20, z: 0}
+  wingp1: {x: -30, y: 40, z: 0}
+  wingp2: {x: 10, y: -40, z: 0}
   rotateScl: 0.3
   floatScl: 0.3
   floatMag: -0.3
   wingl: {fileID: 345022079989747798}
   wingr: {fileID: 4234494222661672257}
   attachBlocks: 1
+  faceMaterials:
+  - {fileID: 2100000, guid: c077b23ee396ef646bf4c4ed14772269, type: 2}
+  - {fileID: 2100000, guid: e446ea09eff0740409c14c073ff87d86, type: 2}
+  - {fileID: 2100000, guid: 3c9acbc5cd925ac4ca50976a27d821ec, type: 2}
+  faceID: 1
